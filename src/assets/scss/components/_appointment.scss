@@ -1,0 +1,65 @@
+.appointment {
+  padding: 67.968px 82.963px 68.301px 82.963px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 24px;
+  background: $linear-color;
+
+  button {
+    padding: 25px 20px;
+    border-radius: 34.5px;
+    border: 1px solid $white-color;
+    background: $white-color;
+    color: $primary-color;
+    transition: all 0.2s ease-in;
+    width: 370px;
+    text-transform: uppercase;
+
+    &:hover {
+      transition: all 0.2s ease-in;
+      background: $linear-color;
+      color: $white-color;
+    }
+  }
+}
+
+.appointment-page {
+
+  .appointment-container {
+    border-radius: 20px;
+    border: 1px solid #C4C4C4;
+
+    &-header {
+      border-bottom: 2px solid #D9D9D9;
+      padding: 20px 35px;
+
+      .appointment-step {
+        color: #4680FF;
+        font-weight: bold;
+      }
+
+      p {
+        margin-bottom: 0;
+      }
+    }
+
+    &-footer {
+      border-top: 2px solid #D9D9D9;
+      padding: 20px 35px;
+    }
+
+    &-body {
+      padding: 35px 20px;
+
+      .MuiInputBase-root {
+        padding-top: 3px;
+        padding-bottom: 3px;
+      }
+    }
+  }
+
+
+
+}

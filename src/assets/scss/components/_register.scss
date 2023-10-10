@@ -1,0 +1,98 @@
+.register {
+    background: url("../../../assets/images/background.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    position: relative;
+
+    height: 100vh;
+
+    &-container {
+        width: 70%;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        padding: 50px;
+        border-radius: 10px;
+        background: #FFF;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
+        &-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-bottom: 20px;
+
+            img {
+                margin-bottom: 10px;
+            }
+        }
+
+        &-body {
+            button {
+                background-color: transparent;
+            }
+        }
+
+        &-footer {
+            width: 300px;
+            margin: auto;
+            margin-top: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            border-radius: 30px;
+            border: 1px solid #EEE;
+            padding: 5px 20px;
+
+
+            i {
+                color: #333333;
+                opacity: .3;
+            }
+
+            label {
+                margin: auto;
+            }
+
+            input {
+                width: 90%;
+                border-radius: 20px;
+                border: none;
+                outline: none;
+                background-color: transparent;
+
+                &:focus {
+                    border: none !important;
+                    outline: none !important;
+                    box-shadow: none;
+                    background-color: transparent;
+                }
+
+            }
+        }
+
+        .radio-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .form-check {
+            border-radius: 30px;
+            border: 1px solid #B7B7B7 !important;
+            width: 100%;
+            padding: 13px 20px;
+            margin: 5px;
+
+            input {
+                margin: 0 10px !important;
+                border: 1px solid #B7B7B7;
+            }
+
+        }
+    }
+}

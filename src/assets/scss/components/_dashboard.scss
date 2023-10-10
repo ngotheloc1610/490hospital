@@ -1,0 +1,178 @@
+.dashboard {
+  .banner {
+    .carousel-inner {
+      width: 80%;
+      margin: auto;
+    }
+
+    .carousel-control-prev-icon {
+      background-image: url("../../images/arrow_left.png");
+      height: 3rem;
+    }
+    .carousel-control-next-icon {
+      background-image: url("../../images/arrow_right.png");
+      height: 3rem;
+    }
+
+    h3 {
+      font-weight: bold;
+      &::before {
+        border-top: 3px solid #333;
+      }
+    }
+  }
+
+  .experience {
+    width: 70%;
+    margin: auto;
+  }
+
+  .our-top-service {
+    padding: 150px 0px 160px 0px;
+    background-color: #f2fcfb;
+    line-height: 3rem;
+    .heading-title {
+      width: 75%;
+      margin-bottom: 100px;
+    }
+
+    .box-item {
+      border-radius: 40px;
+      background: var(
+        --thin-light-blue,
+        linear-gradient(
+          180deg,
+          #c5dcff 0%,
+          rgba(197, 220, 255, 0.5) 96.87%,
+          rgba(196, 196, 196, 0) 100%
+        )
+      );
+      box-shadow: -1px 5px 5px 5px rgba(144, 131, 213, 0.35);
+
+      img {
+        border-radius: 40px;
+      }
+
+      p {
+        text-align: center;
+        font-weight: bold;
+        padding: 20px 0;
+        color: $heading-color;
+      }
+    }
+
+    .carousel-inner {
+      width: 80%;
+      margin: auto;
+    }
+
+    .carousel-control-prev-icon {
+      background-image: url("../../images/Left.png");
+      height: 4rem;
+      width: 4rem;
+    }
+    .carousel-control-next-icon {
+      background-image: url("../../images/Right.png");
+      height: 4rem;
+      width: 4rem;
+    }
+
+    .carousel-indicators {
+      height: 0;
+
+      .active {
+        background-color: $primary-color;
+      }
+
+      button {
+        background-color: $gray-color;
+        width: 15px;
+        height: 15px;
+        border-radius: 100rem !important;
+      }
+    }
+  }
+
+  .our-department {
+    margin: 100px;
+
+    &-container {
+      padding: 50px 100px;
+      background: rgba(199, 199, 199, 0.1);
+    }
+
+    .department-icon {
+      border-radius: 16px;
+      background: #fff;
+      padding: 15px;
+
+      /* Drop Shadow */
+      box-shadow: 0px 17px 70px -11px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .our-doctor {
+    padding-bottom: 160px;
+
+    h3 {
+      margin: 0 195px 50px 195px;
+    }
+
+    .carousel-inner {
+      width: 70%;
+      margin: auto;
+
+      img {
+        width: 100px;
+        height: 100px;
+        border-radius: 100rem;
+        object-fit: cover;
+      }
+    }
+
+    .carousel-control-prev-icon {
+      background-image: url("../../images/Left.png");
+      height: 3rem;
+      width: 3rem;
+    }
+    .carousel-control-next-icon {
+      background-image: url("../../images/Right.png");
+      height: 3rem;
+      width: 3rem;
+    }
+
+    .carousel-indicators {
+      height: 0;
+
+      .active {
+        background-color: $primary-color;
+      }
+
+      button {
+        background-color: $gray-color;
+        width: 15px;
+        height: 15px;
+        border-radius: 100rem !important;
+      }
+    }
+  }
+
+  .about-us {
+    width: 85%;
+    margin: auto;
+
+    padding: 130px 0;
+
+    .heading-title {
+      color: #4680ff;
+
+      /* h6 */
+      font-family: Montserrat;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 24px; /* 171.429% */
+      letter-spacing: 0.2px;
+    }
+  }
+}

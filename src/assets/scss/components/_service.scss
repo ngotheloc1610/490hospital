@@ -1,0 +1,34 @@
+.service {
+    .title-service {
+        color: #4B4B4B;
+        font-size: 45px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        letter-spacing: 0.2px;
+    }
+
+    .subtitle-service {
+        color: #000;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        letter-spacing: 0.2px;
+    }
+
+    .detail-service {
+
+        .image-content {
+            padding: 54px 0;
+
+            img {
+                width: 600px;
+                height: 410px;
+                object-fit: cover;
+                margin: 0 auto;
+            }
+        }
+
+    }
+}
