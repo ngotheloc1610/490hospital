@@ -6,20 +6,22 @@ import { DOCTOR } from "../../assets";
 import { defineConfigGet } from "../../components/Common/utils";
 import { API_ALL_GET_SERVICE } from "../../Contants/api.constant";
 import axios from "axios";
+import { PAGE_SIZE_SERVICE, START_PAGE } from "../../Contants/general.constant";
+import { IService } from "../../interface/general.interface";
 
-interface IPropServices { }
-
-const Services = (props: IPropServices) => {
+const Services = () => {
 
   let navigate = useNavigate();
   const outlet = useOutlet();
 
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const [itemPerPage, setItemPerPage] = useState<number>(5);
+  const [currentPage, setCurrentPage] = useState<number>(START_PAGE);
+  const [itemPerPage, setItemPerPage] = useState<number>(PAGE_SIZE_SERVICE);
   const [totalItem, setTotalItem] = useState<number>(0);
 
+  const [listService, setListService] = useState<IService[]>([]);
+
   const getCurrentPage = (item: number) => {
-    setCurrentPage(item);
+    setCurrentPage(item - 1);
   };
 
   const getItemPerPage = (item: number) => {
@@ -34,11 +36,11 @@ const Services = (props: IPropServices) => {
 
     axios.get(url, defineConfigGet({ page: currentPage, size: itemPerPage })).then((resp: any) => {
       if (resp) {
-
+        setListService(resp.data.content);
+        setTotalItem(resp.data.totalElements);
       }
-    }).catch(err => {
+    }).catch((err: any) => {
       console.log("err:", err)
-
     })
   }, [currentPage, itemPerPage])
 
@@ -52,41 +54,25 @@ const Services = (props: IPropServices) => {
             standards at SEP490 Hospital
           </p>
           <div className="service-container">
-            <div className="row gy-3 mb-5 py-3 cursor-pointer" onClick={() => navigate("123123123")}>
-              <div className="col-6">
-                <img src={DOCTOR} alt="" />
-              </div>
-              <div className="col-6">
-                <h5 className="title-service">Premium general health check package</h5>
-                <p className="subtitle-service">
-                  The 2021 Premium general health examination package provides a
-                  comprehensive examination and screening solution for some cancer
-                  diseases such as stomach, colon... with senior doctors and experts
-                  at Vinmec, thereby providing direction in developing a health care
-                  plan.
-                </p>
-              </div>
-            </div>
-
-            <div className="row gy-3 py-3" onClick={() => navigate("123123123")}>
-              <div className="col-4">
-                <img src={DOCTOR} alt="" />
-              </div>
-              <div className="col-8">
-                <h5>Premium general health check package</h5>
-                <p>
-                  The 2021 Premium general health examination package provides a
-                  comprehensive examination and screening solution for some cancer
-                  diseases such as stomach, colon... with senior doctors and experts
-                  at Vinmec, thereby providing direction in developing a health care
-                  plan.
-                </p>
-              </div>
-            </div>
+            {listService.map((item: IService, idx: number) => {
+              return (
+                <div className="row gy-3 mb-5 py-3 cursor-pointer" onClick={() => navigate(item.id)}>
+                  <div className={`${idx === 0 ? "col-6" : "col-4"}`}>
+                    <img src={DOCTOR} alt={item.photo} />
+                  </div>
+                  <div className={`${idx === 0 ? "col-6" : "col-8"}`}>
+                    <h5 className="title-service">{item.serviceName}</h5>
+                    <p className="subtitle-service">
+                      {item.serviceDescription}
+                    </p>
+                  </div>
+                </div>
+              )
+            })}
             <PaginationComponent
               totalItem={totalItem}
               itemPerPage={itemPerPage}
-              currentPage={currentPage}
+              currentPage={currentPage === 0 ? 1 : currentPage + 1}
               getItemPerPage={getItemPerPage}
               getCurrentPage={getCurrentPage}
             />

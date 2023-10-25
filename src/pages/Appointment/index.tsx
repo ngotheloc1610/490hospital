@@ -12,9 +12,8 @@ import { GENDER, LIST_TIME } from "../../Contants";
 import { FORMAT_DATE, TOTAL_STEP } from "../../Contants/general.constant";
 import { DOCTOR } from "../../assets";
 
-interface IPropAppointment { }
 
-const Appointment = (props: IPropAppointment) => {
+const Appointment = () => {
   const [step, setStep] = useState<number>(1);
 
   const [isBooking, setIsBooking] = useState<boolean>(false);

@@ -1,40 +1,38 @@
 import {
   BANNER,
   CANCER,
-  CHECKUP,
   DOCTOR,
-  HOMESERVICE,
-  IVF,
-  VACCIN,
   WHOWEARE,
 } from "../../assets";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LIST_DEPARTMENT } from "../../Contants";
 import { _renderMakeAppointment } from "../../components/Common/utils-ui";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { defineConfigGet } from "../../components/Common/utils";
+import { chunkArraySplice, defineConfigGet } from "../../components/Common/utils";
 import { API_ALL_GET_DEPARTMENT, API_ALL_GET_DOCTOR, API_ALL_GET_SERVICE } from "../../Contants/api.constant";
+import { IService } from "../../interface/general.interface";
+import { START_PAGE } from "../../Contants/general.constant";
 
 const Dashboard = () => {
   const [listDepartment, setListDepartment] = useState<any>([]);
-  const [listService, setListService] = useState<any>([]);
+  const [listService, setListService] = useState<IService[]>([]);
   const [listDoctor, setListDoctor] = useState<any>([]);
 
-
   const url_api = process.env.REACT_APP_API_URL;
+
+  const navigate = useNavigate();
 
   //Get all doctor
   useEffect(() => {
     const url = `${url_api}${API_ALL_GET_DOCTOR}`;
 
-    axios.get(url, defineConfigGet({ page: 0, size: 1000 })).then((resp: any) => {
+    axios.get(url, defineConfigGet({ page: START_PAGE, size: 1000 })).then((resp: any) => {
       if (resp) {
-
+        setListDoctor(resp.data.content);
       }
-    }).catch(err => {
+    }).catch((err: any) => {
       console.log("err:", err)
-
     })
 
   }, [])
@@ -43,11 +41,12 @@ const Dashboard = () => {
   useEffect(() => {
     const url = `${url_api}${API_ALL_GET_SERVICE}`;
 
-    axios.get(url, defineConfigGet({ page: 0, size: 1000 })).then((resp: any) => {
+    axios.get(url, defineConfigGet({ page: START_PAGE, size: 9 })).then((resp: any) => {
       if (resp) {
-
+        const dataChuck = chunkArraySplice(resp.data.content, 3);
+        setListService(dataChuck);
       }
-    }).catch(err => {
+    }).catch((err: any) => {
       console.log("err:", err)
 
     })
@@ -59,11 +58,10 @@ const Dashboard = () => {
 
     axios.get(url, defineConfigGet({})).then((resp: any) => {
       if (resp) {
-
+        setListDepartment(resp.data.content)
       }
-    }).catch(err => {
+    }).catch((err: any) => {
       console.log("err:", err)
-
     })
   }, [])
 
@@ -241,112 +239,28 @@ const Dashboard = () => {
             ></button>
           </div>
           <div className="carousel-inner">
-            <div className="carousel-item active">
-              <div className="row">
-                <div className="col-4">
-                  <div className="box-item">
-                    <img
-                      className="d-block w-100"
-                      src={CANCER}
-                      alt="First slide"
-                    />
-                    <p>Cancer Screening</p>
+            {listService.map((services: any, idxService: number) => {
+              return (
+                <div className={`carousel-item ${idxService === 0 ? "active" : ""}`}>
+                  <div className="row">
+                    {services.map((item: IService, idx: number) => {
+                      return (
+                        <div className="col-4" onClick={() => navigate(`/services/${item.id}`)}>
+                          <div className="box-item">
+                            <img
+                              className="d-block w-100"
+                              src={CANCER}
+                              alt={item.photo}
+                            />
+                            <p>{item.serviceName}</p>
+                          </div>
+                        </div>
+                      )
+                    })}
                   </div>
                 </div>
-                <div className="col-4">
-                  <div className="box-item">
-                    <img
-                      className="d-block w-100"
-                      src={VACCIN}
-                      alt="First slide"
-                    />
-                    <p>Vaccination</p>
-                  </div>
-                </div>
-                <div className="col-4">
-                  <div className="box-item">
-                    <img
-                      className="d-block w-100"
-                      src={CHECKUP}
-                      alt="First slide"
-                    />
-                    <p>Regular Health Check-up</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="carousel-item">
-              <div className="row">
-                <div className="col-4">
-                  <div className="box-item">
-                    <img
-                      className="d-block w-100"
-                      src={HOMESERVICE}
-                      alt="First slide"
-                    />
-                    <p>Home Medical Service</p>
-                  </div>
-                </div>
-
-                <div className="col-4 ">
-                  <div className="box-item">
-                    <img
-                      className="d-block w-100"
-                      src={IVF}
-                      alt="First slide"
-                    />
-                    <p>IVF Center</p>
-                  </div>
-                </div>
-
-                <div className="col-4 ">
-                  <div className="box-item">
-                    <img
-                      className="d-block w-100"
-                      src={CANCER}
-                      alt="First slide"
-                    />
-                    <p>Cancer Screening</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="carousel-item">
-              <div className="row gy-3">
-                <div className="col-4 ">
-                  <div className="box-item">
-                    <img
-                      className="d-block w-100"
-                      src={HOMESERVICE}
-                      alt="First slide"
-                    />
-                    <p>Home Medical Service</p>
-                  </div>
-                </div>
-
-                <div className="col-4">
-                  <div className="box-item">
-                    <img
-                      className="d-block w-100"
-                      src={IVF}
-                      alt="First slide"
-                    />
-                    <p>IVF Center</p>
-                  </div>
-                </div>
-
-                <div className="col-4">
-                  <div className="box-item">
-                    <img
-                      className="d-block w-100"
-                      src={CANCER}
-                      alt="First slide"
-                    />
-                    <p>Cancer Screening</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+              )
+            })}
           </div>
           <button
             className="carousel-control-prev"

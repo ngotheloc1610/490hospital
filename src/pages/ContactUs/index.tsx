@@ -1,10 +1,4 @@
-import React from 'react'
-
-interface IPropContactUs {
-   
-}
-
-const ContactUs = (props: IPropContactUs) => {
+const ContactUs = () => {
     return (
         <div>ContactUs</div>
     )

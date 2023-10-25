@@ -2,9 +2,7 @@ import { useState } from "react";
 import { LOGO_HOSPITAL } from "../../../assets";
 import { GENDER_ALL } from "../../../Contants";
 
-interface IPropRegister { }
-
-const Register = (props: IPropRegister) => {
+const Register = () => {
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
   const [isShowCfPassword, setIsShowCfPassword] = useState<boolean>(false);
 

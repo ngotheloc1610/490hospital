@@ -1,24 +1,26 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { DOCTOR, SIDEBAR } from "../../assets";
 import { API_ALL_GET_SERVICE } from "../../Contants/api.constant";
 import axios from "axios";
 import { defineConfigGet } from "../Common/utils";
+import { IService } from "../../interface/general.interface";
+import { useNavigate } from "react-router-dom";
 
-interface IPropSidebar { }
-
-const Sidebar = (props: IPropSidebar) => {
+const Sidebar = () => {
   const url_api = process.env.REACT_APP_API_URL;
+  const navigate = useNavigate();
+
+  const [listService, setListService] = useState<IService[]>([]);
 
   useEffect(() => {
     const url = `${url_api}${API_ALL_GET_SERVICE}`;
 
     axios.get(url, defineConfigGet({})).then((resp: any) => {
       if (resp) {
-
+        setListService(resp.data.content);
       }
-    }).catch(err => {
+    }).catch((err: any) => {
       console.log("err:", err)
-
     })
   }, [])
 
@@ -27,30 +29,18 @@ const Sidebar = (props: IPropSidebar) => {
       <h5 className="heading-title pt-5">You may be interested</h5>
 
       <div className="sidebar-contain">
-        <div className="row gy-3 py-3 mb-3">
-          <div className="col-6">
-            <img src={DOCTOR} alt="" />
-          </div>
-          <div className="col-6">
-            <p className="title">Advanced general health examination package</p>
-          </div>
-        </div>
-        <div className="row gy-3 py-3 mb-3">
-          <div className="col-6">
-            <img src={DOCTOR} alt="" />
-          </div>
-          <div className="col-6">
-            <p>Advanced general health examination package</p>
-          </div>
-        </div>
-        <div className="row gy-3 py-3 mb-3">
-          <div className="col-6">
-            <img src={DOCTOR} alt="" />
-          </div>
-          <div className="col-6">
-            <p>Advanced general health examination package</p>
-          </div>
-        </div>
+        {listService.map((item: IService) => {
+          return (
+            <div className="row gy-3 py-3 mb-3" onClick={() => navigate(`/services/${item.id}`)}>
+              <div className="col-6">
+                <img src={DOCTOR} alt="" />
+              </div>
+              <div className="col-6">
+                <p className="title">{item.serviceName}</p>
+              </div>
+            </div>
+          )
+        })}
       </div>
 
       <img src={SIDEBAR} alt="" className="image-sidebar" />
