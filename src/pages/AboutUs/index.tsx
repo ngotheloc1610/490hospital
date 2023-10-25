@@ -1,10 +1,6 @@
-import React from 'react'
 
-interface IPropAboutUs {
-   
-}
 
-const AboutUs = (props: IPropAboutUs) => {
+const AboutUs = () => {
     return (
         <div>AboutUs</div>
     )

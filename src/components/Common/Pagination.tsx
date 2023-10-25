@@ -13,7 +13,6 @@ function PaginationComponent(props: IPropsPagination) {
     const { totalItem, itemPerPage, currentPage, getCurrentPage } = props;
 
     const handleChangePage = (pageNumber: number) => {
-        // avoid set page when current page dont change value
         if (pageNumber === currentPage) return;
         getCurrentPage && getCurrentPage(pageNumber);
     }

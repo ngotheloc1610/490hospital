@@ -5,9 +5,7 @@ import { API_GET_DEPARTMENT } from "../../Contants/api.constant";
 import axios from "axios";
 import { defineConfigGet } from "../../components/Common/utils";
 
-interface IPropDepartmentDetail { }
-
-const DepartmentDetail = (props: IPropDepartmentDetail) => {
+const DepartmentDetail = () => {
 
   const params = useParams();
   const url_api = process.env.REACT_APP_API_URL;

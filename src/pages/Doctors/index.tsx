@@ -2,16 +2,14 @@ import { useEffect, useState } from 'react'
 import { DOCTOR, DOCTOR_BG, ICON_GRADUATION, ICON_PEOPLE_TEAM } from '../../assets'
 import Sidebar from '../../components/Sidebar'
 import PaginationComponent from '../../components/Common/Pagination'
-import { Outlet, useNavigate, useOutlet, useParams } from 'react-router-dom'
+import { Outlet, useNavigate, useOutlet } from 'react-router-dom'
 import axios from 'axios'
 import { defineConfigGet } from '../../components/Common/utils'
-import { API_ALL_GET_DEPARTMENT, API_ALL_GET_DOCTOR, API_GET_DOCTOR, API_SEARCH_DOCTOR } from '../../Contants/api.constant'
+import { API_ALL_GET_DEPARTMENT, API_ALL_GET_DOCTOR, API_SEARCH_DOCTOR } from '../../Contants/api.constant'
+import { IParamSearchDoctor } from '../../interface/general.interface'
+import { PAGE_SIZE_DOCTOR, START_PAGE } from '../../Contants/general.constant'
 
-interface IPropDoctors {
-
-}
-
-const Doctors = (props: IPropDoctors) => {
+const Doctors = () => {
     let navigate = useNavigate();
     const outlet = useOutlet();
 
@@ -19,12 +17,13 @@ const Doctors = (props: IPropDoctors) => {
     const [department, setDepartment] = useState("")
 
     const [departmentList, setDepartmentList] = useState([]);
+    const [doctorList, setDoctorList] = useState([]);
 
-    const [currentPage, setCurrentPage] = useState<number>(0);
-    const [itemPerPage, setItemPerPage] = useState<number>(5);
+    const [currentPage, setCurrentPage] = useState<number>(START_PAGE);
+    const [itemPerPage, setItemPerPage] = useState<number>(PAGE_SIZE_DOCTOR);
     const [totalItem, setTotalItem] = useState<number>(0);
 
-    const [paramSearch, setParamSearch] = useState({
+    const [paramSearch, setParamSearch] = useState<IParamSearchDoctor>({
         nameDoctor: "",
         department: ""
     })
@@ -38,9 +37,7 @@ const Doctors = (props: IPropDoctors) => {
             if (resp) {
 
             }
-        }).catch(err => {
-            console.log("err:", err)
-
+        }).catch((err: any) => {
         })
     }, [])
 
@@ -49,11 +46,10 @@ const Doctors = (props: IPropDoctors) => {
 
         axios.get(url, defineConfigGet({ page: currentPage, size: itemPerPage })).then((resp: any) => {
             if (resp) {
-
+                setDoctorList(resp.data.content);
+                setTotalItem(resp.data.totalElements);
             }
-        }).catch(err => {
-            console.log("err:", err)
-
+        }).catch((err: any) => {
         })
     }, [currentPage, itemPerPage])
 
@@ -65,13 +61,11 @@ const Doctors = (props: IPropDoctors) => {
 
             }
         }).catch(err => {
-            console.log("err:", err)
-
         })
     }, [paramSearch])
 
     const getCurrentPage = (item: number) => {
-        setCurrentPage(item);
+        setCurrentPage(item - 1);
     };
 
     const getItemPerPage = (item: number) => {
@@ -83,7 +77,7 @@ const Doctors = (props: IPropDoctors) => {
         setName(value);
     };
 
-    const handleChangeDepartment = (event: any, values: any) => {
+    const handleChangeDepartment = (values: any) => {
         setDepartment(values);
     };
 
@@ -152,7 +146,7 @@ const Doctors = (props: IPropDoctors) => {
                         <input
                             type="text"
                             placeholder="Name"
-                            onChange={(e) => handleChangeName(e.target.value)}
+                            onChange={(e: any) => handleChangeName(e.target.value)}
                             value={name}
                             className="form-control"
                         />
@@ -160,7 +154,7 @@ const Doctors = (props: IPropDoctors) => {
                     <div className="col-4">
                         <select
                             className="form-select"
-                            onChange={(e) => handleChangeDepartment(e, e.target.value)}
+                            onChange={(e: any) => handleChangeDepartment(e.target.value)}
                             value={department}
                         >
                             {_renderListDepartment()}
@@ -188,7 +182,7 @@ const Doctors = (props: IPropDoctors) => {
                             <PaginationComponent
                                 totalItem={totalItem}
                                 itemPerPage={itemPerPage}
-                                currentPage={currentPage}
+                                currentPage={currentPage === 0 ? 1 : currentPage + 1}
                                 getItemPerPage={getItemPerPage}
                                 getCurrentPage={getCurrentPage}
                             />

@@ -5,11 +5,8 @@ import axios from 'axios';
 import { defineConfigGet } from '../../components/Common/utils';
 import { useParams } from 'react-router-dom';
 
-interface IPropDoctorDetail {
 
-}
-
-const DoctorDetail = (props: IPropDoctorDetail) => {
+const DoctorDetail = () => {
     const params = useParams();
     const url_api = process.env.REACT_APP_API_URL;
 

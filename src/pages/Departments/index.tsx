@@ -6,9 +6,8 @@ import axios from "axios";
 import { defineConfigGet } from "../../components/Common/utils";
 import { API_ALL_GET_DEPARTMENT } from "../../Contants/api.constant";
 
-interface IPropDepartments { }
 
-const Departments = (props: IPropDepartments) => {
+const Departments = () => {
   let navigate = useNavigate();
   const outlet = useOutlet();
 

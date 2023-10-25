@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-interface IPropForgotPassword {}
 
-const ForgotPassword = (props: IPropForgotPassword) => {
+const ForgotPassword = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isShowCfPassword, setIsShowCfPassword] = useState(false);
 
@@ -54,9 +53,8 @@ const ForgotPassword = (props: IPropForgotPassword) => {
               className="btn-hidden"
             >
               <i
-                className={`bi ${
-                  isShowPassword ? "bi-eye-slash" : "bi-eye-fill"
-                } fs-5`}
+                className={`bi ${isShowPassword ? "bi-eye-slash" : "bi-eye-fill"
+                  } fs-5`}
               />
             </button>
           </div>
@@ -76,9 +74,8 @@ const ForgotPassword = (props: IPropForgotPassword) => {
               className="btn-hidden"
             >
               <i
-                className={`bi ${
-                  isShowCfPassword ? "bi-eye-slash" : "bi-eye-fill"
-                } fs-5`}
+                className={`bi ${isShowCfPassword ? "bi-eye-slash" : "bi-eye-fill"
+                  } fs-5`}
               />
             </button>
           </div>
