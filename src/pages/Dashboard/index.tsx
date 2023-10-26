@@ -1,18 +1,20 @@
-import {
-  BANNER,
-  CANCER,
-  DOCTOR,
-  WHOWEARE,
-} from "../../assets";
+import { BANNER, CANCER, DOCTOR, WHOWEARE } from "../../assets";
 import { Link, useNavigate } from "react-router-dom";
 import { LIST_DEPARTMENT } from "../../Contants";
-import { _renderMakeAppointment } from "../../components/Common/utils-ui";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { chunkArraySplice, defineConfigGet } from "../../components/Common/utils";
-import { API_ALL_GET_DEPARTMENT, API_ALL_GET_DOCTOR, API_ALL_GET_SERVICE } from "../../Contants/api.constant";
+import {
+  chunkArraySplice,
+  defineConfigGet,
+} from "../../components/Common/utils";
+import {
+  API_ALL_GET_DEPARTMENT,
+  API_ALL_GET_DOCTOR,
+  API_ALL_GET_SERVICE,
+} from "../../Contants/api.constant";
 import { IService } from "../../interface/general.interface";
 import { START_PAGE } from "../../Contants/general.constant";
+import MakeAppointment from "../../components/Common/MakeAppointment";
 
 const Dashboard = () => {
   const [listDepartment, setListDepartment] = useState<any>([]);
@@ -27,44 +29,50 @@ const Dashboard = () => {
   useEffect(() => {
     const url = `${url_api}${API_ALL_GET_DOCTOR}`;
 
-    axios.get(url, defineConfigGet({ page: START_PAGE, size: 1000 })).then((resp: any) => {
-      if (resp) {
-        setListDoctor(resp.data.content);
-      }
-    }).catch((err: any) => {
-      console.log("err:", err)
-    })
-
-  }, [])
+    axios
+      .get(url, defineConfigGet({ page: START_PAGE, size: 1000 }))
+      .then((resp: any) => {
+        if (resp) {
+          setListDoctor(resp.data.content);
+        }
+      })
+      .catch((err: any) => {
+        console.log("err:", err);
+      });
+  }, []);
 
   //Get all service
   useEffect(() => {
     const url = `${url_api}${API_ALL_GET_SERVICE}`;
 
-    axios.get(url, defineConfigGet({ page: START_PAGE, size: 9 })).then((resp: any) => {
-      if (resp) {
-        const dataChuck = chunkArraySplice(resp.data.content, 3);
-        setListService(dataChuck);
-      }
-    }).catch((err: any) => {
-      console.log("err:", err)
-
-    })
-  }, [])
+    axios
+      .get(url, defineConfigGet({ page: START_PAGE, size: 9 }))
+      .then((resp: any) => {
+        if (resp) {
+          const dataChuck = chunkArraySplice(resp.data.content, 3);
+          setListService(dataChuck);
+        }
+      })
+      .catch((err: any) => {
+        console.log("err:", err);
+      });
+  }, []);
 
   //Get all department
   useEffect(() => {
     const url = `${url_api}${API_ALL_GET_DEPARTMENT}`;
 
-    axios.get(url, defineConfigGet({})).then((resp: any) => {
-      if (resp) {
-        setListDepartment(resp.data.content)
-      }
-    }).catch((err: any) => {
-      console.log("err:", err)
-    })
-  }, [])
-
+    axios
+      .get(url, defineConfigGet({}))
+      .then((resp: any) => {
+        if (resp) {
+          setListDepartment(resp.data.content);
+        }
+      })
+      .catch((err: any) => {
+        console.log("err:", err);
+      });
+  }, []);
 
   const _renderBanner = () => {
     return (
@@ -241,11 +249,18 @@ const Dashboard = () => {
           <div className="carousel-inner">
             {listService.map((services: any, idxService: number) => {
               return (
-                <div className={`carousel-item ${idxService === 0 ? "active" : ""}`}>
+                <div
+                  className={`carousel-item ${
+                    idxService === 0 ? "active" : ""
+                  }`}
+                >
                   <div className="row">
                     {services.map((item: IService, idx: number) => {
                       return (
-                        <div className="col-4" onClick={() => navigate(`/services/${item.id}`)}>
+                        <div
+                          className="col-4"
+                          onClick={() => navigate(`/services/${item.id}`)}
+                        >
                           <div className="box-item">
                             <img
                               className="d-block w-100"
@@ -255,11 +270,11 @@ const Dashboard = () => {
                             <p>{item.serviceName}</p>
                           </div>
                         </div>
-                      )
+                      );
                     })}
                   </div>
                 </div>
-              )
+              );
             })}
           </div>
           <button
@@ -297,7 +312,8 @@ const Dashboard = () => {
         <div className="our-department-container">
           <h3 className="mb-3 fs-1 fw-bold">Our Departments</h3>
           <p className="color-primary mb-3 pb-3 border-bottom">
-            Experience high quality medical services that meet international standards at SEP490 Hospital
+            Experience high quality medical services that meet international
+            standards at SEP490 Hospital
           </p>
           <div className="mt-5">
             <div className="row gy-3">
@@ -690,7 +706,7 @@ const Dashboard = () => {
       {_renderOurTopService()}
       {_renderOurDepartment()}
       {_renderOurDoctor()}
-      {_renderMakeAppointment()}
+      <MakeAppointment />
       {_renderAboutUs()}
     </section>
   );
