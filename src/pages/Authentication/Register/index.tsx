@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LOGO_HOSPITAL } from "../../../assets";
 import { GENDER_ALL } from "../../../Contants";
+import { API_REGISTER } from "../../../Contants/api.constant";
+import { defineConfigPost } from "../../../components/Common/utils";
+import axios from "axios";
 
 const Register = () => {
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
@@ -13,6 +16,24 @@ const Register = () => {
   const [cfPassword, setCfPassword] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [gender, setGender] = useState<string>("");
+
+  const url_api = process.env.REACT_APP_API_URL;
+
+  const handleRegister = () => {
+    const url = `${url_api}${API_REGISTER}`;
+
+    axios
+      .post(url, defineConfigPost())
+      .then((resp: any) => {
+        if (resp) {
+          console.log("resp:", resp)
+        }
+      })
+      .catch((err: any) => {
+        console.log("err:", err);
+      });
+  }
+
 
   return (
     <div className="register">
@@ -154,7 +175,7 @@ const Register = () => {
         </div>
 
         <div className="register-container-footer">
-          <button className="button button--large button--large--primary w-100">
+          <button className="button button--large button--large--primary w-100" onClick={() => handleRegister()}>
             Register
           </button>
         </div>
