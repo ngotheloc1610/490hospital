@@ -75,7 +75,7 @@ const Appointment = () => {
           <span className="appointment-step">
             STEP {step}/{TOTAL_STEP}
           </span>
-          <span className="fw-bold"> - {step === 3 ? "CONFIRMATION" : "APPOINTMENT INFORMATION"}</span>
+          <span className="fw-bold"> - {step === 2 ? "CONFIRMATION" : "APPOINTMENT INFORMATION"}</span>
         </p>
       </div>
     );

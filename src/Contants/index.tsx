@@ -75,75 +75,40 @@ export const GENDER_ALL = [
 
 export const LIST_TIME = [
   {
-    title: "8:00",
+    title: "08:00 AM - 09:00 AM",
     value: "8:00:00",
   },
   {
-    title: "8:30",
+    title: "09:00 AM - 10:00 AM",
     value: "8:30:00",
   },
   {
-    title: "9:00",
+    title: "10:00 AM - 11:00 AM",
     value: "9:00:00",
   },
   {
-    title: "9:30",
+    title: "11:00 AM - 12:00 PM",
     value: "9:30:00",
   },
   {
-    title: "10:00",
+    title: "12:00 PM - 01:00 PM",
     value: "10:00:00",
   },
   {
-    title: "10:30",
+    title: "01:00 PM - 02:00 PM",
     value: "10:30:00",
   },
   {
-    title: "11:00",
+    title: "02:00 PM - 03:00 PM",
     value: "11:00:00",
   },
   {
-    title: "11:30",
+    title: "03:00 PM - 04:00 PM",
     value: "11:30:00",
   },
   {
-    title: "12:00",
+    title: "04:00 PM - 04:00 PM",
     value: "12:00:00",
   },
-  {
-    title: "12:30",
-    value: "12:30:00",
-  },
 
-  {
-    title: "13:00",
-    value: "13:00:00",
-  },
-  {
-    title: "13:30",
-    value: "13:30:00",
-  },
-  {
-    title: "14:00",
-    value: "14:00:00",
-  },
-  {
-    title: "14:30",
-    value: "14:30:00",
-  },
-
-  {
-    title: "15:00",
-    value: "15:00:00",
-  },
-
-  {
-    title: "15:30",
-    value: "15:30:00",
-  },
-
-  {
-    title: "16:00",
-    value: "16:0:00",
-  },
 ];
