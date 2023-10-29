@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-export const _renderMakeAppointment = () => {
+function MakeAppointment() {
   const navigate = useNavigate();
 
   return (
@@ -13,7 +13,10 @@ export const _renderMakeAppointment = () => {
           Pellentesque ac bibendum tortor. Nulla eget lobortis lacus.
         </p>
       </div>
-      <button onClick={() => navigate("/appointment")}>Make an Appointment Now!</button>
+      <button onClick={() => navigate("appointment")}>
+        Make an Appointment Now!
+      </button>
     </section>
   );
-};
+}
+export default MakeAppointment;
