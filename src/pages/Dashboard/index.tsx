@@ -29,7 +29,10 @@ const Dashboard = () => {
 
     axios.get(url, defineConfigGet({ page: START_PAGE, size: 1000 })).then((resp: any) => {
       if (resp) {
-        setListDoctor(resp.data.content);
+        console.log("resp:", resp)
+        const dataChuck = chunkArraySplice(resp.data.content, 3);
+        console.log("dataChuck:", dataChuck)
+        setListDoctor(dataChuck);
       }
     }).catch((err: any) => {
       console.log("err:", err)
@@ -355,271 +358,25 @@ const Dashboard = () => {
             ></button>
           </div>
           <div className="carousel-inner">
-            <div className="carousel-item active">
-              <div className="row g-5">
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
+            {listDoctor.map((doctors: any, idxDoctor: number) => {
+              return (
+                <div className={`carousel-item ${idxDoctor === 0 ? "active" : " "}`}>
+                  <div className="row g-5">
+                    {doctors.map((item: any, idx: number) => {
+                      return (
+                        <div className="col-3 d-flex" onClick={() => navigate(`/doctors/${item.id}`)}>
+                          <img src={DOCTOR} alt="" />
+                          <div className="ms-3">
+                            <p className="color-dark fw-bold">{item.practitionerTarget.nameFirstRep.nameAsSingleString}</p>
+                            <span className="text-small">empty</span>
+                          </div>
+                        </div>
+                      )
+                    })}
                   </div>
                 </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold ">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="carousel-item">
-              <div className="row g-5">
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold ">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="carousel-item">
-              <div className="row g-5">
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-                <div className="col-3 d-flex">
-                  <img src={DOCTOR} alt="" />
-                  <div className="ms-3">
-                    <p className="color-dark fw-bold ">Silva A.D.M.P</p>
-                    <span className="text-small">MBBS,MD,IDCCM</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+              )
+            })}
           </div>
           <button
             className="carousel-control-prev"
@@ -674,7 +431,7 @@ const Dashboard = () => {
             <p className="mt-3">It's 2019: time to sink o r swim.</p>
             <p className="mt-3">We are your Social Media Marketing Agency.</p>
 
-            <button className="button button--primary button--large mt-3">
+            <button className="button button--primary button--large mt-3" onClick={() => navigate("/about")}>
               See More
             </button>
           </div>

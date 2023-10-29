@@ -6,7 +6,6 @@ import { Outlet, useNavigate, useOutlet } from 'react-router-dom'
 import axios from 'axios'
 import { defineConfigGet } from '../../components/Common/utils'
 import { API_ALL_GET_DEPARTMENT, API_ALL_GET_DOCTOR, API_SEARCH_DOCTOR } from '../../Contants/api.constant'
-import { IParamSearchDoctor } from '../../interface/general.interface'
 import { PAGE_SIZE_DOCTOR, START_PAGE } from '../../Contants/general.constant'
 
 const Doctors = () => {
@@ -22,11 +21,6 @@ const Doctors = () => {
     const [currentPage, setCurrentPage] = useState<number>(START_PAGE);
     const [itemPerPage, setItemPerPage] = useState<number>(PAGE_SIZE_DOCTOR);
     const [totalItem, setTotalItem] = useState<number>(0);
-
-    const [paramSearch, setParamSearch] = useState<IParamSearchDoctor>({
-        nameDoctor: "",
-        department: ""
-    })
 
     const url_api = process.env.REACT_APP_API_URL;
 
@@ -46,23 +40,29 @@ const Doctors = () => {
 
         axios.get(url, defineConfigGet({ page: currentPage, size: itemPerPage })).then((resp: any) => {
             if (resp) {
+                console.log("resp:", resp)
                 setDoctorList(resp.data.content);
                 setTotalItem(resp.data.totalElements);
             }
         }).catch((err: any) => {
+            console.log("err:", err)
         })
     }, [currentPage, itemPerPage])
 
-    useEffect(() => {
+    const handleSearch = () => {
         const url = `${url_api}${API_SEARCH_DOCTOR}`;
 
-        axios.get(url, defineConfigGet(paramSearch)).then((resp: any) => {
+        const param = { nameDoctor: name, department: department, page: currentPage, size: itemPerPage }
+
+        axios.get(url, defineConfigGet(param)).then((resp: any) => {
             if (resp) {
+                console.log("resp:", resp)
 
             }
-        }).catch(err => {
+        }).catch((err: any) => {
+            console.log("err:", err)
         })
-    }, [paramSearch])
+    }
 
     const getCurrentPage = (item: number) => {
         setCurrentPage(item - 1);
@@ -72,15 +72,6 @@ const Doctors = () => {
         setItemPerPage(item);
         setCurrentPage(0);
     };
-
-    const handleChangeName = (value: string) => {
-        setName(value);
-    };
-
-    const handleChangeDepartment = (values: any) => {
-        setDepartment(values);
-    };
-
 
     const _renderListDepartment = () => {
         return (
@@ -102,38 +93,23 @@ const Doctors = () => {
     const _renderListDoctor = () => {
         return (
             <div className='container'>
-                <div className='row gy-3 py-3 mb-3' onClick={() => navigate("123123")}>
-                    <div className='col-4'>
-                        <img src={DOCTOR} alt="" />
-                    </div>
-                    <div className='col-8'>
-                        <h3 className='mb-3'>Dr. Ivan Good</h3>
-                        <p className='ms-3'><span><ICON_GRADUATION /></span>  Level II specialist, Meritorious Doctor</p>
-                        <p className='ms-3'><span><ICON_PEOPLE_TEAM /></span> General Surgery Department</p>
-                    </div>
-                </div>
+                {doctorList?.map((doctor: any, idx: number) => {
+                    const name = doctor.practitionerTarget.nameFirstRep.nameAsSingleString;
+                    const specialty = doctor.specialty[0].coding[0].display;
 
-                <div className='row gy-3 py-3 mb-3'>
-                    <div className='col-4'>
-                        <img src={DOCTOR} alt="" />
-                    </div>
-                    <div className='col-8'>
-                        <h3>Dr. Ivan Good</h3>
-                        <p><span><ICON_GRADUATION /></span>  Level II specialist, Meritorious Doctor</p>
-                        <p><span><ICON_PEOPLE_TEAM /></span> General Surgery Department</p>
-                    </div>
-                </div>
-
-                <div className='row gy-3 py-3 mb-3'>
-                    <div className='col-4'>
-                        <img src={DOCTOR} alt="" />
-                    </div>
-                    <div className='col-8'>
-                        <h3>Dr. Ivan Good</h3>
-                        <p><span><ICON_GRADUATION /></span>  Level II specialist, Meritorious Doctor</p>
-                        <p><span><ICON_PEOPLE_TEAM /></span> General Surgery Department</p>
-                    </div>
-                </div>
+                    return (
+                        <div className='row gy-3 py-3 mb-3' onClick={() => navigate(doctor.id)}>
+                            <div className='col-4'>
+                                <img src={DOCTOR} alt="" />
+                            </div>
+                            <div className='col-8'>
+                                <h3 className='mb-3'>{name}</h3>
+                                <p className='ms-3'><span><ICON_GRADUATION /></span>  Level II specialist, Meritorious Doctor</p>
+                                <p className='ms-3'><span><ICON_PEOPLE_TEAM /></span> {specialty}</p>
+                            </div>
+                        </div>
+                    )
+                })}
             </div>
         )
     }
@@ -146,7 +122,7 @@ const Doctors = () => {
                         <input
                             type="text"
                             placeholder="Name"
-                            onChange={(e: any) => handleChangeName(e.target.value)}
+                            onChange={(e: any) => setName(e.target.value)}
                             value={name}
                             className="form-control"
                         />
@@ -154,14 +130,14 @@ const Doctors = () => {
                     <div className="col-4">
                         <select
                             className="form-select"
-                            onChange={(e: any) => handleChangeDepartment(e.target.value)}
+                            onChange={(e: any) => setDepartment(e.target.value)}
                             value={department}
                         >
                             {_renderListDepartment()}
                         </select>
                     </div>
                     <div className="col-4">
-                        <button className="button-apply">Apply</button>
+                        <button className="button-apply" onClick={() => handleSearch()}>Apply</button>
                     </div>
                 </div>
             </div>

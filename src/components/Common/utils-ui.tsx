@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 export const _renderMakeAppointment = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="appointment">
       <div>
@@ -9,7 +13,7 @@ export const _renderMakeAppointment = () => {
           Pellentesque ac bibendum tortor. Nulla eget lobortis lacus.
         </p>
       </div>
-      <button>Make an Appointment Now!</button>
+      <button onClick={() => navigate("/appointment")}>Make an Appointment Now!</button>
     </section>
   );
 };
