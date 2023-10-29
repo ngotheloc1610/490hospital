@@ -8,8 +8,3 @@ export interface IService {
     id: string
 }
 
-export interface IParamSearchDoctor {
-    nameDoctor: string;
-    department: string;
-
-}

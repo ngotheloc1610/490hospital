@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { DOCTOR } from '../../assets'
 import { API_GET_DOCTOR } from '../../Contants/api.constant';
 import axios from 'axios';
@@ -10,16 +10,19 @@ const DoctorDetail = () => {
     const params = useParams();
     const url_api = process.env.REACT_APP_API_URL;
 
+    const [doctor, setDoctor] = useState<any>({});
+
     useEffect(() => {
-        const url = `${url_api}${API_GET_DOCTOR}`;
+        const id = params.doctorId;
+        const url = `${url_api}${API_GET_DOCTOR}${id}`;
 
-        axios.get(url, defineConfigGet({ id: params.doctorId })).then((resp: any) => {
+        axios.get(url, defineConfigGet({})).then((resp: any) => {
             if (resp) {
-
+                console.log("resp:", resp)
+                setDoctor(resp.data)
             }
-        }).catch(err => {
+        }).catch((err: any) => {
             console.log("err:", err)
-
         })
     }, [params.doctocId])
 
@@ -32,7 +35,7 @@ const DoctorDetail = () => {
                 </div>
                 <div className="col-8">
                     <div className=''>
-                        <h3 className='pb-3 mb-3 fw-bold text-uppercase border-bottom'>Dr. Ivan Good</h3>
+                        <h3 className='pb-3 mb-3 fw-bold text-uppercase border-bottom'>{doctor?.practitionerTarget?.nameFirstRep?.nameAsSingleString}</h3>
                         <div className='container'>
                             <div className='row'>
                                 <p className='col-2 fw-bold'>Department</p>
@@ -44,22 +47,23 @@ const DoctorDetail = () => {
                             <div className='row'>
                                 <p className='col-2 fw-bold'>Education</p>
                                 <ul className='col-10'>
-                                    <li className='lh-base mb-2'>2014: Graduated as General Practitioner at Thai Binh University of Medicine and Pharmacy</li>
-                                    <li className='lh-base mb-2'>Year 2022: Graduated from Level I Specialist in Surgery specializing in Orthopedics, Hanoi Medical University</li>
+                                    {doctor.education && doctor.education.map((edu: any, idx: number) => {
+                                        return (
+                                            <li className='lh-base mb-2'>2014: Graduated as General Practitioner at Thai Binh University of Medicine and Pharmacy</li>
+                                        )
+                                    })}
                                 </ul>
                             </div>
                             <div className='row'>
                                 <p className='col-2 fw-bold'>Specialized activities</p>
                                 <ul className='col-10'>
-                                    <li className='lh-base mb-2'>2014 - 2020: General surgery doctor, specializing in orthopedic trauma, Department of General Surgery, Y Yen General Hospital
-                                    </li>
-                                    <li className='lh-base mb-2'>2015: Surgeon treating hand and foot fractures, Department of Orthopedics, Nam Dinh Provincial General Hospital
-                                    </li>
-                                    <li className='lh-base mb-2'>2016: Surgeon treating femur and lower leg fractures, Department of Lower Limb Trauma, Viet Duc Hospital
-                                    </li>
-                                    <li className='lh-base mb-2'>2017: Basic laparoscopic surgeon, Viet Duc Hospital
-                                    </li>
-                                    <li className='lh-base mb-2'>Year 2020 - 2022: Level I specialist in trauma surgery, Viet Duc Hospital, Hanoi Medical University Hospital, Saint Paul Hospital,...</li>
+                                    {doctor.specialty && doctor.specialty.map((spec: any, idx: number) => {
+                                        return (
+                                            <li className='lh-base mb-2'>2014 - 2020: General surgery doctor, specializing in orthopedic trauma, Department of General Surgery, Y Yen General Hospital
+                                            </li>
+                                        )
+                                    })}
+
                                 </ul>
                             </div>
                         </div>
@@ -69,9 +73,12 @@ const DoctorDetail = () => {
                         <h3 className='pb-3 mb-3 fw-bold text-uppercase border-bottom'>Achievement</h3>
                         <div>
                             <ul>
-                                <li className='lh-base mb-2'>2016: Certificate of practice in surgical examination and treatment
-                                </li>
-                                <li className='lh-base mb-2'>2 grassroots scientific topics: Forearm fusion surgery in 2019 and skin flap surgery to treat polydactyly in 2022</li>
+                                {doctor.achievements && doctor.achievements.map((achi: any, idx: number) => {
+                                    return (
+                                        <li className='lh-base mb-2'>2016: Certificate of practice in surgical examination and treatment
+                                        </li>
+                                    )
+                                })}
                             </ul>
                         </div>
                     </div>
