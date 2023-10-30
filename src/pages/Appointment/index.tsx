@@ -1,22 +1,20 @@
 import { useEffect, useState } from "react";
-
 import { Autocomplete, InputAdornment, TextField } from "@mui/material";
 import WorkIcon from "@mui/icons-material/Work";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import VaccinesIcon from "@mui/icons-material/Vaccines";
 import { Box } from "@mui/system";
-
 import moment from "moment";
 
-import { GENDER, LIST_TIME } from "../../Contants";
+import { LIST_TIME } from "../../Contants";
 import { FORMAT_DATE, TOTAL_STEP } from "../../Contants/general.constant";
 import { DOCTOR } from "../../assets";
-
 
 const Appointment = () => {
   const [step, setStep] = useState<number>(1);
 
   const [isBooking, setIsBooking] = useState<boolean>(false);
+  const [isPassStep1, setIsPassStep1] = useState<boolean>(false);
 
   const [listDepartment, setListDepartment] = useState([]);
   const [listDoctor, setListDoctor] = useState([]);
@@ -33,16 +31,23 @@ const Appointment = () => {
     moment(`${date} ${time}`).format(FORMAT_DATE)
   );
 
-  const [name, setName] = useState<string>("");
-  const [gender, setGender] = useState<string>("");
-  const [birthDay, setBirthDay] = useState<number>(0);
-  const [phoneNumber, setPhoneNumber] = useState<number>(0);
-  const [gmail, setGmail] = useState<string>("");
-  const [problem, setProblem] = useState<string>("");
-
   useEffect(() => {
     setAppointmentTime(moment(`${date} ${time}`).format(FORMAT_DATE));
   }, [time, date]);
+
+  const handleNext = () => {
+    setIsPassStep1(true);
+    setStep(step + 1);
+  };
+
+  const handleBook = () => {
+    setIsBooking(true);
+  };
+
+  const handleCancel = () => {
+    setIsPassStep1(false);
+    setStep(step - 1);
+  };
 
   const handleChangeDepartment = (value: string) => {
     value ? setDepartment(value) : setDepartment("");
@@ -75,7 +80,9 @@ const Appointment = () => {
           <span className="appointment-step">
             STEP {step}/{TOTAL_STEP}
           </span>
-          <span className="fw-bold"> - {step === 2 ? "CONFIRMATION" : "APPOINTMENT INFORMATION"}</span>
+          <span className="fw-bold">
+            - {step === 2 ? "CONFIRMATION" : "APPOINTMENT INFORMATION"}
+          </span>
         </p>
       </div>
     );
@@ -84,9 +91,28 @@ const Appointment = () => {
   const _renderAppointmentFooter = () => {
     return (
       <div className="appointment-container-footer">
-        <button className="button button--primary d-block m-auto">Next</button>
-        {step === TOTAL_STEP && (
-          <button className="button button--primary d-block m-auto">Book</button>
+        {step === TOTAL_STEP ? (
+          <div className="m-auto">
+            <button
+              className="button button--primary me-3"
+              onClick={() => handleBook()}
+            >
+              Book
+            </button>
+            <button
+              className="button button--primary"
+              onClick={() => handleCancel()}
+            >
+              Cancel
+            </button>
+          </div>
+        ) : (
+          <button
+            className="button button--primary d-block m-auto"
+            onClick={() => handleNext()}
+          >
+            Next
+          </button>
         )}
       </div>
     );
@@ -228,82 +254,6 @@ const Appointment = () => {
 
   const _renderStep2 = () => {
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-6 row">
-            <div className="col-8">
-              <div className="input-group">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Name"
-                  value={name}
-                  onChange={(e: any) => setName(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="col-4">
-              <select className="form-select" aria-label="gender">
-                {GENDER.map((item) => {
-                  return <option value={item.value}>{item.title}</option>;
-                })}
-              </select>
-            </div>
-            <div className="col-12">
-              <div className="input-group">
-                <input
-                  type="date"
-                  className="form-control"
-                  placeholder="Date of birth"
-                  value={birthDay}
-                  onChange={(e: any) => setBirthDay(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="col-12">
-              <div className="input-group">
-                <input
-                  type="number"
-                  className="form-control"
-                  placeholder="Phone number"
-                  value={phoneNumber}
-                  onChange={(e: any) => setPhoneNumber(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="col-12">
-              <div className="input-group">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="gmail"
-                  placeholder="Gmail"
-                  value={gmail}
-                  onChange={(e: any) => setGmail(e.target.value)}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="col-6">
-            <div className="form-floating">
-              <textarea
-                className="form-control is-invalid h-100"
-                placeholder="Leave a comment here"
-                id="problem"
-                rows={10}
-                value={problem}
-                onChange={(e: any) => setProblem(e.target.value)}
-              ></textarea>
-              <label htmlFor="problem">Comments</label>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const _renderStep3 = () => {
-    return (
       <div className="container" style={{ width: "50%" }}>
         <div className="mb-5">
           <p className="fw-bold">Customer</p>
@@ -311,7 +261,7 @@ const Appointment = () => {
             <tbody>
               <tr>
                 <td width="50%">Full name</td>
-                <td >Jonathan Hudson</td>
+                <td>Jonathan Hudson</td>
               </tr>
               <tr>
                 <td>Date of birth</td>
@@ -365,17 +315,25 @@ const Appointment = () => {
 
   const _renderBookingSuccess = () => {
     return (
-      <div>
-        <div>
-          <p>
+      <div className="container booking-success">
+        <div className="w-50 m-auto">
+          <p className="icon-success mb-3">
             <i className="bi bi-check-lg fs-1"></i>
           </p>
           <h3 className="text-center mb-3">Booking Success</h3>
-          <p className="text-center mb-5">
-            Your appointment has been successfully booked, please regularly
-            check your schedule to keep up with the appointment time
+          <p className="text-center mb-5 text-gray">
+            <span className="d-block mb-1">
+              Your appointment has been successfully{" "}
+            </span>
+            <span className="d-block mb-1">
+              booked, please regularly check your
+            </span>
+            <span className="d-block mb-1">schedule to keep up with the</span>
+            <span className="d-block">appointment time</span>
           </p>
-          <p className="text-center">Return to Appointment list</p>
+          <button className="button button--large button--primary d-block m-auto">
+            Return to Appointment list
+          </button>
         </div>
       </div>
     );
@@ -391,9 +349,7 @@ const Appointment = () => {
           <>
             {_renderAppointmentHeader()}
             <div className="appointment-container-body">
-              {_renderStep1()}
-              {/* {_renderStep2()} */}
-              {/* {_renderStep3()} */}
+              {isPassStep1 ? _renderStep2() : _renderStep1()}
             </div>
             {_renderAppointmentFooter()}
           </>
