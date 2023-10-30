@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import Login from "../pages/Authentication/Login";
 import ForgotPassword from "../pages/Authentication/ForgotPassword";
@@ -30,18 +30,25 @@ const RouterDom = () => {
       <Suspense fallback={loading}>
         <Routes>
           <Route path="/" element={<Dashboard />} />
+
           <Route path="/appointment" element={<Appointment />} />
+
           <Route path="/doctors" element={<Doctors />}>
             <Route path=":doctorId" element={<DoctorDetail />} />
           </Route>
+
           <Route path="/departments" element={<Departments />} >
             <Route path=":departmentId" element={<DepartmentDetail />} />
           </Route>
+
           <Route path="/services" element={<Services />} >
             <Route path=":serviceId" element={<ServiceDetail />} />
           </Route>
+
           <Route path="/about" element={<AboutUs />} />
+
           <Route path="/contact" element={<ContactUs />} />
+
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
