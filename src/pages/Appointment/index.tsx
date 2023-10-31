@@ -166,20 +166,6 @@ const Appointment = () => {
               }
               onKeyUp={(event: any) => handleKeyUpSpecialty(event.target.value)}
               disablePortal
-              renderOption={(props, option) => (
-                <Box
-                  component="li"
-                  sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-                  className="d-flex"
-                  {...props}
-                >
-                  <img src={DOCTOR} alt="" />
-                  <div>
-                    <h4>Doctor</h4>
-                    <p>sub doctor</p>
-                  </div>
-                </Box>
-              )}
               renderInput={(params) => (
                 <div>
                   <TextField
