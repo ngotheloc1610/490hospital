@@ -30,5 +30,13 @@
             }
         }
 
+        .doctor-specialty {
+            &-header {
+                padding: 50px 56px;
+                background: $linear-color;
+                border-radius: 30px;
+            }
+        }
+
     }
 }

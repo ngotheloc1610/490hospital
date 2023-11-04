@@ -3,13 +3,13 @@ import PaginationComponent from "../../components/Common/Pagination";
 import { Outlet, useNavigate, useOutlet } from "react-router-dom";
 import { DOCTOR } from "../../assets";
 import { defineConfigGet } from "../../components/Common/utils";
-import { API_ALL_GET_SERVICE } from "../../Contants/api.constant";
+import { API_ALL_GET_SPECIALTY } from "../../Contants/api.constant";
 import axios from "axios";
 import { PAGE_SIZE_SERVICE, START_PAGE } from "../../Contants/general.constant";
-import { IService } from "../../interface/general.interface";
+import { ISpecialty } from "../../interface/general.interface";
 import MakeAppointment from "../../components/Common/MakeAppointment";
 
-const Services = () => {
+const Specialty = () => {
   let navigate = useNavigate();
   const outlet = useOutlet();
 
@@ -17,7 +17,7 @@ const Services = () => {
   const [itemPerPage, setItemPerPage] = useState<number>(PAGE_SIZE_SERVICE);
   const [totalItem, setTotalItem] = useState<number>(0);
 
-  const [listService, setListService] = useState<IService[]>([]);
+  const [listSpecialty, setListSpecialty] = useState<ISpecialty[]>([]);
 
   const getCurrentPage = (item: number) => {
     setCurrentPage(item - 1);
@@ -31,18 +31,18 @@ const Services = () => {
   const url_api = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
-    const url = `${url_api}${API_ALL_GET_SERVICE}`;
+    const url = `${url_api}${API_ALL_GET_SPECIALTY}`;
 
     axios
       .get(url, defineConfigGet({ page: currentPage, size: itemPerPage }))
       .then((resp: any) => {
         if (resp) {
-          setListService(resp.data.content);
+          setListSpecialty(resp.data.content);
           setTotalItem(resp.data.totalElements);
         }
       })
       .catch((err: any) => {
-        console.log("err:", err);
+        console.log("err:", err)
       });
   }, [currentPage, itemPerPage]);
 
@@ -52,13 +52,12 @@ const Services = () => {
         <Outlet />
       ) : (
         <div className="container p-5">
-          <h3 className="mb-3 fs-1 fw-bold">Our Service</h3>
+          <h3 className="mb-3 fs-1 fw-bold">Our Specialty</h3>
           <p className="color-primary pb-3 border-bottom">
-            Experience high quality medical services that meet international
-            standards at SEP490 Hospital
+            Experience high quality medical services that meet international standards at SEP490 Hospital
           </p>
           <div className="service-container">
-            {listService.map((item: IService, idx: number) => {
+            {listSpecialty.map((item: ISpecialty, idx: number) => {
               return (
                 <div
                   className="row gy-3 mb-5 py-3 cursor-pointer"
@@ -92,4 +91,4 @@ const Services = () => {
   );
 };
 
-export default Services;
+export default Specialty;

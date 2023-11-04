@@ -10,15 +10,15 @@ import {
 import {
   API_ALL_GET_DEPARTMENT,
   API_ALL_GET_DOCTOR,
-  API_ALL_GET_SERVICE,
+  API_ALL_GET_SPECIALTY,
 } from "../../Contants/api.constant";
-import { IService } from "../../interface/general.interface";
+import { ISpecialty } from "../../interface/general.interface";
 import { START_PAGE } from "../../Contants/general.constant";
 import MakeAppointment from "../../components/Common/MakeAppointment";
 
 const Dashboard = () => {
   const [listDepartment, setListDepartment] = useState<any>([]);
-  const [listService, setListService] = useState<IService[]>([]);
+  const [listSpecialty, setListSpecialty] = useState<ISpecialty[]>([]);
   const [listDoctor, setListDoctor] = useState<any>([]);
 
   const url_api = process.env.REACT_APP_API_URL;
@@ -41,16 +41,16 @@ const Dashboard = () => {
       });
   }, []);
 
-  //Get all service
+  //Get all specialty
   useEffect(() => {
-    const url = `${url_api}${API_ALL_GET_SERVICE}`;
+    const url = `${url_api}${API_ALL_GET_SPECIALTY}`;
 
     axios
       .get(url, defineConfigGet({ page: START_PAGE, size: 9 }))
       .then((resp: any) => {
         if (resp) {
           const dataChuck = chunkArraySplice(resp.data.content, 3);
-          setListService(dataChuck);
+          setListSpecialty(dataChuck);
         }
       })
       .catch((err: any) => {
@@ -212,10 +212,9 @@ const Dashboard = () => {
     return (
       <section className="our-top-service">
         <div className="mx-auto heading-title">
-          <h3 className="mb-3 fs-1 fw-bold">Our Top Services</h3>
+          <h3 className="mb-3 fs-1 fw-bold">Our Top Specialty</h3>
           <p className="color-dark">
-            Experience high quality medical services that meet international
-            standards at SEP490 Hospital
+            Experience high quality medical services that meet international standards at SEP490 Hospital
           </p>
         </div>
 
@@ -247,18 +246,18 @@ const Dashboard = () => {
             ></button>
           </div>
           <div className="carousel-inner">
-            {listService.map((services: any, idxService: number) => {
+            {listSpecialty?.map((specialty: any, idxSpecialty: number) => {
               return (
                 <div
-                  className={`carousel-item ${idxService === 0 ? "active" : ""
+                  className={`carousel-item ${idxSpecialty === 0 ? "active" : ""
                     }`}
                 >
                   <div className="row">
-                    {services.map((item: IService, idx: number) => {
+                    {specialty?.map((item: ISpecialty, idx: number) => {
                       return (
                         <div
                           className="col-4"
-                          onClick={() => navigate(`/services/${item.id}`)}
+                          onClick={() => navigate(`/specialty/${item.id}`)}
                         >
                           <div className="box-item">
                             <img
@@ -370,11 +369,11 @@ const Dashboard = () => {
             ></button>
           </div>
           <div className="carousel-inner">
-            {listDoctor.map((doctors: any, idxDoctor: number) => {
+            {listDoctor?.map((doctors: any, idxDoctor: number) => {
               return (
                 <div className={`carousel-item ${idxDoctor === 0 ? "active" : " "}`}>
                   <div className="row g-5">
-                    {doctors.map((item: any, idx: number) => {
+                    {/* {doctors?.map((item: any, idx: number) => {
                       return (
                         <div className="col-3 d-flex" onClick={() => navigate(`/doctors/${item.id}`)}>
                           <img src={DOCTOR} alt="" />
@@ -384,7 +383,7 @@ const Dashboard = () => {
                           </div>
                         </div>
                       )
-                    })}
+                    })} */}
                   </div>
                 </div>
               )

@@ -7,7 +7,8 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import DoctorDetail from "../pages/Doctors/DoctorDetail";
 import DepartmentDetail from "../pages/Departments/DepartmentDetail";
-import ServiceDetail from "../pages/Services/ServiceDetail";
+import Specialty from "../pages/Specialty";
+import SpecialtyDetail from "../pages/Specialty/SpecialtyDetail";
 
 const loading = (
   <div className="pt-3 text-center">
@@ -19,7 +20,6 @@ const Dashboard = lazy(() => import("../pages/Dashboard"));
 const Appointment = lazy(() => import("../pages/Appointment"));
 const Doctors = lazy(() => import("../pages/Doctors"));
 const Departments = lazy(() => import("../pages/Departments"));
-const Services = lazy(() => import("../pages/Services"));
 const AboutUs = lazy(() => import("../pages/AboutUs"));
 const ContactUs = lazy(() => import("../pages/ContactUs"));
 
@@ -41,8 +41,8 @@ const RouterDom = () => {
             <Route path=":departmentId" element={<DepartmentDetail />} />
           </Route>
 
-          <Route path="/services" element={<Services />} >
-            <Route path=":serviceId" element={<ServiceDetail />} />
+          <Route path="/specialty" element={<Specialty />} >
+            <Route path=":specialtyId" element={<SpecialtyDetail />} />
           </Route>
 
           <Route path="/about" element={<AboutUs />} />

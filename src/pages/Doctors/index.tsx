@@ -5,17 +5,17 @@ import PaginationComponent from '../../components/Common/Pagination'
 import { Outlet, useNavigate, useOutlet } from 'react-router-dom'
 import axios from 'axios'
 import { defineConfigGet } from '../../components/Common/utils'
-import { API_ALL_GET_DEPARTMENT, API_ALL_GET_DOCTOR, API_SEARCH_DOCTOR } from '../../Contants/api.constant'
+import { API_ALL_GET_DOCTOR, API_ALL_GET_SPECIALTY, API_SEARCH_DOCTOR } from '../../Contants/api.constant'
 import { PAGE_SIZE_DOCTOR, START_PAGE } from '../../Contants/general.constant'
 
 const Doctors = () => {
     let navigate = useNavigate();
     const outlet = useOutlet();
 
-    const [name, setName] = useState("")
-    const [department, setDepartment] = useState("")
+    const [name, setName] = useState("");
+    const [specialty, setSpecialty] = useState("");
 
-    const [departmentList, setDepartmentList] = useState([]);
+    const [specialtyList, setSpecialtyList] = useState([]);
     const [doctorList, setDoctorList] = useState([]);
 
     const [currentPage, setCurrentPage] = useState<number>(START_PAGE);
@@ -25,17 +25,14 @@ const Doctors = () => {
     const url_api = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
-        const url = `${url_api}${API_ALL_GET_DEPARTMENT}`;
-
-        axios.get(url, defineConfigGet({})).then((resp: any) => {
-            if (resp) {
-
-            }
-        }).catch((err: any) => {
-        })
+        getSpecialty();
     }, [])
 
     useEffect(() => {
+        getDoctor()
+    }, [currentPage, itemPerPage])
+
+    const getDoctor = () => {
         const url = `${url_api}${API_ALL_GET_DOCTOR}`;
 
         axios.get(url, defineConfigGet({ page: currentPage, size: itemPerPage })).then((resp: any) => {
@@ -47,17 +44,28 @@ const Doctors = () => {
         }).catch((err: any) => {
             console.log("err:", err)
         })
-    }, [currentPage, itemPerPage])
+    }
+
+    const getSpecialty = () => {
+        const url = `${url_api}${API_ALL_GET_SPECIALTY}`;
+
+        axios.get(url, defineConfigGet({})).then((resp: any) => {
+            if (resp) {
+                setSpecialtyList(resp.data.content);
+            }
+        }).catch((err: any) => {
+            console.log("err:", err)
+        })
+    }
 
     const handleSearch = () => {
         const url = `${url_api}${API_SEARCH_DOCTOR}`;
 
-        const param = { nameDoctor: name, department: department, page: currentPage, size: itemPerPage }
+        const param = { nameDoctor: name, nameSpecialty: specialty, page: currentPage, size: itemPerPage }
 
         axios.get(url, defineConfigGet(param)).then((resp: any) => {
             if (resp) {
                 console.log("resp:", resp)
-
             }
         }).catch((err: any) => {
             console.log("err:", err)
@@ -73,12 +81,12 @@ const Doctors = () => {
         setCurrentPage(0);
     };
 
-    const _renderListDepartment = () => {
+    const _renderListSpecialty = () => {
         return (
             <>
-                <option hidden>Department</option>
-                {departmentList.length > 0 ? (
-                    departmentList.map((item: any) => (
+                <option hidden>Specialty</option>
+                {specialtyList.length > 0 ? (
+                    specialtyList.map((item: any) => (
                         <option value={item.code} key={item.code}>
                             {item.name}
                         </option>
@@ -130,10 +138,10 @@ const Doctors = () => {
                     <div className="col-4">
                         <select
                             className="form-select"
-                            onChange={(e: any) => setDepartment(e.target.value)}
-                            value={department}
+                            onChange={(e: any) => setSpecialty(e.target.value)}
+                            value={specialty}
                         >
-                            {_renderListDepartment()}
+                            {_renderListSpecialty()}
                         </select>
                     </div>
                     <div className="col-4">
