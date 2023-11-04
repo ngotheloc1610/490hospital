@@ -8,8 +8,8 @@ const NAV_LINK = [
     url: "/",
   },
   {
-    title: "Services",
-    url: "/services",
+    title: "Specialty",
+    url: "/specialty",
   },
   {
     title: "Departments",

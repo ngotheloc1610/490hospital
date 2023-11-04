@@ -1,4 +1,4 @@
-export interface IService {
+export interface ISpecialty {
     serviceName: string,
     photo: string,
     serviceDescription: string,
