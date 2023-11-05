@@ -1,23 +1,24 @@
-import { BANNER, CANCER, DOCTOR, WHOWEARE } from "../../assets";
 import { Link, useNavigate } from "react-router-dom";
-import { LIST_DEPARTMENT } from "../../Contants";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import {
-  chunkArraySplice,
-  defineConfigGet,
-} from "../../components/Common/utils";
+
 import {
   API_ALL_GET_DEPARTMENT,
   API_ALL_GET_DOCTOR,
   API_ALL_GET_SPECIALTY,
 } from "../../Contants/api.constant";
-import { ISpecialty } from "../../interface/general.interface";
 import { START_PAGE } from "../../Contants/general.constant";
+import { IDepartment, ISpecialty } from "../../interface/general.interface";
+import { BANNER, WHOWEARE } from "../../assets";
+
+import {
+  chunkArraySplice,
+  defineConfigGet,
+} from "../../components/Common/utils";
 import MakeAppointment from "../../components/Common/MakeAppointment";
 
 const Dashboard = () => {
-  const [listDepartment, setListDepartment] = useState<any>([]);
+  const [listDepartment, setListDepartment] = useState<IDepartment[]>([]);
   const [listSpecialty, setListSpecialty] = useState<ISpecialty[]>([]);
   const [listDoctor, setListDoctor] = useState<any>([]);
 
@@ -66,7 +67,7 @@ const Dashboard = () => {
       .get(url, defineConfigGet({}))
       .then((resp: any) => {
         if (resp) {
-          setListDepartment(resp.data.content);
+          setListDepartment(resp.data);
         }
       })
       .catch((err: any) => {
@@ -262,10 +263,10 @@ const Dashboard = () => {
                           <div className="box-item">
                             <img
                               className="d-block w-100"
-                              src={CANCER}
+                              src={item.photo}
                               alt={item.photo}
                             />
-                            <p>{item.serviceName}</p>
+                            <p>{item.detail}</p>
                           </div>
                         </div>
                       );
@@ -315,13 +316,13 @@ const Dashboard = () => {
           </p>
           <div className="mt-5">
             <div className="row gy-3">
-              {LIST_DEPARTMENT.map((item: any) => {
+              {listDepartment.map((item: IDepartment, idx: number) => {
                 return (
                   <div className="col-4">
-                    <Link to={`departments${item.url}`} className="d-flex">
-                      <p className="department-icon">{item.icon}</p>
+                    <Link to={`departments/${item.id}`} className="d-flex">
+                      <p className="department-icon">{item.emojiPhoto}</p>
                       <span className="my-auto ms-3 color-gray-light">
-                        {item.title}
+                        {item.describe}
                       </span>
                     </Link>
                   </div>

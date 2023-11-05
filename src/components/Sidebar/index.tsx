@@ -36,7 +36,7 @@ const Sidebar = () => {
                 <img src={DOCTOR} alt="" />
               </div>
               <div className="col-6">
-                <p className="title">{item.serviceName}</p>
+                <p className="title">{item.description}</p>
               </div>
             </div>
           )

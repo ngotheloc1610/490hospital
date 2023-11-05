@@ -4,7 +4,9 @@ export const KEY_LOCAL_STORAGE = {
 
 export const TOTAL_STEP = 2;
 
-export const FORMAT_DATE = "DD/MM/YYYY HH:mm:ss";
+export const FORMAT_DATE = "YYYY-MM-DD";
+
+export const FORMAT_DATE_TIME = "YYYY-MM-DD HH:mm:ss";
 
 export const START_PAGE = 0;
 

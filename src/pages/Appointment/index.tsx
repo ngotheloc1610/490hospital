@@ -3,10 +3,12 @@ import moment from "moment";
 import axios from "axios";
 
 import { LIST_TIME, TYPE_OF_APPOINTMENT } from "../../Contants";
-import { FORMAT_DATE, TOTAL_STEP } from "../../Contants/general.constant";
+import { FORMAT_DATE, FORMAT_DATE_TIME, TOTAL_STEP } from "../../Contants/general.constant";
 import { DOCTOR, ICON_GRADUATION, ICON_PEOPLE_TEAM } from "../../assets";
-import { API_GET_DOCTOR_APPOINTMENT, API_GET_PATIENT_APPOINTMENT, API_GET_SLOT, API_GET_SPECIALTY_APPOINTMENT } from "../../Contants/api.constant";
-import { defineConfigGet } from "../../components/Common/utils";
+import { API_CREATE_APPOINTMENT, API_GET_DOCTOR_APPOINTMENT, API_GET_PATIENT_APPOINTMENT, API_GET_SLOT, API_GET_SPECIALTY_APPOINTMENT } from "../../Contants/api.constant";
+import { defineConfigGet, defineConfigPost } from "../../components/Common/utils";
+import { ISpecialty } from "../../interface/general.interface";
+import { warn } from "../../components/Common/notify";
 
 const Appointment = () => {
   const url_api = process.env.REACT_APP_API_URL;
@@ -15,21 +17,27 @@ const Appointment = () => {
 
   const [isBooking, setIsBooking] = useState<boolean>(false);
   const [isPassStep1, setIsPassStep1] = useState<boolean>(false);
+  const [triggerTime, setTriggerTime] = useState<boolean>(false);
 
-  const [listTypeOfAppointment, setListTypeOfAppointment] = useState([]);
-  const [listSpecialty, setListSpecialty] = useState([]);
+  const [listSpecialty, setListSpecialty] = useState<ISpecialty[]>([]);
   const [listDoctor, setListDoctor] = useState([]);
   const [listPatient, setListPatient] = useState([]);
 
-  const [date, setDate] = useState<string>("");
-  const [time, setTime] = useState<string>("");
+  const [date, setDate] = useState<string>(moment().format(FORMAT_DATE));
+  const [startTime, setStartTime] = useState<string>("")
+  const [endTime, setEndTime] = useState<string>("")
 
-  const [appointmentTime, setAppointmentTime] = useState<string>(
-    moment(`${date} ${time}`).format(FORMAT_DATE)
+  const [startDate, setStartDate] = useState<string>(
+    moment(`${date} ${startTime}`).format(FORMAT_DATE_TIME)
   );
+  const [endDate, setEndDate] = useState<string>(
+    moment(`${date} ${endTime}`).format(FORMAT_DATE_TIME)
+  );
+
+  const [timeBusy, setTimeBusy] = useState<string>("");
   const [specialty, setSpecialty] = useState<string>("");
   const [typeOfAppointment, setTypeOfAppointment] = useState<string>("");
-  const [doctor, setDoctor] = useState<string>("");
+  const [doctor, setDoctor] = useState<any>();
   const [description, setDescription] = useState<string>("");
   const [namePatient, setNamePatient] = useState<string>("");
 
@@ -37,21 +45,25 @@ const Appointment = () => {
     getSpecialty();
   }, [])
 
-  // useEffect(() => {
-  //  getSlot(doctor.id , date);
-  // }, [date, doctor])
-
-
+  useEffect(() => {
+    getDoctor(specialty);
+  }, [specialty])
 
   useEffect(() => {
-    setAppointmentTime(moment(`${date} ${time}`).format(FORMAT_DATE));
-  }, [time, date]);
+    getSlot(doctor?.id, date);
+  }, [date, doctor])
+
+  useEffect(() => {
+    setStartDate(moment(`${date} ${startTime}`).format(FORMAT_DATE_TIME));
+    setEndDate(moment(`${date} ${endTime}`).format(FORMAT_DATE_TIME));
+  }, [startTime, endTime, date]);
 
   const getPatient = () => {
     const url = `${url_api}${API_GET_PATIENT_APPOINTMENT}`;
 
-    axios.get(url, defineConfigGet({ namePatient: "patient" })).then((resp: any) => {
+    axios.get(url, defineConfigGet({ namePatient: namePatient })).then((resp: any) => {
       if (resp) {
+        setListPatient(resp.data);
       }
     }).catch((err: any) => {
       console.log("err:", err)
@@ -70,41 +82,88 @@ const Appointment = () => {
     })
   }
 
-  const getDoctor = (id: string) => {
+  const getDoctor = (specialty: string) => {
     const url = `${url_api}${API_GET_DOCTOR_APPOINTMENT}`;
 
-    axios.get(url, defineConfigGet({ specialtyId: id })).then((resp: any) => {
+    axios.get(url, defineConfigGet({ specialtyName: specialty })).then((resp: any) => {
       if (resp) {
+        setListDoctor(resp.data);
       }
     }).catch((err: any) => {
       console.log("err:", err)
     })
   }
 
-  const getSlot = (doctorId: string, date: string) => {
+  const getSlot = (doctorId: any, date: string) => {
     const url = `${url_api}${API_GET_SLOT}`;
 
     axios.get(url, defineConfigGet({ doctorID: doctorId, date: date })).then((resp: any) => {
       if (resp) {
+        console.log("resp:", resp)
       }
     }).catch((err: any) => {
+      console.log("err:", err)
+    })
+  }
+
+  const createAppointment = () => {
+    const url = `${url_api}${API_CREATE_APPOINTMENT}`;
+
+    const params = {
+      identifier: "",
+      cancellationReason: "",
+      cancellationDate: "",
+      serviceCategory: "",
+      serviceType: "",
+      specialty: "",
+      appointmentType: typeOfAppointment,
+      reasonCode: "",
+      reasonReference: "",
+      priority: "",
+      description: description,
+      supportingInformation: "",
+      start: startDate,
+      end: endDate,
+      minutesDuration: "",
+      created: "",
+      comment: "",
+      patientInstruction: "",
+      basedOn: "",
+    }
+
+    axios.post(url, params, defineConfigPost()).then((resp: any) => {
+      if (resp) {
+        console.log("resp:", resp)
+        setIsBooking(true);
+      }
+    }).catch((err: any) => {
+      setIsBooking(false);
       console.log("err:", err)
     })
   }
 
   const handleNext = () => {
-    setIsPassStep1(true);
-    setStep(step + 1);
+    if (typeOfAppointment && specialty && doctor && date && startTime && endTime) {
+      setIsPassStep1(true);
+      setStep(step + 1);
+    } else {
+
+      warn("Chưa điền hết thông tin!");
+    }
   };
 
   const handleBook = () => {
-    setIsBooking(true);
+    createAppointment();
   };
 
   const handleCancel = () => {
     setIsPassStep1(false);
     setStep(step - 1);
   };
+
+  const handleSearchPatient = () => {
+    getPatient()
+  }
 
   const _renderTimeBook = useCallback(
     () => {
@@ -116,7 +175,8 @@ const Appointment = () => {
             {LIST_TIME.map((item: any, idx: number) => {
               return (
                 <div className="col-4">
-                  <button type="button" className="w-100 p-3">
+                  <button type="button" className={`w-100 p-3 ${startTime === item.startTime && endTime === item.endTime ? "time-selected" : ""}`}
+                    onClick={() => { setStartTime(item.startTime); setEndTime(item.endTime); setTriggerTime(!triggerTime) }}>
                     {item.title}
                   </button>
                 </div>
@@ -126,9 +186,8 @@ const Appointment = () => {
         </div>
       )
     },
-    [],
+    [triggerTime],
   )
-
 
   const _renderListSpecialty = () => {
     return (
@@ -137,7 +196,7 @@ const Appointment = () => {
         {listSpecialty?.length > 0 ? (
           listSpecialty?.map((item: any) => (
             <option value={item.code} key={item.code}>
-              {item.name}
+              {item.code}
             </option>
           ))
         ) : (
@@ -153,8 +212,8 @@ const Appointment = () => {
         <option hidden>Type of appointment</option>
         {
           TYPE_OF_APPOINTMENT.map((item: any) => (
-            <option value={item.value} key={item.value}>
-              {item.title}
+            <option value={item.code} key={item.code}>
+              {item.display}
             </option>
           ))
         }
@@ -181,7 +240,7 @@ const Appointment = () => {
     return (
       <div className="appointment-container-footer">
         {step === TOTAL_STEP ? (
-          <div className="m-auto">
+          <div className="d-flex justify-content-center align-item-center">
             <button
               className="button button--primary me-3"
               onClick={() => handleBook()}
@@ -189,7 +248,7 @@ const Appointment = () => {
               Book
             </button>
             <button
-              className="button button--primary"
+              className="button button--gray"
               onClick={() => handleCancel()}
             >
               Cancel
@@ -220,12 +279,12 @@ const Appointment = () => {
               </div>
             </div>
             <div className="col-4">
-              <button className="button-apply">Apply</button>
+              <button className="button-apply" onClick={() => handleSearchPatient()}>Apply</button>
             </div>
           </div>
 
           <div>
-            <table className="table table-striped">
+            {listPatient.length > 0 && <table className="table table-striped">
               <thead className="table-light">
                 <tr>
                   <th scope="col">Name</th>
@@ -240,6 +299,9 @@ const Appointment = () => {
                   const email = item.telecom?.find(
                     (i: any) => i?.system === "email"
                   )?.value;
+                  const phone = item.telecom?.find(
+                    (i: any) => i?.system === "phone"
+                  )?.value;
 
                   return (
                     <tr className={`${idx % 2 === 1 ? "table-light" : ""}`}>
@@ -249,14 +311,15 @@ const Appointment = () => {
                       <td >{item.gender}</td>
                       <td >{item.birthDate}</td>
                       <td >
-                        {item.telecomFirstRep.value}
+                        {phone}
                       </td>
                       <td >{email}</td>
                     </tr>
                   );
                 })}
               </tbody>
-            </table>
+            </table>}
+
           </div>
         </div>
 
@@ -280,7 +343,9 @@ const Appointment = () => {
               <select
                 id="specialty"
                 className="form-select"
-                onChange={(e: any) => setSpecialty(e.target.value)}
+                onChange={(e: any) => {
+                  setSpecialty(e.target.value)
+                }}
                 value={specialty}
               >
                 {_renderListSpecialty()}
@@ -289,13 +354,14 @@ const Appointment = () => {
           </div>
 
           <div className="mt-3">
-            <h5 className="mb-3 fw-bold">Select Doctor</h5>
+            <h5 className="fw-bold mb-3">Select Doctor</h5>
             <div className="row">
-              {listDoctor?.map((doctor: any, idx: number) => {
-                const name = doctor.practitionerTarget.nameFirstRep.nameAsSingleString;
-                const specialty = doctor.specialty[0].coding[0].display;
+              {listDoctor?.map((item: any, idx: number) => {
+                const name = item.practitionerTarget.nameFirstRep.nameAsSingleString;
+                const specialty = item.specialty[0].coding[0].display;
                 return (
-                  <div className='col-6 row gy-3 py-3 mb-3'>
+
+                  <div className={`col-6 row ${item.id === doctor?.id ? "doctor-selected" : ""}`} onClick={() => setDoctor(item)}>
                     <div className='col-4'>
                       <img src={DOCTOR} alt="" />
                     </div>
@@ -310,7 +376,7 @@ const Appointment = () => {
             </div>
           </div>
 
-          <div>
+          <div className="mt-3">
             <h5 className="mb-3 fw-bold">Select date and time</h5>
 
             <div className="row gx-5">
@@ -322,6 +388,9 @@ const Appointment = () => {
                     type="date"
                     className="form-control"
                     autoComplete="new-password"
+                    value={date}
+                    max="9999-12-31"
+                    onChange={(e: any) => setDate(moment(e.target.value).format(FORMAT_DATE))}
                   />
                 </div>
                 <p className="fw-light fst-italic text-center pt-3">See next 7 days</p>
@@ -332,7 +401,7 @@ const Appointment = () => {
               <div className="col-12 mt-3">
                 <label htmlFor="description" className="fw-bold mb-3">Description</label>
                 <div className="form-floating">
-                  <textarea className="form-control" placeholder="Enter description" id="description"></textarea>
+                  <textarea className="w-100 p-3 rounded" cols={10} rows={10} placeholder="Enter description" id="description" value={description} onChange={(e: any) => setDescription(e.target.value)}></textarea>
                 </div>
               </div>
             </div>
@@ -343,6 +412,9 @@ const Appointment = () => {
   };
 
   const _renderStep2 = () => {
+    const specialtyCode = listSpecialty.find(item => item.code === specialty)?.code;
+    const specialtyDisplay = listSpecialty.find(item => item.code === specialty)?.display;
+
     return (
       <div className="border border-3 rounded p-3">
         <div className="border-bottom">
@@ -394,27 +466,31 @@ const Appointment = () => {
             <tbody>
               <tr>
                 <td>Appointment Date</td>
-                <td>Thu, 26 Oct 2023</td>
+                <td>{moment(startDate).format("ddd, DD MMM YYYY")}</td>
               </tr>
               <tr>
                 <td>Appointment time</td>
-                <td>13:00. 22/09/2023</td>
+                <td>
+                  <span>{moment(startDate).format("HH:mm")}</span> - <span>{moment(endDate).format("HH:mm")}</span>
+                </td>
               </tr>
               <tr>
                 <td>Doctor</td>
-                <td>jonathan12</td>
+                <td>{doctor?.practitionerTarget?.nameFirstRep?.nameAsSingleString}</td>
               </tr>
               <tr>
                 <td>Type of appointment</td>
-                <td>jonathan12</td>
+                <td>{TYPE_OF_APPOINTMENT.find(item => item.code === typeOfAppointment)?.display}</td>
               </tr>
               <tr>
                 <td>Specialty</td>
-                <td>General Surgery</td>
+                <td>
+                  {"["}<span className="text-info">{specialtyCode}</span>{"]"} {specialtyDisplay && "-"}
+                  {specialtyDisplay}</td>
               </tr>
               <tr>
                 <td>Status</td>
-                <td>General Surgery</td>
+                <td><span className="text-warning">No Show</span></td>
               </tr>
             </tbody>
           </table>
@@ -423,7 +499,7 @@ const Appointment = () => {
         <div className="mt-3">
           <label htmlFor="description" className="mb-3 fw-bold">Description</label>
           <div className="form-floating">
-            <textarea className="form-control" placeholder="Leave a comment here" id="description"></textarea>
+            <textarea className="w-100 p-3 rounded" cols={5} rows={5} placeholder="Enter description" id="description" value={description} onChange={(e: any) => setDescription(e.target.value)}></textarea>
           </div>
         </div>
       </div>

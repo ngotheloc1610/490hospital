@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
+
 import Login from "../pages/Authentication/Login";
 import ForgotPassword from "../pages/Authentication/ForgotPassword";
 import Register from "../pages/Authentication/Register";

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import PaginationComponent from "../../components/Common/Pagination";
-import { Outlet, useNavigate, useOutlet } from "react-router-dom";
-import { DOCTOR } from "../../assets";
-import { defineConfigGet } from "../../components/Common/utils";
-import { API_ALL_GET_SPECIALTY } from "../../Contants/api.constant";
 import axios from "axios";
+import { Outlet, useNavigate, useOutlet } from "react-router-dom";
+
+import { API_ALL_GET_SPECIALTY } from "../../Contants/api.constant";
 import { PAGE_SIZE_SERVICE, START_PAGE } from "../../Contants/general.constant";
 import { ISpecialty } from "../../interface/general.interface";
+
+import PaginationComponent from "../../components/Common/Pagination";
+import { defineConfigGet } from "../../components/Common/utils";
 import MakeAppointment from "../../components/Common/MakeAppointment";
 
 const Specialty = () => {
@@ -64,12 +65,12 @@ const Specialty = () => {
                   onClick={() => navigate(item.id)}
                 >
                   <div className={`${idx === 0 ? "col-6" : "col-4"}`}>
-                    <img src={DOCTOR} alt={item.photo} />
+                    <img src={item.photo} alt={item.photo} />
                   </div>
                   <div className={`${idx === 0 ? "col-6" : "col-8"}`}>
-                    <h5 className="title-service">{item.serviceName}</h5>
+                    <h5 className="title-service">{item.detail}</h5>
                     <p className="subtitle-service">
-                      {item.serviceDescription}
+                      {item.description}
                     </p>
                   </div>
                 </div>

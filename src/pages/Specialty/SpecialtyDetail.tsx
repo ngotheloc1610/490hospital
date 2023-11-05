@@ -1,11 +1,13 @@
-import Sidebar from "../../components/Sidebar";
-import { DOCTOR, ICON_GRADUATION, ICON_PEOPLE_TEAM } from "../../assets";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { API_GET_DOCTOR_FOR_SPECIALTY, API_GET_SPECIALTY } from "../../Contants/api.constant";
-import { defineConfigGet } from "../../components/Common/utils";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+
+import { DOCTOR, ICON_GRADUATION, ICON_PEOPLE_TEAM } from "../../assets";
+import { API_GET_DOCTOR_FOR_SPECIALTY, API_GET_SPECIALTY } from "../../Contants/api.constant";
 import { ISpecialty } from "../../interface/general.interface";
+import { defineConfigGet } from "../../components/Common/utils";
+
+import Sidebar from "../../components/Sidebar";
 
 const SpecialtyDetail = () => {
   const params = useParams();
@@ -13,13 +15,18 @@ const SpecialtyDetail = () => {
   const url_api = process.env.REACT_APP_API_URL;
 
   const [specialty, setSpecialty] = useState<ISpecialty>({
-    serviceName: "",
+    id: "",
+    department: {
+      coding: "",
+      display: ""
+    },
+    code: "",
+    display: "",
     photo: "",
-    serviceDescription: "",
-    departments: null,
-    rankServices: [],
-    vouchers: [],
-    id: ""
+    description: "",
+    detail: "",
+    specialistTeamPhoto: "",
+    specialistTeamDescription: ""
   });
 
   const [listDoctor, setListDoctor] = useState<any>([]);
@@ -61,12 +68,12 @@ const SpecialtyDetail = () => {
       <div className="container p-5">
         <div className="row gy-3">
           <div className="col-8">
-            <h3 className="mb-3 fs-1 fw-bold">{specialty.serviceName}</h3>
+            <h3 className="mb-3 fs-1 fw-bold">{specialty.detail}</h3>
             <div className="image-content">
-              <img src={DOCTOR} alt={specialty.photo} />
+              <img src={specialty.photo} alt={specialty.photo} />
             </div>
             <div className="detail-content">
-              <p>{specialty.serviceDescription}</p>
+              <p>{specialty.description}</p>
             </div>
 
             <div className='doctor-specialty'>
