@@ -1,10 +1,11 @@
-import { useEffect } from "react";
-import { DEPARTMENT_BG } from "../../assets";
-import { LIST_DEPARTMENT } from "../../Contants";
-import { Link, Outlet, useNavigate, useOutlet } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Outlet, useNavigate, useOutlet } from "react-router-dom";
 import axios from "axios";
-import { defineConfigGet } from "../../components/Common/utils";
+
+import { DEPARTMENT_BG } from "../../assets";
 import { API_ALL_GET_DEPARTMENT } from "../../Contants/api.constant";
+import { IDepartment } from "../../interface/general.interface";
+import { defineConfigGet } from "../../components/Common/utils";
 
 
 const Departments = () => {
@@ -13,16 +14,17 @@ const Departments = () => {
 
   const url_api = process.env.REACT_APP_API_URL;
 
+  const [listDepartment, setListDepartment] = useState<IDepartment[]>([]);
+
   useEffect(() => {
     const url = `${url_api}${API_ALL_GET_DEPARTMENT}`;
 
     axios.get(url, defineConfigGet({})).then((resp: any) => {
       if (resp) {
-
+        setListDepartment(resp.data);
       }
     }).catch(err => {
       console.log("err:", err)
-
     })
   }, [])
 
@@ -37,13 +39,13 @@ const Departments = () => {
           </p>
           <div className="mt- 5">
             <div className="row gy-3">
-              {LIST_DEPARTMENT.map((item: any) => {
+              {listDepartment.map((item: IDepartment, idx: number) => {
                 return (
-                  <div className="col-4" onClick={() => navigate("123123D")}>
+                  <div className="col-4" onClick={() => navigate(item.id)}>
                     <div className="d-flex">
-                      <p className="department-icon">{item.icon}</p>
+                      <p className="department-icon">{item.emojiPhoto}</p>
                       <span className="my-auto ms-3 color-gray-light">
-                        {item.title}
+                        {item.describe}
                       </span>
                     </div>
                   </div>

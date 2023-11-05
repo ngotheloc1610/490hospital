@@ -1,61 +1,3 @@
-import {
-  ICON_CARDIOLOGIST,
-  ICON_DENTIST,
-  ICON_DERMATOLOGY,
-  ICON_GENERAL,
-  ICON_GYNECOLOGY,
-  ICON_LUNG,
-  ICON_PSYCHIATRIST,
-} from "../assets";
-
-export const LIST_DEPARTMENT = [
-  {
-    title: "General",
-    icon: <ICON_GENERAL />,
-    url: "/general",
-  },
-  {
-    title: "Cardiology",
-    icon: <ICON_CARDIOLOGIST />,
-    url: "/cardiology",
-  },
-  {
-    title: "Obstetrics and Gynecology",
-    icon: <ICON_GYNECOLOGY />,
-    url: "/obstetrics-gynecology",
-  },
-  {
-    title: "Dentistry",
-    icon: <ICON_DENTIST />,
-    url: "/dentistry",
-  },
-  {
-    title: "Lungs Specialist",
-    icon: <ICON_LUNG />,
-    url: "/lungs-specialist",
-  },
-  {
-    title: "Covid-19 ",
-    icon: <ICON_GENERAL />,
-    url: "/covid-19 ",
-  },
-  {
-    title: "Pediatrics",
-    icon: <ICON_GENERAL />,
-    url: "/pediatrics",
-  },
-  {
-    title: "Psychiatry",
-    icon: <ICON_PSYCHIATRIST />,
-    url: "/psychiatry",
-  },
-  {
-    title: "Dermatology",
-    icon: <ICON_DERMATOLOGY />,
-    url: "/dermatology",
-  },
-];
-
 export const GENDER = [
   { title: "Male", value: "male" },
   {
@@ -75,13 +17,25 @@ export const GENDER_ALL = [
 
 export const TYPE_OF_APPOINTMENT = [
   {
-    title: "Previous",
-    value: "previous",
+    code: "ROUTINE",
+    display: "Routine appointment - default if not value"
   },
   {
-    title: "Upcoming",
-    value: "upcoming"
-  }
+    code: "WALKIN",
+    display: "A previously unscheduled walk-in visit"
+  },
+  {
+    code: "CHECKUP",
+    display: "A routine check-up, such as an annual physical"
+  },
+  {
+    code: "FOLLOWUP",
+    display: "A follow up visit from a previous appointment	A"
+  },
+  {
+    code: "EMERGENCY",
+    display: "Emergency appointment"
+  },
 ]
 
 export const LIST_TIME = [
@@ -130,5 +84,4 @@ export const LIST_TIME = [
     startTime: "16:00:00",
     endTime: "17:00:00",
   },
-
 ];

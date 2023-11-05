@@ -16,3 +16,4 @@ export const API_GET_PATIENT_APPOINTMENT = "/appointment/patient";
 export const API_GET_SPECIALTY_APPOINTMENT = "/appointment/specialty";
 export const API_GET_DOCTOR_APPOINTMENT = "/appointment/doctor";
 export const API_GET_SLOT = "/appointment/slot";
+export const API_CREATE_APPOINTMENT = "/appointment/createAppointment";

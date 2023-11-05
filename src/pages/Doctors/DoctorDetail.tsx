@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+
 import { DOCTOR } from '../../assets'
 import { API_GET_DOCTOR } from '../../Contants/api.constant';
-import axios from 'axios';
 import { defineConfigGet } from '../../components/Common/utils';
-import { useParams } from 'react-router-dom';
 
 
 const DoctorDetail = () => {

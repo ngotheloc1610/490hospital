@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
-import { DOCTOR, DOCTOR_BG, ICON_GRADUATION, ICON_PEOPLE_TEAM } from '../../assets'
-import Sidebar from '../../components/Sidebar'
-import PaginationComponent from '../../components/Common/Pagination'
-import { Outlet, useNavigate, useOutlet } from 'react-router-dom'
 import axios from 'axios'
-import { defineConfigGet } from '../../components/Common/utils'
+import { Outlet, useNavigate, useOutlet } from 'react-router-dom';
+
+import { DOCTOR, DOCTOR_BG, ICON_GRADUATION, ICON_PEOPLE_TEAM } from '../../assets'
 import { API_ALL_GET_DOCTOR, API_ALL_GET_SPECIALTY, API_SEARCH_DOCTOR } from '../../Contants/api.constant'
 import { PAGE_SIZE_DOCTOR, START_PAGE } from '../../Contants/general.constant'
+
+import Sidebar from '../../components/Sidebar'
+import PaginationComponent from '../../components/Common/Pagination'
+import { defineConfigGet } from '../../components/Common/utils'
 
 const Doctors = () => {
     let navigate = useNavigate();
@@ -88,7 +90,7 @@ const Doctors = () => {
                 {specialtyList.length > 0 ? (
                     specialtyList.map((item: any) => (
                         <option value={item.code} key={item.code}>
-                            {item.name}
+                            {item.code}
                         </option>
                     ))
                 ) : (

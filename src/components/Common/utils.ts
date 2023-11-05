@@ -1,4 +1,3 @@
-import { log } from "console";
 import { KEY_LOCAL_STORAGE } from "../../Contants/general.constant";
 
 export const defineConfigGet = (param: any) => {
@@ -24,5 +23,9 @@ export const chunkArraySplice = (array: any, chunkSize: number) => {
     }
 
     return chunkedArray;
-
 };
+
+export function convertDateToTimeStamp(value: string, time: string) {
+    const newDate = `${value} ${time}`
+    return Date.parse(newDate);
+}

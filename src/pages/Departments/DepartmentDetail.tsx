@@ -1,20 +1,25 @@
-import React, { useEffect } from "react";
-import { DOCTOR } from "../../assets";
-import { useParams } from "react-router-dom";
-import { API_GET_DEPARTMENT } from "../../Contants/api.constant";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
+
+import { DOCTOR } from "../../assets";
+import { API_GET_DEPARTMENT } from "../../Contants/api.constant";
+import { IDepartment } from "../../interface/general.interface";
 import { defineConfigGet } from "../../components/Common/utils";
 
 const DepartmentDetail = () => {
-
   const params = useParams();
   const url_api = process.env.REACT_APP_API_URL;
+
+  const [department, setDepartment] = useState<IDepartment>();
+
   useEffect(() => {
-    const url = `${url_api}${API_GET_DEPARTMENT}`;
+    const id = params.departmentId
+    const url = `${url_api}${API_GET_DEPARTMENT}${id}`;
 
-    axios.get(url, defineConfigGet({ id: params.departmentId })).then((resp: any) => {
+    axios.get(url, defineConfigGet({})).then((resp: any) => {
       if (resp) {
-
+        setDepartment(resp.data);
       }
     }).catch(err => {
       console.log("err:", err)
@@ -25,13 +30,9 @@ const DepartmentDetail = () => {
   const _renderOurDepartment = () => {
     return (
       <section className="department-detail container p-5">
-        <h3 className="mb-3 fs-1 fw-bold  pb-3 border-bottom">OBSTETRICS AND GYNECOLOGY</h3>
+        <h3 className="mb-3 fs-1 fw-bold  pb-3 border-bottom">{department?.describe}</h3>
         <p>
-          The Obstetrics Department is considered one of the most spearhead at
-          SEP490 Hospital. With sincere care, compassion, and responsibility,
-          the medical team at SEP490 is always ready to accompany and serve as a
-          solid foundation, so that parents can rest assured to receive precious
-          moments in the most perfect way.
+          {department?.descriptions}
         </p>
         <div className="mt-5">
           <div className="general bg-linear color-white mb-5">
