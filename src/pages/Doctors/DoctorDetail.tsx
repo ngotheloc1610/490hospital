@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
-import { DOCTOR } from '../../assets'
 import { API_GET_DOCTOR } from '../../Contants/api.constant';
 import { defineConfigGet } from '../../components/Common/utils';
 
@@ -31,7 +30,7 @@ const DoctorDetail = () => {
         <div className="container p-3">
             <div className='row gy-5'>
                 <div className="col-4 pe-5">
-                    <img src={DOCTOR} alt="" className='image-doctor' />
+                    <img src={doctor?.practitionerTarget?.photo[0].data} alt={doctor?.practitionerTarget?.photo[0].data} className='image-doctor' />
                     <button className='button button--primary w-100 mt-4 text-uppercase'>Make an Appointment Now!</button>
                 </div>
                 <div className="col-8">
@@ -39,18 +38,22 @@ const DoctorDetail = () => {
                         <h3 className='pb-3 mb-3 fw-bold text-uppercase border-bottom'>{doctor?.practitionerTarget?.nameFirstRep?.nameAsSingleString}</h3>
                         <div className='container'>
                             <div className='row'>
-                                <p className='col-2 fw-bold'>Department</p>
+                                <p className='col-2 fw-bold'>Specialty</p>
                                 <ul className='col-10'>
-                                    <li className='lh-base mb-2'>General Surgery Department,</li>
+                                    <li className='lh-base mb-2'>{doctor.specialty?.map((spec: any) => {
+                                        return (
+                                            <span>{spec.display}</span>
+                                        )
+                                    })}</li>
                                 </ul>
                             </div>
 
                             <div className='row'>
                                 <p className='col-2 fw-bold'>Education</p>
                                 <ul className='col-10'>
-                                    {doctor.education && doctor.education.map((edu: any, idx: number) => {
+                                    {doctor.educations && doctor.educations.map((edu: any, idx: number) => {
                                         return (
-                                            <li className='lh-base mb-2'>2014: Graduated as General Practitioner at Thai Binh University of Medicine and Pharmacy</li>
+                                            <li className='lh-base mb-2'><span>{edu.year}</span>: {edu.detail}</li>
                                         )
                                     })}
                                 </ul>
@@ -60,7 +63,7 @@ const DoctorDetail = () => {
                                 <ul className='col-10'>
                                     {doctor.specialty && doctor.specialty.map((spec: any, idx: number) => {
                                         return (
-                                            <li className='lh-base mb-2'>2014 - 2020: General surgery doctor, specializing in orthopedic trauma, Department of General Surgery, Y Yen General Hospital
+                                            <li className='lh-base mb-2'>{spec.timeStart} - {spec.timeEnd}: <span>{spec.detail}</span>
                                             </li>
                                         )
                                     })}
@@ -76,7 +79,7 @@ const DoctorDetail = () => {
                             <ul>
                                 {doctor.achievements && doctor.achievements.map((achi: any, idx: number) => {
                                     return (
-                                        <li className='lh-base mb-2'>2016: Certificate of practice in surgical examination and treatment
+                                        <li className='lh-base mb-2'>{achi.time}: {achi.detail}
                                         </li>
                                     )
                                 })}

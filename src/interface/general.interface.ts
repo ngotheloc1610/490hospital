@@ -5,7 +5,7 @@ export interface ISpecialty {
         display: string,
     },
     code: string,
-    display: string,
+    name: string,
     photo: string,
     description: string,
     detail: string,
@@ -20,10 +20,10 @@ export interface IDepartment {
         display: string,
     },
     emojiPhoto: string,
-    photo: string,
     describe: string,
-    specialty: any,
-    descriptions: string
+    photo: string,
+    title: string
+    titleDetail: string
 }
 
 export interface ICoding {

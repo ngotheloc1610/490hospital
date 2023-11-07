@@ -34,7 +34,8 @@ const Dashboard = () => {
       .get(url, defineConfigGet({ page: START_PAGE, size: 1000 }))
       .then((resp: any) => {
         if (resp) {
-          setListDoctor(resp.data.content);
+          const dataChuck = chunkArraySplice(resp.data.content, 3);
+          setListDoctor(dataChuck);
         }
       })
       .catch((err: any) => {
@@ -266,7 +267,7 @@ const Dashboard = () => {
                               src={item.photo}
                               alt={item.photo}
                             />
-                            <p>{item.detail}</p>
+                            <p>{item.name}</p>
                           </div>
                         </div>
                       );
@@ -320,9 +321,9 @@ const Dashboard = () => {
                 return (
                   <div className="col-4">
                     <Link to={`departments/${item.id}`} className="d-flex">
-                      <p className="department-icon">{item.emojiPhoto}</p>
+                      <p className="department-icon">{item.photo}</p>
                       <span className="my-auto ms-3 color-gray-light">
-                        {item.describe}
+                        {item.title}
                       </span>
                     </Link>
                   </div>
@@ -374,17 +375,23 @@ const Dashboard = () => {
               return (
                 <div className={`carousel-item ${idxDoctor === 0 ? "active" : " "}`}>
                   <div className="row g-5">
-                    {/* {doctors?.map((item: any, idx: number) => {
+                    {doctors?.map((item: any, idx: number) => {
                       return (
                         <div className="col-3 d-flex" onClick={() => navigate(`/doctors/${item.id}`)}>
-                          <img src={DOCTOR} alt="" />
+                          <img src={item?.practitionerTarget.photo[0].data} alt={item?.practitionerTarget.photo[0].data} />
                           <div className="ms-3">
                             <p className="color-dark fw-bold">{item.practitionerTarget.nameFirstRep.nameAsSingleString}</p>
-                            <span className="text-small">empty</span>
+                            <span className="text-small">
+                              {item.specialty?.map((spec: any) => {
+                                return (
+                                  <span>{spec.display} ,</span>
+                                )
+                              })}
+                            </span>
                           </div>
                         </div>
                       )
-                    })} */}
+                    })}
                   </div>
                 </div>
               )

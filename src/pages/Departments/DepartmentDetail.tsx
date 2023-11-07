@@ -30,29 +30,15 @@ const DepartmentDetail = () => {
   const _renderOurDepartment = () => {
     return (
       <section className="department-detail container p-5">
-        <h3 className="mb-3 fs-1 fw-bold  pb-3 border-bottom">{department?.describe}</h3>
+        <h3 className="mb-3 fs-1 fw-bold  pb-3 border-bottom">{department?.title}</h3>
         <p>
-          {department?.descriptions}
+          {department?.titleDetail}
         </p>
         <div className="mt-5">
           <div className="general bg-linear color-white mb-5">
             <h3 className="color-white mb-3">GENERAL INTRODUCTION</h3>
             <p className="lh-base">
-              Accompanying SEP490 General Hospital since the early days of its
-              establishment, the Obstetrics Department has continuously improved
-              its team of experienced doctors, developed modern equipment and
-              comprehensive innovation to provide obstetric services. High
-              quality for customers.
-            </p>
-            <p className="lh-base">
-              During 10 years of operation, SEP490 Obstetrics Department has
-              always been a close and trusted companion of many pregnant
-              mothers, helping to make the pregnancy journey and the moment of
-              labor easier. With unremitting efforts, SEP490 Obstetrics
-              Department is proud to have welcomed more than thousands of babies
-              into the world, successfully implementing the skin-to-skin method
-              - slow clamping of the umbilical cord and many other modern
-              methods.
+              {department?.describe}
             </p>
           </div>
 

@@ -1,10 +1,32 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { defineConfigGet } from "../../../components/Common/utils";
+import axios from "axios";
+import { API_FORGOT_PASSWORD } from "../../../Contants/api.constant";
 
 
 const ForgotPassword = () => {
+  const url_api = process.env.REACT_APP_API_URL;
+
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isShowCfPassword, setIsShowCfPassword] = useState(false);
+
+  const [email, setEmail] = useState<string>("");
+
+  const handleSendMail = () => {
+    const url = `${url_api}${API_FORGOT_PASSWORD}`;
+
+    axios
+      .post(url, defineConfigGet({ email: email }))
+      .then((resp: any) => {
+        if (resp) {
+          console.log("resp:", resp)
+        }
+      })
+      .catch((err: any) => {
+        console.log("err:", err);
+      });
+  }
 
   const _renderForgotYourPw = () => {
     return (
@@ -19,12 +41,12 @@ const ForgotPassword = () => {
             <label htmlFor="email" className="icon-email">
               <i className="bi bi-envelope fs-4"></i>
             </label>
-            <input type="email" className="form-control" id="email" />
+            <input type="email" className="form-control" id="email" value={email} onChange={(e: any) => setEmail(e.target.value)} />
             <span className="icon-check">
               <i className="bi bi-check-lg fs-4"></i>
             </span>
           </div>
-          <button className="w-100 button button--large button--large--primary">
+          <button className="w-100 button button--large button--large--primary" onClick={() => handleSendMail()}>
             Send code
           </button>
         </div>
@@ -126,9 +148,9 @@ const ForgotPassword = () => {
   return (
     <>
       {_renderForgotYourPw()}
-      {_renderCreateNewPw()}
+      {/* {_renderCreateNewPw()}
       {_renderSuccess()}
-      {_renderVerifyCode()}
+      {_renderVerifyCode()} */}
     </>
   );
 };

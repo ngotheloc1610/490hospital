@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { DOCTOR, SIDEBAR } from "../../assets";
+import { SIDEBAR } from "../../assets";
 import { API_ALL_GET_SPECIALTY } from "../../Contants/api.constant";
 import axios from "axios";
 import { defineConfigGet } from "../Common/utils";
@@ -33,10 +33,10 @@ const Sidebar = () => {
           return (
             <div className="row gy-3 py-3 mb-3" onClick={() => navigate(`/specialty/${item.id}`)}>
               <div className="col-6">
-                <img src={DOCTOR} alt="" />
+                <img src={item.photo} alt={item.photo} />
               </div>
               <div className="col-6">
-                <p className="title">{item.description}</p>
+                <p className="title">{item.name}</p>
               </div>
             </div>
           )
