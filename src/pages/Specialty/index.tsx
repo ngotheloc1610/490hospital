@@ -68,7 +68,7 @@ const Specialty = () => {
                     <img src={item.photo} alt={item.photo} />
                   </div>
                   <div className={`${idx === 0 ? "col-6" : "col-8"}`}>
-                    <h5 className="title-service">{item.detail}</h5>
+                    <h5 className="title-service">{item.name}</h5>
                     <p className="subtitle-service">
                       {item.description}
                     </p>

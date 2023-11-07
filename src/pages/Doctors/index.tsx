@@ -90,7 +90,7 @@ const Doctors = () => {
                 {specialtyList.length > 0 ? (
                     specialtyList.map((item: any) => (
                         <option value={item.code} key={item.code}>
-                            {item.code}
+                            {item.display}
                         </option>
                     ))
                 ) : (
@@ -105,17 +105,25 @@ const Doctors = () => {
             <div className='container'>
                 {doctorList?.map((doctor: any, idx: number) => {
                     const name = doctor.practitionerTarget.nameFirstRep.nameAsSingleString;
-                    const specialty = doctor.specialty[0].coding[0].display;
+                    const photo = doctor.practitionerTarget.photo[0].data;
 
                     return (
                         <div className='row gy-3 py-3 mb-3' onClick={() => navigate(doctor.id)}>
                             <div className='col-4'>
-                                <img src={DOCTOR} alt="" />
+                                <img src={photo} alt={photo} />
                             </div>
                             <div className='col-8'>
                                 <h3 className='mb-3'>{name}</h3>
-                                <p className='ms-3'><span><ICON_GRADUATION /></span>  Level II specialist, Meritorious Doctor</p>
-                                <p className='ms-3'><span><ICON_PEOPLE_TEAM /></span> {specialty}</p>
+                                <p className='ms-3'><span><ICON_GRADUATION /></span> {doctor.educations?.map((edu: any) => {
+                                    return (
+                                        <span>{edu.detail}</span>
+                                    )
+                                })}</p>
+                                <p className='ms-3'><span><ICON_PEOPLE_TEAM /></span> {doctor.specialty?.map((spec: any) => {
+                                    return (
+                                        <span>{spec.display}</span>
+                                    )
+                                })}</p>
                             </div>
                         </div>
                     )

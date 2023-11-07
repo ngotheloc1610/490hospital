@@ -1,5 +1,8 @@
 export const API_LOGIN = "/api/v1/login";
 export const API_REGISTER = "/api/v1/register";
+export const API_FORGOT_PASSWORD = "/password/sendMail";
+export const API_CHANGE_PASSWORD_NEW = "/password/changePassfromEmail";
+export const API_CHANGE_PASSWORD = "/password/changePass/";
 
 export const API_ALL_GET_SPECIALTY = "/homepage/listSpecialty";
 export const API_GET_SPECIALTY = "/homepage/Specialty/detail/";

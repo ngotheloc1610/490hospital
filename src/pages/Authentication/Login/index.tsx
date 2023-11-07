@@ -1,6 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import { LOGO_HOSPITAL } from "../../../assets";
 import { useState } from "react";
+import axios from "axios";
+import { defineConfigPost } from "../../../components/Common/utils";
+import { API_LOGIN } from "../../../Contants/api.constant";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -8,7 +11,27 @@ const Login = () => {
   const [gmail, setGmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  const url_api = process.env.REACT_APP_API_URL;
 
+  const handleLogin = () => {
+    const url = `${url_api}${API_LOGIN}`;
+
+    const params = {
+      username: gmail,
+      password: password
+    }
+
+    axios
+      .post(url, params, defineConfigPost())
+      .then((resp: any) => {
+        if (resp) {
+          console.log("resp:", resp)
+        }
+      })
+      .catch((err: any) => {
+        console.log("err:", err);
+      });
+  }
 
   return (
     <div className="contain">
@@ -30,7 +53,7 @@ const Login = () => {
             </label>
             <input type="password" id="password" autoComplete="new-password" value={password} onChange={(e: any) => setPassword(e.target.value)} />
           </div>
-          <button className="button button--large button--large--primary w-100">Login</button>
+          <button className="button button--large button--large--primary w-100" onClick={() => handleLogin()}>Login</button>
           <p className="text-end mt-3">
             <Link to="/forgot-password">Forgot Password?</Link>
           </p>

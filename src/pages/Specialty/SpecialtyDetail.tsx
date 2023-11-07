@@ -21,7 +21,7 @@ const SpecialtyDetail = () => {
       display: ""
     },
     code: "",
-    display: "",
+    name: "",
     photo: "",
     description: "",
     detail: "",
@@ -68,7 +68,7 @@ const SpecialtyDetail = () => {
       <div className="container p-5">
         <div className="row gy-3">
           <div className="col-8">
-            <h3 className="mb-3 fs-1 fw-bold">{specialty.detail}</h3>
+            <h3 className="mb-3 fs-1 fw-bold">{specialty.name}</h3>
             <div className="image-content">
               <img src={specialty.photo} alt={specialty.photo} />
             </div>
@@ -85,17 +85,25 @@ const SpecialtyDetail = () => {
 
                 {listDoctor?.map((doctor: any, idx: number) => {
                   const name = doctor.practitionerTarget.nameFirstRep.nameAsSingleString;
-                  const specialty = doctor.specialty[0].coding[0].display;
+                  const photo = doctor?.practitionerTarget.photo[0].data;
 
                   return (
                     <div className='row gy-3 py-3 mb-3' onClick={() => navigate(doctor.id)}>
                       <div className='col-4'>
-                        <img src={DOCTOR} alt="" />
+                        <img src={photo} alt={photo} />
                       </div>
                       <div className='col-8'>
                         <h3 className='mb-3'>{name}</h3>
-                        <p className='ms-3'><span><ICON_GRADUATION /></span>  Level II specialist, Meritorious Doctor</p>
-                        <p className='ms-3'><span><ICON_PEOPLE_TEAM /></span> {specialty}</p>
+                        <p className='ms-3'><span><ICON_GRADUATION /></span>  {doctor.educations?.map((edu: any) => {
+                          return (
+                            <span>{edu.detail}</span>
+                          )
+                        })}</p>
+                        <p className='ms-3'><span><ICON_PEOPLE_TEAM /></span> {doctor.specialty?.map((spec: any) => {
+                          return (
+                            <span>{spec.display}, </span>
+                          )
+                        })}</p>
                       </div>
                     </div>
                   )

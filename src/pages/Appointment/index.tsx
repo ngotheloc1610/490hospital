@@ -111,24 +111,30 @@ const Appointment = () => {
 
     const params = {
       identifier: "",
+      status: "no show",
       cancellationReason: "",
       cancellationDate: "",
-      serviceCategory: "",
-      serviceType: "",
-      specialty: "",
+      serviceCategory: [],
+      serviceType: [],
+      specialty: [specialty],
       appointmentType: typeOfAppointment,
-      reasonCode: "",
-      reasonReference: "",
+      reasonCode: [],
+      reasonReference: [],
       priority: "",
       description: description,
-      supportingInformation: "",
+      supportingInformation: [],
       start: startDate,
       end: endDate,
       minutesDuration: "",
       created: "",
       comment: "",
-      patientInstruction: "",
+      patientInstruction: [],
       basedOn: "",
+      participant: [
+        doctor
+      ],
+      requestedPeriod: "",
+      slot: []
     }
 
     axios.post(url, params, defineConfigPost()).then((resp: any) => {
@@ -143,7 +149,7 @@ const Appointment = () => {
   }
 
   const handleNext = () => {
-    if (typeOfAppointment && specialty && doctor && date && startTime && endTime) {
+    if (typeOfAppointment && doctor && date && startTime && endTime) {
       setIsPassStep1(true);
       setStep(step + 1);
     } else {
@@ -196,7 +202,7 @@ const Appointment = () => {
         {listSpecialty?.length > 0 ? (
           listSpecialty?.map((item: any) => (
             <option value={item.code} key={item.code}>
-              {item.code}
+              {item.display}
             </option>
           ))
         ) : (
@@ -357,18 +363,26 @@ const Appointment = () => {
             <h5 className="fw-bold mb-3">Select Doctor</h5>
             <div className="row">
               {listDoctor?.map((item: any, idx: number) => {
-                const name = item.practitionerTarget.nameFirstRep.nameAsSingleString;
-                const specialty = item.specialty[0].coding[0].display;
+                const name = item?.practitionerTarget?.nameFirstRep.nameAsSingleString;
                 return (
-
                   <div className={`col-6 row ${item.id === doctor?.id ? "doctor-selected" : ""}`} onClick={() => setDoctor(item)}>
                     <div className='col-4'>
-                      <img src={DOCTOR} alt="" />
+                      <img src={item?.practitionerTarget?.photo[0].data} alt={item?.practitionerTarget?.photo[0].data} />
                     </div>
                     <div className='col-8'>
                       <h3 className='mb-3'>{name}</h3>
-                      <p className='ms-3'><span><ICON_GRADUATION /></span>  Level II specialist, Meritorious Doctor</p>
-                      <p className='ms-3'><span><ICON_PEOPLE_TEAM /></span> {specialty}</p>
+                      <p className='ms-3'><span><ICON_GRADUATION /></span>  {item.educations?.map((edu: any) => {
+                        return (
+                          <span>{edu.detail}</span>
+                        )
+                      })}</p>
+                      <p className='ms-3'><span><ICON_PEOPLE_TEAM /></span> {item.specialty?.map((spec: any) => {
+                        return (
+                          <span>
+                            {spec.display}
+                          </span>
+                        )
+                      })}</p>
                     </div>
                   </div>
                 )
@@ -413,7 +427,7 @@ const Appointment = () => {
 
   const _renderStep2 = () => {
     const specialtyCode = listSpecialty.find(item => item.code === specialty)?.code;
-    const specialtyDisplay = listSpecialty.find(item => item.code === specialty)?.display;
+    const specialtyDisplay = listSpecialty.find(item => item.code === specialty)?.name;
 
     return (
       <div className="border border-3 rounded p-3">
