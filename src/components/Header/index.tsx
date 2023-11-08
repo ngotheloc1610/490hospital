@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
-import { LOGO } from "../../assets";
+import { DOCTOR, LOGO } from "../../assets";
 
 const NAV_LINK = [
   {
@@ -65,6 +65,20 @@ const Header = () => {
                 Login <i className="bi bi-arrow-right-short fs-5"></i>
               </Link>
             </li>
+
+            {/* <div className="dropdown">
+              <a className="btn btn-secondary dropdown-toggle m-auto" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style={{ background: "transparent", border: "none" }}>
+                <div className="d-flex mt-3">
+                  <img src={DOCTOR} alt="" style={{ width: "40px", height: "40px", borderRadius: "100rem" }} />
+                  <span className="m-auto ms-2 text-dark">Name <i className="bi bi-caret-down-fill"></i></span>
+                </div>
+              </a>
+
+              <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <li><a className="dropdown-item" href="/information">Information</a></li>
+                <li><a className="dropdown-item" href="#">Log out</a></li>
+              </ul>
+            </div> */}
           </ul>
           <div className="menu-toggle">
             <span></span>

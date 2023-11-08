@@ -10,6 +10,9 @@ import DoctorDetail from "../pages/Doctors/DoctorDetail";
 import DepartmentDetail from "../pages/Departments/DepartmentDetail";
 import Specialty from "../pages/Specialty";
 import SpecialtyDetail from "../pages/Specialty/SpecialtyDetail";
+import Information from "../pages/Information";
+import EditPatient from "../pages/Information/EditPatient";
+import ChangePassword from "../pages/Authentication/ChangePassword";
 
 const loading = (
   <div className="pt-3 text-center">
@@ -49,10 +52,14 @@ const RouterDom = () => {
           <Route path="/about" element={<AboutUs />} />
 
           <Route path="/contact" element={<ContactUs />} />
+          <Route path="/information" element={<Information />} >
+            <Route path="edit" element={<EditPatient />} />
+          </Route>
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/change-password" element={<ChangePassword />} />
 
           <Route path="*" element={<Dashboard />} />
         </Routes>
