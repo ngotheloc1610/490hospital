@@ -18,5 +18,9 @@ export const API_GET_DEPARTMENT = "/homepage/department/detail/";
 export const API_GET_PATIENT_APPOINTMENT = "/appointment/patient";
 export const API_GET_SPECIALTY_APPOINTMENT = "/appointment/specialty";
 export const API_GET_DOCTOR_APPOINTMENT = "/appointment/doctor";
-export const API_GET_SLOT = "/appointment/slot";
+export const API_GET_SLOT = "/appointment/schedule";
 export const API_CREATE_APPOINTMENT = "/appointment/createAppointment";
+
+export const API_GET_PATIENT = "/admin/patient/detail/";
+export const API_GET_LIST_APPOINTMENT_PATIENT = "/api/v1/patient/listAppointment/";
+export const API_UPDATE_PATIENT = "/api/v1/patient/update/";

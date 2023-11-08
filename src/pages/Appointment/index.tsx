@@ -110,14 +110,32 @@ const Appointment = () => {
     const url = `${url_api}${API_CREATE_APPOINTMENT}`;
 
     const params = {
-      identifier: "",
+      identifier: [],
       status: "no show",
       cancellationReason: "",
       cancellationDate: "",
       serviceCategory: [],
       serviceType: [],
-      specialty: [specialty],
-      appointmentType: typeOfAppointment,
+      specialty: [{
+        coding: [{
+          system: "",
+          version: "",
+          code: specialty,
+          display: "",
+          userSelected: true
+        }],
+        display: ""
+      }],
+      appointmentType: {
+        coding: [{
+          system: "",
+          version: "",
+          code: typeOfAppointment,
+          display: "",
+          userSelected: true
+        }],
+        display: ""
+      },
       reasonCode: [],
       reasonReference: [],
       priority: "",
@@ -275,7 +293,7 @@ const Appointment = () => {
   const _renderStep1 = () => {
     return (
       <div className="container">
-        <div className="patient-detail border-bottom pb-3">
+        {/* <div className="patient-detail border-bottom pb-3">
           <h5 className="mb-3 fw-bold">Patient Details</h5>
           <div className="row m-auto" style={{ width: "70%" }}>
             <div className="col-8 d-flex">
@@ -327,7 +345,7 @@ const Appointment = () => {
             </table>}
 
           </div>
-        </div>
+        </div> */}
 
         <div className="mt-3">
           <h5 className="mb-3 fw-bold">Booking details</h5>

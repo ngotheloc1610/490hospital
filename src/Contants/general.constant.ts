@@ -13,3 +13,8 @@ export const START_PAGE = 0;
 export const PAGE_SIZE_SERVICE = 4;
 
 export const PAGE_SIZE_DOCTOR = 5;
+
+export const FORMAT_DATE_MONTH_YEAR = "DD/MM/YYYY";
+
+export const FORMAT_TIME = "HH:mm";
+

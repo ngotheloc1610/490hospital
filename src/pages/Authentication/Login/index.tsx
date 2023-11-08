@@ -10,6 +10,7 @@ const Login = () => {
 
   const [gmail, setGmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
 
   const url_api = process.env.REACT_APP_API_URL;
 
@@ -41,17 +42,39 @@ const Login = () => {
           <h3>Login</h3>
         </div>
         <div className="login-container-body">
-          <div>
+          <div className="input-group">
             <label htmlFor="gmail">
-              <i className="bi bi-person-fill"></i> Gmail
+              <i className="bi bi-person-fill fs-5"></i>
             </label>
-            <input type="text" id="gmail" autoComplete="new-password" value={gmail} onChange={(e: any) => setGmail(e.target.value)} />
+            <input
+              type="text"
+              className="form-control"
+              id="gmail"
+              placeholder="Gmail"
+              autoComplete="new-password"
+              value={gmail}
+              onChange={(e: any) => setGmail(e.target.value)}
+            />
           </div>
-          <div>
+          <div className="input-group">
             <label htmlFor="password">
-              <i className="bi bi-lock-fill"></i> Password
+              <i className="bi bi-lock-fill fs-5"></i>
             </label>
-            <input type="password" id="password" autoComplete="new-password" value={password} onChange={(e: any) => setPassword(e.target.value)} />
+            <input
+              type={isShowPassword ? "text" : "password"}
+              className="form-control"
+              id="password"
+              placeholder="Password"
+              autoComplete="new-password"
+              value={password}
+              onChange={(e: any) => setPassword(e.target.value)}
+            />
+            <button onClick={() => setIsShowPassword(!isShowPassword)}>
+              <i
+                className={`bi ${isShowPassword ? "bi-eye-slash" : "bi-eye-fill"
+                  } fs-5`}
+              />
+            </button>
           </div>
           <button className="button button--large button--large--primary w-100" onClick={() => handleLogin()}>Login</button>
           <p className="text-end mt-3">
