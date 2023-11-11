@@ -7,12 +7,12 @@ export const GENDER = [
 ];
 
 export const GENDER_ALL = [
-  { title: "Male", value: "male" },
+  { title: "Male", value: "MALE" },
   {
     title: "Female",
-    value: "female",
+    value: "FEMALE",
   },
-  { title: "Other", value: "other" },
+  { title: "Other", value: "" },
 ]
 
 export const TYPE_OF_APPOINTMENT = [

@@ -13,6 +13,7 @@ import SpecialtyDetail from "../pages/Specialty/SpecialtyDetail";
 import Information from "../pages/Information";
 import EditPatient from "../pages/Information/EditPatient";
 import ChangePassword from "../pages/Authentication/ChangePassword";
+import Chat from "../pages/Chat";
 
 const loading = (
   <div className="pt-3 text-center">
@@ -60,6 +61,7 @@ const RouterDom = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/chat" element={<Chat />} />
 
           <Route path="*" element={<Dashboard />} />
         </Routes>

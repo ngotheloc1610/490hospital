@@ -321,7 +321,8 @@ const Dashboard = () => {
                 return (
                   <div className="col-4">
                     <Link to={`departments/${item.id}`} className="d-flex">
-                      <p className="department-icon">{item.photo}</p>
+                      <img src={item.photo} alt="image" />
+                      {/* <p className="department-icon">{item.photo}</p> */}
                       <span className="my-auto ms-3 color-gray-light">
                         {item.title}
                       </span>
@@ -376,15 +377,18 @@ const Dashboard = () => {
                 <div className={`carousel-item ${idxDoctor === 0 ? "active" : " "}`}>
                   <div className="row g-5">
                     {doctors?.map((item: any, idx: number) => {
+                      const photo = item.practitionerTarget.photo[0];
+                      const src = `data:${photo.contentType};base64,${photo.data}`;
+
                       return (
-                        <div className="col-3 d-flex" onClick={() => navigate(`/doctors/${item.id}`)}>
-                          <img src={item?.practitionerTarget.photo[0].data} alt={item?.practitionerTarget.photo[0].data} />
+                        <div className="col-4 d-flex" onClick={() => navigate(`/doctors/${item.id}`)}>
+                          <img src={src} alt={"api image"} />
                           <div className="ms-3">
                             <p className="color-dark fw-bold">{item.practitionerTarget.nameFirstRep.nameAsSingleString}</p>
                             <span className="text-small">
                               {item.specialty?.map((spec: any) => {
                                 return (
-                                  <span>{spec.display} ,</span>
+                                  <span>{spec.coding[0].display} ,</span>
                                 )
                               })}
                             </span>

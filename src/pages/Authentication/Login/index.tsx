@@ -4,12 +4,19 @@ import { useState } from "react";
 import axios from "axios";
 import { defineConfigPost } from "../../../components/Common/utils";
 import { API_LOGIN } from "../../../Contants/api.constant";
+import { KEY_LOCAL_STORAGE } from "../../../Contants/general.constant";
+import { JwtPayload, jwtDecode } from "jwt-decode";
+import { useAppDispatch } from "../../../redux/hooks";
+import { setLogin } from "../../../redux/features/auth/authSlice";
+import { error } from "../../../components/Common/notify";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const [gmail, setGmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
 
   const url_api = process.env.REACT_APP_API_URL;
@@ -18,18 +25,31 @@ const Login = () => {
     const url = `${url_api}${API_LOGIN}`;
 
     const params = {
-      username: gmail,
-      password: password
+      username: gmail.trim(),
+      email: gmail.trim(),
+      password: password.trim()
     }
 
     axios
       .post(url, params, defineConfigPost())
       .then((resp: any) => {
         if (resp) {
-          console.log("resp:", resp)
+          const accessToken = resp.data.accessToken;
+
+          localStorage.setItem(KEY_LOCAL_STORAGE.AUTHEN, accessToken);
+
+          const decoded: any = jwtDecode<JwtPayload>(accessToken);
+          localStorage.setItem(KEY_LOCAL_STORAGE.EXP, decoded.exp);
+          localStorage.setItem(KEY_LOCAL_STORAGE.IAT, decoded.iat);
+          localStorage.setItem(KEY_LOCAL_STORAGE.SUB, decoded.sub);
+          dispatch(setLogin(true));
+          navigate("/")
         }
       })
       .catch((err: any) => {
+        if (err?.response?.data?.error?.code === "400") {
+          error(err?.response?.data?.error?.message)
+        }
         console.log("err:", err);
       });
   }

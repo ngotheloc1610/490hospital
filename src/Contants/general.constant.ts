@@ -1,5 +1,8 @@
 export const KEY_LOCAL_STORAGE = {
     AUTHEN: "objAuthen",
+    EXP: "exp",
+    IAT: "iat",
+    SUB: "sub",
 };
 
 export const TOTAL_STEP = 2;

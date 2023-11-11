@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Outlet, useNavigate, useOutlet } from 'react-router-dom';
 
-import { DOCTOR, DOCTOR_BG, ICON_GRADUATION, ICON_PEOPLE_TEAM } from '../../assets'
+import { DOCTOR_BG, ICON_GRADUATION, ICON_PEOPLE_TEAM } from '../../assets'
 import { API_ALL_GET_DOCTOR, API_ALL_GET_SPECIALTY, API_SEARCH_DOCTOR } from '../../Contants/api.constant'
 import { PAGE_SIZE_DOCTOR, START_PAGE } from '../../Contants/general.constant'
 
@@ -23,6 +23,7 @@ const Doctors = () => {
     const [currentPage, setCurrentPage] = useState<number>(START_PAGE);
     const [itemPerPage, setItemPerPage] = useState<number>(PAGE_SIZE_DOCTOR);
     const [totalItem, setTotalItem] = useState<number>(0);
+    const [isSearch, setIsSearch] = useState<boolean>(false);
 
     const url_api = process.env.REACT_APP_API_URL;
 
@@ -31,7 +32,11 @@ const Doctors = () => {
     }, [])
 
     useEffect(() => {
-        getDoctor()
+        if (isSearch) {
+            searchDoctor()
+        } else {
+            getDoctor()
+        }
     }, [currentPage, itemPerPage])
 
     const getDoctor = () => {
@@ -39,7 +44,6 @@ const Doctors = () => {
 
         axios.get(url, defineConfigGet({ page: currentPage, size: itemPerPage })).then((resp: any) => {
             if (resp) {
-                console.log("resp:", resp)
                 setDoctorList(resp.data.content);
                 setTotalItem(resp.data.totalElements);
             }
@@ -60,18 +64,24 @@ const Doctors = () => {
         })
     }
 
-    const handleSearch = () => {
+    const searchDoctor = () => {
         const url = `${url_api}${API_SEARCH_DOCTOR}`;
 
         const param = { nameDoctor: name, nameSpecialty: specialty, page: currentPage, size: itemPerPage }
 
         axios.get(url, defineConfigGet(param)).then((resp: any) => {
             if (resp) {
-                console.log("resp:", resp)
+                setDoctorList(resp.data.content);
+                setTotalItem(resp.data.totalElements);
             }
         }).catch((err: any) => {
             console.log("err:", err)
         })
+    }
+
+    const handleSearch = () => {
+        searchDoctor();
+        setIsSearch(true);
     }
 
     const getCurrentPage = (item: number) => {
@@ -89,8 +99,8 @@ const Doctors = () => {
                 <option hidden>Specialty</option>
                 {specialtyList.length > 0 ? (
                     specialtyList.map((item: any) => (
-                        <option value={item.code} key={item.code}>
-                            {item.display}
+                        <option value={item.name} key={item.name}>
+                            {item.name}
                         </option>
                     ))
                 ) : (
@@ -105,12 +115,13 @@ const Doctors = () => {
             <div className='container'>
                 {doctorList?.map((doctor: any, idx: number) => {
                     const name = doctor.practitionerTarget.nameFirstRep.nameAsSingleString;
-                    const photo = doctor.practitionerTarget.photo[0].data;
+                    const photo = doctor.practitionerTarget.photo[0];
+                    const src = `data:${photo.contentType};base64,${photo.data}`;
 
                     return (
                         <div className='row gy-3 py-3 mb-3' onClick={() => navigate(doctor.id)}>
                             <div className='col-4'>
-                                <img src={photo} alt={photo} />
+                                <img src={src} alt={"API Image"} />
                             </div>
                             <div className='col-8'>
                                 <h3 className='mb-3'>{name}</h3>
@@ -121,7 +132,7 @@ const Doctors = () => {
                                 })}</p>
                                 <p className='ms-3'><span><ICON_PEOPLE_TEAM /></span> {doctor.specialty?.map((spec: any) => {
                                     return (
-                                        <span>{spec.display}</span>
+                                        <span>{spec.coding[0].display}</span>
                                     )
                                 })}</p>
                             </div>
