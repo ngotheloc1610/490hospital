@@ -31,8 +31,6 @@ const SpecialtyDetail = () => {
 
   const [listDoctor, setListDoctor] = useState<any>([]);
 
-
-
   useEffect(() => {
     getSpecialtyDetail(params.specialtyId);
     getDoctorForSpecialty(params.specialtyId);
@@ -85,12 +83,13 @@ const SpecialtyDetail = () => {
 
                 {listDoctor?.map((doctor: any, idx: number) => {
                   const name = doctor.practitionerTarget.nameFirstRep.nameAsSingleString;
-                  const photo = doctor?.practitionerTarget.photo[0].data;
+                  const photo = doctor.practitionerTarget.photo[0];
+                  const src = `data:${photo.contentType};base64,${photo.data}`;
 
                   return (
                     <div className='row gy-3 py-3 mb-3' onClick={() => navigate(doctor.id)}>
                       <div className='col-4'>
-                        <img src={photo} alt={photo} />
+                        <img src={src} alt={"image"} />
                       </div>
                       <div className='col-8'>
                         <h3 className='mb-3'>{name}</h3>

@@ -43,7 +43,7 @@ const Departments = () => {
                 return (
                   <div className="col-4" onClick={() => navigate(item.id)}>
                     <div className="d-flex">
-                      <p className="department-icon">{item.photo}</p>
+                      <img src={item.photo} alt="image" />
                       <span className="my-auto ms-3 color-gray-light">
                         {item.title}
                       </span>

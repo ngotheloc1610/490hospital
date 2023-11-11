@@ -3,15 +3,18 @@ import moment from "moment";
 import axios from "axios";
 
 import { LIST_TIME, TYPE_OF_APPOINTMENT } from "../../Contants";
-import { FORMAT_DATE, FORMAT_DATE_TIME, TOTAL_STEP } from "../../Contants/general.constant";
+import { FORMAT_DATE, FORMAT_DATE_MONTH_YEAR, FORMAT_DATE_TIME, TOTAL_STEP } from "../../Contants/general.constant";
 import { DOCTOR, ICON_GRADUATION, ICON_PEOPLE_TEAM } from "../../assets";
-import { API_CREATE_APPOINTMENT, API_GET_DOCTOR_APPOINTMENT, API_GET_PATIENT_APPOINTMENT, API_GET_SLOT, API_GET_SPECIALTY_APPOINTMENT } from "../../Contants/api.constant";
+import { API_CREATE_APPOINTMENT, API_GET_DOCTOR_APPOINTMENT, API_GET_PATIENT_APPOINTMENT, API_GET_SLOT, API_GET_SPECIALTY_APPOINTMENT, API_PROFILE_PATIENT } from "../../Contants/api.constant";
 import { defineConfigGet, defineConfigPost } from "../../components/Common/utils";
 import { ISpecialty } from "../../interface/general.interface";
 import { warn } from "../../components/Common/notify";
+import { useAppSelector } from "../../redux/hooks";
 
 const Appointment = () => {
   const url_api = process.env.REACT_APP_API_URL;
+
+  const { isLogin } = useAppSelector((state) => state.authSlice)
 
   const [step, setStep] = useState<number>(1);
 
@@ -22,6 +25,8 @@ const Appointment = () => {
   const [listSpecialty, setListSpecialty] = useState<ISpecialty[]>([]);
   const [listDoctor, setListDoctor] = useState([]);
   const [listPatient, setListPatient] = useState([]);
+
+  const [patient, setPatient] = useState<any>({});
 
   const [date, setDate] = useState<string>(moment().format(FORMAT_DATE));
   const [startTime, setStartTime] = useState<string>("")
@@ -34,7 +39,7 @@ const Appointment = () => {
     moment(`${date} ${endTime}`).format(FORMAT_DATE_TIME)
   );
 
-  const [timeBusy, setTimeBusy] = useState<string>("");
+  const [timeBusy, setTimeBusy] = useState<any>([]);
   const [specialty, setSpecialty] = useState<string>("");
   const [typeOfAppointment, setTypeOfAppointment] = useState<string>("");
   const [doctor, setDoctor] = useState<any>();
@@ -50,7 +55,9 @@ const Appointment = () => {
   }, [specialty])
 
   useEffect(() => {
-    getSlot(doctor?.id, date);
+    if (date && doctor?.id) {
+      getSlot(doctor?.id, date);
+    }
   }, [date, doctor])
 
   useEffect(() => {
@@ -99,11 +106,30 @@ const Appointment = () => {
 
     axios.get(url, defineConfigGet({ doctorID: doctorId, date: date })).then((resp: any) => {
       if (resp) {
-        console.log("resp:", resp)
+        setTimeBusy(resp.data)
       }
     }).catch((err: any) => {
       console.log("err:", err)
     })
+  }
+
+  useEffect(() => {
+    getPractitionerInfo()
+  }, []);
+
+  const getPractitionerInfo = () => {
+    const url = `${url_api}${API_PROFILE_PATIENT}`;
+
+    axios
+      .get(url, defineConfigGet({}))
+      .then((resp: any) => {
+        if (resp) {
+          setPatient(resp.data);
+        }
+      })
+      .catch((err) => {
+        console.log("err:", err);
+      });
   }
 
   const createAppointment = () => {
@@ -111,47 +137,56 @@ const Appointment = () => {
 
     const params = {
       identifier: [],
-      status: "no show",
-      cancellationReason: "",
-      cancellationDate: "",
+      status: "No Show",
+      cancellationReason: null,
+      cancellationDate: null,
       serviceCategory: [],
       serviceType: [],
-      specialty: [{
-        coding: [{
-          system: "",
-          version: "",
-          code: specialty,
-          display: "",
-          userSelected: true
-        }],
-        display: ""
-      }],
       appointmentType: {
-        coding: [{
-          system: "",
-          version: "",
-          code: typeOfAppointment,
-          display: "",
-          userSelected: true
-        }],
-        display: ""
+        coding: [
+          {
+            system: null,
+            code: typeOfAppointment,
+            display: null
+          }
+        ]
       },
       reasonCode: [],
       reasonReference: [],
-      priority: "",
+      priority: 0,
       description: description,
       supportingInformation: [],
-      start: startDate,
-      end: endDate,
-      minutesDuration: "",
-      created: "",
+      start: new Date(startDate),
+      end: new Date(endDate),
+      minutesDuration: 0,
+      created: new Date(),
       comment: "",
       patientInstruction: [],
-      basedOn: "",
+      basedOn: [],
+
       participant: [
-        doctor
+        {
+          actor: {
+            reference: `Patient/${patient?.id}`,
+            identifier: {
+              value: patient?.id
+            },
+            display: patient?.name
+          },
+          status: "Accepted"
+        },
+        {
+          actor: {
+            reference: `Practitioner/${doctor?.id}`,
+            identifier: {
+              value: doctor?.id
+            },
+            display: doctor?.practitionerTarget?.nameFirstRep.nameAsSingleString
+          },
+          status: "Accepted"
+        }
       ],
-      requestedPeriod: "",
+      requestedPeriod: null,
       slot: []
     }
 
@@ -167,17 +202,20 @@ const Appointment = () => {
   }
 
   const handleNext = () => {
-    if (typeOfAppointment && doctor && date && startTime && endTime) {
+    if (typeOfAppointment && specialty && doctor && date && startTime && endTime) {
       setIsPassStep1(true);
       setStep(step + 1);
     } else {
-
       warn("Chưa điền hết thông tin!");
     }
   };
 
   const handleBook = () => {
-    createAppointment();
+    if (isLogin) {
+      createAppointment();
+    } else {
+      warn("Bạn chưa đăng nhập! Vui lòng đăng nhập trước khi book lịch");
+    }
   };
 
   const handleCancel = () => {
@@ -187,6 +225,19 @@ const Appointment = () => {
 
   const handleSearchPatient = () => {
     getPatient()
+  }
+
+  const disabled = (item: any) => {
+    if (timeBusy.length > 0) {
+      timeBusy.find((time: any) => {
+        if (time.start === new Date(Date.parse(item.startTime)) && time.end === new Date(Date.parse(item.endTime))) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+    }
+    return false;
   }
 
   const _renderTimeBook = useCallback(
@@ -200,7 +251,9 @@ const Appointment = () => {
               return (
                 <div className="col-4">
                   <button type="button" className={`w-100 p-3 ${startTime === item.startTime && endTime === item.endTime ? "time-selected" : ""}`}
-                    onClick={() => { setStartTime(item.startTime); setEndTime(item.endTime); setTriggerTime(!triggerTime) }}>
+                    onClick={() => { setStartTime(item.startTime); setEndTime(item.endTime); setTriggerTime(!triggerTime) }}
+                    disabled={disabled(item)}
+                  >
                     {item.title}
                   </button>
                 </div>
@@ -210,7 +263,7 @@ const Appointment = () => {
         </div>
       )
     },
-    [triggerTime],
+    [triggerTime, timeBusy],
   )
 
   const _renderListSpecialty = () => {
@@ -220,7 +273,7 @@ const Appointment = () => {
         {listSpecialty?.length > 0 ? (
           listSpecialty?.map((item: any) => (
             <option value={item.code} key={item.code}>
-              {item.display}
+              {item.name}
             </option>
           ))
         ) : (
@@ -382,10 +435,13 @@ const Appointment = () => {
             <div className="row">
               {listDoctor?.map((item: any, idx: number) => {
                 const name = item?.practitionerTarget?.nameFirstRep.nameAsSingleString;
+                const photo = item?.practitionerTarget.photo[0];
+                const src = `data:${photo.contentType};base64,${photo.data}`;
+
                 return (
-                  <div className={`col-6 row ${item.id === doctor?.id ? "doctor-selected" : ""}`} onClick={() => setDoctor(item)}>
+                  <div className={`col-6 row mb-3 ${item.id === doctor?.id ? "doctor-selected" : ""}`} onClick={() => setDoctor(item)}>
                     <div className='col-4'>
-                      <img src={item?.practitionerTarget?.photo[0].data} alt={item?.practitionerTarget?.photo[0].data} />
+                      <img src={src} alt={"image"} />
                     </div>
                     <div className='col-8'>
                       <h3 className='mb-3'>{name}</h3>
@@ -397,7 +453,7 @@ const Appointment = () => {
                       <p className='ms-3'><span><ICON_PEOPLE_TEAM /></span> {item.specialty?.map((spec: any) => {
                         return (
                           <span>
-                            {spec.display}
+                            {spec.coding[0].display}
                           </span>
                         )
                       })}</p>
@@ -460,31 +516,31 @@ const Appointment = () => {
                 <tbody>
                   <tr>
                     <td>Name</td>
-                    <td>Jonathan Hudson</td>
+                    <td>{patient.name}</td>
                   </tr>
                   <tr>
                     <td>Gender</td>
-                    <td>Male</td>
+                    <td>{patient.gender}</td>
                   </tr>
                   <tr>
                     <td>Date of birth</td>
-                    <td>01/01/1999</td>
+                    <td>{moment(patient.dateOfBirth).format(FORMAT_DATE_MONTH_YEAR)}</td>
                   </tr>
                   <tr>
                     <td>Address</td>
-                    <td>534 Erewhon St PeasantVille, Rainbow, Vic  3999</td>
+                    <td>{patient.address}</td>
                   </tr>
                   <tr>
                     <td>Citizen identification</td>
-                    <td>[CCCD] 12345678910</td>
+                    <td>{patient.city}</td>
                   </tr>
                   <tr>
                     <td>Phone number</td>
-                    <td>0987654321</td>
+                    <td>{patient.phoneNumber}</td>
                   </tr>
                   <tr>
                     <td>Email</td>
-                    <td>jonathan123@gmail.com</td>
+                    <td>{patient.email}</td>
                   </tr>
                 </tbody>
               </table>

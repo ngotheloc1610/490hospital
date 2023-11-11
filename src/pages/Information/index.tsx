@@ -3,9 +3,11 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useOutlet, useParams } from "react-router-dom";
 import { convertToDate, convertToTime, defineConfigGet } from "../../components/Common/utils";
 import PaginationComponent from "../../components/Common/Pagination";
-import { API_GET_LIST_APPOINTMENT_PATIENT, API_GET_PATIENT } from "../../Contants/api.constant";
+import { API_GET_LIST_APPOINTMENT_PATIENT, API_PROFILE_PATIENT } from "../../Contants/api.constant";
 import { DOCTOR } from "../../assets";
 import EditPatient from "./EditPatient";
+import { setId } from "../../redux/features/auth/authSlice";
+import { useAppDispatch } from "../../redux/hooks";
 
 const Information = () => {
     const [currentPage, setCurrentPage] = useState<number>(0);
@@ -20,18 +22,19 @@ const Information = () => {
     const outlet = useOutlet();
     const param = useParams();
     const navigate = useNavigate();
+    const dispatch = useAppDispatch()
     const url_api = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
-        getPatientDetail(param.patientId)
-    }, [param.patientId]);
+        getPatientDetail(patient?.id)
+    }, [patient?.id]);
 
     useEffect(() => {
-        getListAppointment(param.patientId)
-    }, [param.patientId, currentPage, itemPerPage]);
+        getListAppointment(patient?.id)
+    }, [patient?.id, currentPage, itemPerPage]);
 
     const getPatientDetail = (id: any) => {
-        const url = `${url_api}${API_GET_PATIENT}${id}`;
+        const url = `${url_api}${API_PROFILE_PATIENT}`;
 
         axios
             .get(url, defineConfigGet({}))
@@ -52,7 +55,7 @@ const Information = () => {
             .get(url, defineConfigGet({ page: currentPage, size: itemPerPage }))
             .then((resp: any) => {
                 if (resp) {
-                    setListAppointment(resp.data);
+                    setListAppointment(resp.data.content);
                 }
             })
             .catch((err) => {
@@ -85,7 +88,10 @@ const Information = () => {
                         <div className="pb-3 mb-3 d-flex justify-content-between">
                             <h3 className="fw-bold text-uppercase">{patient?.nameFirstRep?.text}</h3>
                             <div>
-                                <button className="button button--info button--small me-3" onClick={() => navigate("/change-password")}>Change Password</button>
+                                <button className="button button--info button--small me-3" onClick={() => {
+                                    navigate("/change-password");
+                                    dispatch(setId(patient?.id));
+                                }}>Change Password</button>
                                 <button className="button button--primary button--small" onClick={() => navigate(`/information/edit`)}>Edit</button>
                             </div>
                         </div>

@@ -1,13 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { LOGO_HOSPITAL } from "../../../assets";
 import { GENDER_ALL } from "../../../Contants";
-import { API_REGISTER } from "../../../Contants/api.constant";
 import { defineConfigPost } from "../../../components/Common/utils";
 import axios from "axios";
+import { API_CREATE_PATIENT } from "../../../Contants/api.constant";
+import { error, success, warn } from "../../../components/Common/notify";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
   const [isShowCfPassword, setIsShowCfPassword] = useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   const [gmail, setGmail] = useState<string>("");
   const [name, setName] = useState<string>("");
@@ -19,19 +23,45 @@ const Register = () => {
 
   const url_api = process.env.REACT_APP_API_URL;
 
-  const handleRegister = () => {
-    const url = `${url_api}${API_REGISTER}`;
+  const registerPatient = () => {
+    const url = `${url_api}${API_CREATE_PATIENT}`;
+
+    const params = {
+      username: gmail.trim(),
+      password: password.trim(),
+      name: name,
+      phoneNumber: phoneNumber,
+      dateOfBirth: birthday,
+      gender: gender
+    }
 
     axios
-      .post(url, defineConfigPost())
+      .post(url, params, defineConfigPost())
       .then((resp: any) => {
         if (resp) {
-          console.log("resp:", resp)
+          if (resp.status === 200) {
+            success("Register successfully!");
+            navigate("/login")
+          }
         }
       })
       .catch((err: any) => {
         console.log("err:", err);
+        error(err.response.data.error.message);
       });
+  }
+
+  const handleRegister = () => {
+    if (gmail && password && cfPassword && birthday && name && phoneNumber && gender) {
+      if (password === cfPassword) {
+        registerPatient()
+      } else {
+        warn("Mật khẩu không trùng khớp!");
+      }
+    } else {
+      warn("Bạn chưa điền hết thông tin!");
+    }
+
   }
 
 
