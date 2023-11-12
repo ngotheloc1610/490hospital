@@ -9,10 +9,12 @@ import { ISpecialty } from "../../interface/general.interface";
 import PaginationComponent from "../../components/Common/Pagination";
 import { defineConfigGet } from "../../components/Common/utils";
 import MakeAppointment from "../../components/Common/MakeAppointment";
+import { useAppSelector } from "../../redux/hooks";
 
 const Specialty = () => {
   let navigate = useNavigate();
   const outlet = useOutlet();
+  const { isLogin } = useAppSelector((state) => state.authSlice)
 
   const [currentPage, setCurrentPage] = useState<number>(START_PAGE);
   const [itemPerPage, setItemPerPage] = useState<number>(PAGE_SIZE_SERVICE);
@@ -28,6 +30,16 @@ const Specialty = () => {
     setItemPerPage(item);
     setCurrentPage(0);
   };
+
+  const _renderButtonChat = () => {
+    return (
+      <div className='chat-icon cursor-pointer' onClick={() => navigate("/chat")}>
+        <span>
+          <i className="bi bi-chat-dots-fill text-white fs-3"></i>
+        </span>
+      </div>
+    )
+  }
 
   const url_api = process.env.REACT_APP_API_URL;
 
@@ -88,6 +100,8 @@ const Specialty = () => {
       )}
 
       <MakeAppointment />
+
+      {isLogin && _renderButtonChat()}
     </section>
   );
 };

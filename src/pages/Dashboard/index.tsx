@@ -16,6 +16,7 @@ import {
   defineConfigGet,
 } from "../../components/Common/utils";
 import MakeAppointment from "../../components/Common/MakeAppointment";
+import { useAppSelector } from "../../redux/hooks";
 
 const Dashboard = () => {
   const [listDepartment, setListDepartment] = useState<IDepartment[]>([]);
@@ -25,6 +26,9 @@ const Dashboard = () => {
   const url_api = process.env.REACT_APP_API_URL;
 
   const navigate = useNavigate();
+
+  const { isLogin } = useAppSelector((state) => state.authSlice)
+
 
   //Get all doctor
   useEffect(() => {
@@ -463,6 +467,17 @@ const Dashboard = () => {
     );
   };
 
+
+  const _renderButtonChat = () => {
+    return (
+      <div className='chat-icon cursor-pointer' onClick={() => navigate("/chat")}>
+        <span>
+          <i className="bi bi-chat-dots-fill text-white fs-3"></i>
+        </span>
+      </div>
+    )
+  }
+
   return (
     <section className="dashboard">
       {_renderBanner()}
@@ -472,6 +487,7 @@ const Dashboard = () => {
       {_renderOurDoctor()}
       <MakeAppointment />
       {_renderAboutUs()}
+      {isLogin && _renderButtonChat()}
     </section>
   );
 };

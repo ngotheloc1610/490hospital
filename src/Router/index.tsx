@@ -30,7 +30,7 @@ const ContactUs = lazy(() => import("../pages/ContactUs"));
 
 const RouterDom = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Header />
       <Suspense fallback={loading}>
         <Routes>

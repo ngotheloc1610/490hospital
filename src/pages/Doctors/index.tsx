@@ -9,10 +9,12 @@ import { PAGE_SIZE_DOCTOR, START_PAGE } from '../../Contants/general.constant'
 import Sidebar from '../../components/Sidebar'
 import PaginationComponent from '../../components/Common/Pagination'
 import { defineConfigGet } from '../../components/Common/utils'
+import { useAppSelector } from '../../redux/hooks';
 
 const Doctors = () => {
-    let navigate = useNavigate();
+    const navigate = useNavigate();
     const outlet = useOutlet();
+    const { isLogin } = useAppSelector((state) => state.authSlice)
 
     const [name, setName] = useState("");
     const [specialty, setSpecialty] = useState("");
@@ -173,6 +175,16 @@ const Doctors = () => {
         )
     }
 
+    const _renderButtonChat = () => {
+        return (
+            <div className='chat-icon cursor-pointer' onClick={() => navigate("/chat")}>
+                <span>
+                    <i className="bi bi-chat-dots-fill text-white fs-3"></i>
+                </span>
+            </div>
+        )
+    }
+
     return (
         <section className='doctor'>
             <img src={DOCTOR_BG} alt="" className='image-global' />
@@ -199,6 +211,8 @@ const Doctors = () => {
                 </div>}
 
             </section>
+
+            {isLogin && _renderButtonChat()}
         </section>
     )
 }
