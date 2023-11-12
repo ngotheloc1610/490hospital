@@ -4,7 +4,6 @@ import RouterDom from './Router';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-
   return (
     <>
       <RouterDom />

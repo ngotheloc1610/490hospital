@@ -10,11 +10,13 @@ import { defineConfigGet, defineConfigPost } from "../../components/Common/utils
 import { ISpecialty } from "../../interface/general.interface";
 import { warn } from "../../components/Common/notify";
 import { useAppSelector } from "../../redux/hooks";
+import { useNavigate } from "react-router-dom";
 
 const Appointment = () => {
   const url_api = process.env.REACT_APP_API_URL;
 
   const { isLogin } = useAppSelector((state) => state.authSlice)
+  const navigate = useNavigate();
 
   const [step, setStep] = useState<number>(1);
 
@@ -620,6 +622,16 @@ const Appointment = () => {
     );
   };
 
+  const _renderButtonChat = () => {
+    return (
+      <div className='chat-icon cursor-pointer' onClick={() => navigate("/chat")}>
+        <span>
+          <i className="bi bi-chat-dots-fill text-white fs-3"></i>
+        </span>
+      </div>
+    )
+  }
+
   return (
     <section className="appointment-page container p-5">
       <h3 className="mx-5 mb-5">Book an appointment</h3>
@@ -636,6 +648,8 @@ const Appointment = () => {
           </>
         )}
       </div>
+
+      {isLogin && _renderButtonChat()}
     </section>
   );
 };

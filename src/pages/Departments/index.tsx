@@ -6,11 +6,13 @@ import { DEPARTMENT_BG } from "../../assets";
 import { API_ALL_GET_DEPARTMENT } from "../../Contants/api.constant";
 import { IDepartment } from "../../interface/general.interface";
 import { defineConfigGet } from "../../components/Common/utils";
+import { useAppSelector } from "../../redux/hooks";
 
 
 const Departments = () => {
   let navigate = useNavigate();
   const outlet = useOutlet();
+  const { isLogin } = useAppSelector((state) => state.authSlice)
 
   const url_api = process.env.REACT_APP_API_URL;
 
@@ -27,6 +29,16 @@ const Departments = () => {
       console.log("err:", err)
     })
   }, [])
+
+  const _renderButtonChat = () => {
+    return (
+      <div className='chat-icon cursor-pointer' onClick={() => navigate("/chat")}>
+        <span>
+          <i className="bi bi-chat-dots-fill text-white fs-3"></i>
+        </span>
+      </div>
+    )
+  }
 
 
   const _renderOurDepartment = () => {
@@ -62,6 +74,8 @@ const Departments = () => {
     <section className="department">
       <img src={DEPARTMENT_BG} alt="" className="w-100 image-global" />
       {outlet ? <Outlet /> : _renderOurDepartment()}
+
+      {isLogin && _renderButtonChat()}
     </section>
   );
 };
