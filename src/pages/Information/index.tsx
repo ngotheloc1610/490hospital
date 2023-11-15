@@ -25,14 +25,14 @@ const Information = () => {
     const url_api = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
-        getPatientDetail(patient?.id)
-    }, [patient?.id]);
+        getPatientDetail()
+    }, []);
 
     useEffect(() => {
         getListAppointment(patient?.id)
     }, [patient?.id, currentPage, itemPerPage]);
 
-    const getPatientDetail = (id: any) => {
+    const getPatientDetail = () => {
         const url = `${url_api}${API_PROFILE_PATIENT}`;
 
         axios
@@ -91,7 +91,7 @@ const Information = () => {
                                     navigate("/change-password");
                                     dispatch(setId(patient?.id));
                                 }}>Change Password</button>
-                                <button className="button button--primary button--small" onClick={() => navigate(`/information/edit`)}>Edit</button>
+                                <button className="button button--primary button--small" onClick={() =>{ navigate(`/information/edit`); dispatch(setId(patient?.id));}}>Edit</button>
                             </div>
                         </div>
 
@@ -174,7 +174,7 @@ const Information = () => {
                             <tbody>
                                 {listAppointment && listAppointment.map((item: any, idx: number) => {
                                     return (
-                                        <tr className={`${idx % 2 === 1 ? "table-light" : ""}`}>
+                                        <tr className={`${idx % 2 === 1 ? "table-light" : ""}`} onClick={() => navigate(`appointment/${item.id}`)}>
                                             <td >
                                                 {item.patientName}
                                             </td>
