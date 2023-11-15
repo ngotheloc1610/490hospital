@@ -51,11 +51,11 @@ const Departments = () => {
           </p>
           <div className="mt- 5">
             <div className="row gy-3">
-              {listDepartment.map((item: IDepartment, idx: number) => {
+              {listDepartment && listDepartment.map((item: IDepartment, idx: number) => {
                 return (
                   <div className="col-4" onClick={() => navigate(item.id)}>
                     <div className="d-flex">
-                      <img src={item.photo} alt="image" />
+                      <img src={item.photo} alt="img department" />
                       <span className="my-auto ms-3 color-gray-light">
                         {item.title}
                       </span>

@@ -436,23 +436,23 @@ const Appointment = () => {
             <h5 className="fw-bold mb-3">Select Doctor</h5>
             <div className="row">
               {listDoctor?.map((item: any, idx: number) => {
-                const name = item?.practitionerTarget?.nameFirstRep.nameAsSingleString;
+                const name = item?.practitionerTarget?.nameFirstRep.text;
                 const photo = item?.practitionerTarget.photo[0];
                 const src = `data:${photo.contentType};base64,${photo.data}`;
 
                 return (
                   <div className={`col-6 row mb-3 ${item.id === doctor?.id ? "doctor-selected" : ""}`} onClick={() => setDoctor(item)}>
                     <div className='col-4'>
-                      <img src={src} alt={"image"} />
+                      <img src={src} alt="img doctor" />
                     </div>
                     <div className='col-8'>
                       <h3 className='mb-3'>{name}</h3>
-                      <p className='ms-3'><span><ICON_GRADUATION /></span>  {item.educations?.map((edu: any) => {
+                      <p className='ms-3'><span><ICON_GRADUATION /></span>  {item.educations && item.educations.map((edu: any) => {
                         return (
                           <span>{edu.detail}</span>
                         )
                       })}</p>
-                      <p className='ms-3'><span><ICON_PEOPLE_TEAM /></span> {item.specialty?.map((spec: any) => {
+                      <p className='ms-3'><span><ICON_PEOPLE_TEAM /></span> {item.specialty && item.specialty.map((spec: any) => {
                         return (
                           <span>
                             {spec.coding[0].display}
@@ -511,7 +511,7 @@ const Appointment = () => {
           <p className="fw-bold text-uppercase">patient details</p>
           <div className="row">
             <div className="col-3">
-              <img src={DOCTOR} alt="" />
+              <img src={DOCTOR} alt="img patient" />
             </div>
             <div className="col-9">
               <table className="table table-borderless">
@@ -566,7 +566,7 @@ const Appointment = () => {
               </tr>
               <tr>
                 <td>Doctor</td>
-                <td>{doctor?.practitionerTarget?.nameFirstRep?.nameAsSingleString}</td>
+                <td>{doctor?.practitionerTarget?.nameFirstRep?.text}</td>
               </tr>
               <tr>
                 <td>Type of appointment</td>

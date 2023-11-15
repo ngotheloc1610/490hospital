@@ -81,24 +81,24 @@ const SpecialtyDetail = () => {
               <div>
                 <p className="border-bottom color-primary pb-3">Experience high quality medical services that meet international standards at SEP490 Hospital</p>
 
-                {listDoctor?.map((doctor: any, idx: number) => {
-                  const name = doctor.practitionerTarget.nameFirstRep.nameAsSingleString;
+                {listDoctor && listDoctor.map((doctor: any, idx: number) => {
+                  const name = doctor.practitionerTarget.nameFirstRep.text;
                   const photo = doctor.practitionerTarget.photo[0];
                   const src = `data:${photo.contentType};base64,${photo.data}`;
 
                   return (
                     <div className='row gy-3 py-3 mb-3' onClick={() => navigate(doctor.id)}>
                       <div className='col-4'>
-                        <img src={src} alt={"image"} />
+                        <img src={src} alt="img doctor" />
                       </div>
                       <div className='col-8'>
                         <h3 className='mb-3'>{name}</h3>
-                        <p className='ms-3'><span><ICON_GRADUATION /></span>  {doctor.educations?.map((edu: any) => {
+                        <p className='ms-3'><span><ICON_GRADUATION /></span>  {doctor.educations && doctor.educations.map((edu: any) => {
                           return (
                             <span>{edu.detail}</span>
                           )
                         })}</p>
-                        <p className='ms-3'><span><ICON_PEOPLE_TEAM /></span> {doctor.specialty?.map((spec: any) => {
+                        <p className='ms-3'><span><ICON_PEOPLE_TEAM /></span> {doctor.specialty && doctor.specialty.map((spec: any) => {
                           return (
                             <span>{spec.display}, </span>
                           )
