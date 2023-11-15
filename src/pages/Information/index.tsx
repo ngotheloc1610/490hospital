@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate, useOutlet, useParams } from "react-router-dom";
+import { useNavigate, useOutlet } from "react-router-dom";
 import { convertToDate, convertToTime, defineConfigGet } from "../../components/Common/utils";
 import PaginationComponent from "../../components/Common/Pagination";
 import { API_GET_LIST_APPOINTMENT_PATIENT, API_PROFILE_PATIENT } from "../../Contants/api.constant";
@@ -20,7 +20,6 @@ const Information = () => {
     const [image, setImage] = useState<any>("");
 
     const outlet = useOutlet();
-    const param = useParams();
     const navigate = useNavigate();
     const dispatch = useAppDispatch()
     const url_api = process.env.REACT_APP_API_URL;
@@ -173,7 +172,7 @@ const Information = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {listAppointment?.map((item: any, idx: number) => {
+                                {listAppointment && listAppointment.map((item: any, idx: number) => {
                                     return (
                                         <tr className={`${idx % 2 === 1 ? "table-light" : ""}`}>
                                             <td >

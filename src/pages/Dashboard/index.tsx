@@ -252,7 +252,7 @@ const Dashboard = () => {
             ></button>
           </div>
           <div className="carousel-inner">
-            {listSpecialty?.map((specialty: any, idxSpecialty: number) => {
+            {listSpecialty && listSpecialty.map((specialty: any, idxSpecialty: number) => {
               return (
                 <div
                   className={`carousel-item ${idxSpecialty === 0 ? "active" : ""
@@ -321,12 +321,11 @@ const Dashboard = () => {
           </p>
           <div className="mt-5">
             <div className="row gy-3">
-              {listDepartment.map((item: IDepartment, idx: number) => {
+              {listDepartment && listDepartment.map((item: IDepartment, idx: number) => {
                 return (
                   <div className="col-4">
                     <Link to={`departments/${item.id}`} className="d-flex">
-                      <img src={item.photo} alt="image" />
-                      {/* <p className="department-icon">{item.photo}</p> */}
+                      <img src={item.photo} alt="img department" />
                       <span className="my-auto ms-3 color-gray-light">
                         {item.title}
                       </span>
@@ -376,7 +375,7 @@ const Dashboard = () => {
             ></button>
           </div>
           <div className="carousel-inner">
-            {listDoctor?.map((doctors: any, idxDoctor: number) => {
+            {listDoctor && listDoctor.map((doctors: any, idxDoctor: number) => {
               return (
                 <div className={`carousel-item ${idxDoctor === 0 ? "active" : " "}`}>
                   <div className="row g-5">
@@ -386,11 +385,11 @@ const Dashboard = () => {
 
                       return (
                         <div className="col-4 d-flex" onClick={() => navigate(`/doctors/${item.id}`)}>
-                          <img src={src} alt={"api image"} />
+                          <img src={src} alt="img doctor"/>
                           <div className="ms-3">
-                            <p className="color-dark fw-bold">{item.practitionerTarget.nameFirstRep.nameAsSingleString}</p>
+                            <p className="color-dark fw-bold">{item.practitionerTarget.nameFirstRep.text}</p>
                             <span className="text-small">
-                              {item.specialty?.map((spec: any) => {
+                              {item.specialty && item.specialty.map((spec: any) => {
                                 return (
                                   <span>{spec.coding[0].display} ,</span>
                                 )
