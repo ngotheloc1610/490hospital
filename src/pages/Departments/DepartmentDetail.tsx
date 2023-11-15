@@ -81,13 +81,13 @@ const DepartmentDetail = () => {
                   return (
                     <>
                       <div className="col-6">
-                        <img src={item.specialistTeamPhoto} alt="" />
+                        <img src={item.specialistTeamPhoto} alt="img specialty team" />
                       </div>
                       <div className="col-6">
                         <p className="lh-base">
                           {item.specialistTeamDescription}
                         </p>
-                        <button className="button button--large button--white text-uppercase fw-bold px-5 py-3 mt-3" onClick={() => navigate("/doctor")}>
+                        <button className="button button--large button--white text-uppercase fw-bold px-5 py-3 mt-3" onClick={() => navigate("/doctors")}>
                           Go to doctor list
                         </button>
                       </div>

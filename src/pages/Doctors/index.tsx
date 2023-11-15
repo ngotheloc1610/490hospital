@@ -116,7 +116,7 @@ const Doctors = () => {
         return (
             <div className='container'>
                 {doctorList && doctorList.map((doctor: any, idx: number) => {
-                    const name = doctor.practitionerTarget.nameFirstRep.text;
+                    const name = doctor.practitioner.display;
                     const photo = doctor.practitionerTarget.photo[0];
                     const src = `data:${photo.contentType};base64,${photo.data}`;
 
@@ -132,7 +132,7 @@ const Doctors = () => {
                                         <span>{edu.detail}</span>
                                     )
                                 })}</p>
-                                <p className='ms-3'><span><ICON_PEOPLE_TEAM /></span> {doctor.specialty&& doctor.specialty.map((spec: any) => {
+                                <p className='ms-3'><span><ICON_PEOPLE_TEAM /></span> {doctor.specialty && doctor.specialty.map((spec: any) => {
                                     return (
                                         <span>{spec.coding[0].display}</span>
                                     )
