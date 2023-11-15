@@ -59,7 +59,7 @@ const EditPatient = () => {
                     const data = resp.data;
                     const patientDetail = {
                         id: data.id,
-                        name: data.nameFirstRep.nameAsSingleString,
+                        name: data.nameFirstRep.text,
                         dateOfBirth: data.birthDate,
                         gender: data.gender,
                         phoneNumber: data?.telecom?.find((i: any) => i?.system === "phone")?.value,
@@ -81,10 +81,9 @@ const EditPatient = () => {
         const param = {
             username: values.name,
             email: values.email,
-            active: true,
+            password:"",
             name: values.name,
             phoneNumber: values.phoneNumber,
-            type: "PATIENT",
             dateOfBirth: values.dateOfBirth,
             city: values.city,
             district: "",

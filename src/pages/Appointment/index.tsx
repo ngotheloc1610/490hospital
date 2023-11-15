@@ -183,7 +183,7 @@ const Appointment = () => {
             identifier: {
               value: doctor?.id
             },
-            display: doctor?.practitionerTarget?.nameFirstRep.nameAsSingleString
+            display: doctor?.practitionerTarget?.nameFirstRep.text
           },
           status: "Accepted"
         }
@@ -274,7 +274,7 @@ const Appointment = () => {
         <option hidden>Select Specialty</option>
         {listSpecialty?.length > 0 ? (
           listSpecialty?.map((item: any) => (
-            <option value={item.code} key={item.code}>
+            <option value={item.name} key={item.code}>
               {item.name}
             </option>
           ))
@@ -502,8 +502,8 @@ const Appointment = () => {
   };
 
   const _renderStep2 = () => {
-    const specialtyCode = listSpecialty.find(item => item.code === specialty)?.code;
-    const specialtyDisplay = listSpecialty.find(item => item.code === specialty)?.name;
+    const specialtyCode = listSpecialty.find(item => item.name === specialty)?.code;
+    const specialtyDisplay = listSpecialty.find(item => item.name === specialty)?.name;
 
     return (
       <div className="border border-3 rounded p-3">
@@ -575,7 +575,7 @@ const Appointment = () => {
               <tr>
                 <td>Specialty</td>
                 <td>
-                  {"["}<span className="text-info">{specialtyCode}</span>{"]"} {specialtyDisplay && "-"}
+                  {"["}<span className="text-info">{specialtyCode}</span>{"]"} {specialtyDisplay && "- "}
                   {specialtyDisplay}</td>
               </tr>
               <tr>
@@ -614,8 +614,8 @@ const Appointment = () => {
             <span className="d-block mb-1">schedule to keep up with the</span>
             <span className="d-block">appointment time</span>
           </p>
-          <button className="button button--large button--primary d-block m-auto">
-            Return to Appointment list
+          <button className="button button--large button--primary d-block m-auto" onClick={() => navigate("/")}>
+            Return to home
           </button>
         </div>
       </div>

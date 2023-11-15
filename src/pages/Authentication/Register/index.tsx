@@ -29,11 +29,20 @@ const Register = () => {
     const params = {
       username: gmail.trim(),
       password: password.trim(),
+      confirmPassword: cfPassword.trim(),
       name: name,
       phoneNumber: phoneNumber,
+      type: "Patient",
       dateOfBirth: birthday,
-      gender: gender
-    }
+      photo: "",
+      city: "",
+      district: "",
+      state: "",
+      address: "",
+      gender: gender,
+      country: "",
+      postalCode: "",
+    };
 
     axios
       .post(url, params, defineConfigPost())
@@ -41,7 +50,7 @@ const Register = () => {
         if (resp) {
           if (resp.status === 200) {
             success("Register successfully!");
-            navigate("/login")
+            navigate("/login");
           }
         }
       })
@@ -49,21 +58,27 @@ const Register = () => {
         console.log("err:", err);
         error(err.response.data.error.message);
       });
-  }
+  };
 
   const handleRegister = () => {
-    if (gmail && password && cfPassword && birthday && name && phoneNumber && gender) {
+    if (
+      gmail &&
+      password &&
+      cfPassword &&
+      birthday &&
+      name &&
+      phoneNumber &&
+      gender
+    ) {
       if (password === cfPassword) {
-        registerPatient()
+        registerPatient();
       } else {
         warn("Mật khẩu không trùng khớp!");
       }
     } else {
       warn("Bạn chưa điền hết thông tin!");
     }
-
-  }
-
+  };
 
   return (
     <div className="register">
@@ -122,8 +137,9 @@ const Register = () => {
                   />
                   <button onClick={() => setIsShowPassword(!isShowPassword)}>
                     <i
-                      className={`bi ${isShowPassword ? "bi-eye-slash" : "bi-eye-fill"
-                        } fs-5`}
+                      className={`bi ${
+                        isShowPassword ? "bi-eye-slash" : "bi-eye-fill"
+                      } fs-5`}
                     />
                   </button>
                 </div>
@@ -160,8 +176,9 @@ const Register = () => {
                     onClick={() => setIsShowCfPassword(!isShowCfPassword)}
                   >
                     <i
-                      className={`bi ${isShowCfPassword ? "bi-eye-slash" : "bi-eye-fill"
-                        } fs-5`}
+                      className={`bi ${
+                        isShowCfPassword ? "bi-eye-slash" : "bi-eye-fill"
+                      } fs-5`}
                     />
                   </button>
                 </div>
@@ -197,7 +214,7 @@ const Register = () => {
                         {item.title}
                       </label>
                     </div>
-                  )
+                  );
                 })}
               </div>
             </div>
@@ -205,7 +222,10 @@ const Register = () => {
         </div>
 
         <div className="register-container-footer">
-          <button className="button button--large button--large--primary w-100" onClick={() => handleRegister()}>
+          <button
+            className="button button--large button--large--primary w-100"
+            onClick={() => handleRegister()}
+          >
             Register
           </button>
         </div>
