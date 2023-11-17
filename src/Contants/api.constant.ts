@@ -23,7 +23,6 @@ export const API_GET_SLOT = "/appointment/schedule";
 export const API_CREATE_APPOINTMENT = "/appointment/create";
 export const API_CANCEL_APPOINTMENT = "/appointment/cancelAppointment/";
 
-export const API_GET_PATIENT = "/admin/patient/detail/";
 export const API_GET_LIST_APPOINTMENT_PATIENT = "/patient/listAppointment/";
 export const API_UPDATE_PATIENT = "/patient/update/";
 export const API_PROFILE_PATIENT = "/patient/profile";
