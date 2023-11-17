@@ -479,7 +479,8 @@ const Appointment = () => {
                     className="form-control"
                     autoComplete="new-password"
                     value={date}
-                    max="9999-12-31"
+                    min={moment().format(FORMAT_DATE)}
+                    max={moment().add(7, 'days').format(FORMAT_DATE)}
                     onChange={(e: any) => setDate(moment(e.target.value).format(FORMAT_DATE))}
                   />
                 </div>

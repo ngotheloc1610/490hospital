@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { defineConfigGet, defineConfigPost } from "../../components/Common/utils";
 import { error, success } from "../../components/Common/notify";
-import { API_GET_PATIENT, API_UPDATE_PATIENT } from "../../Contants/api.constant";
+import { API_PROFILE_PATIENT, API_UPDATE_PATIENT } from "../../Contants/api.constant";
 import { GENDER } from "../../Contants";
 import { DOCTOR } from "../../assets";
 
@@ -50,7 +50,7 @@ const EditPatient = () => {
     }, [params.patientId])
 
     const getPatientInfo = (id: any) => {
-        const url = `${url_api}${API_GET_PATIENT}${id}`;
+        const url = `${url_api}${API_PROFILE_PATIENT}`;
 
         axios
             .get(url, defineConfigGet({}))

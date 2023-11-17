@@ -26,7 +26,6 @@ const Login = () => {
 
     const params = {
       username: gmail.trim(),
-      email: gmail.trim(),
       password: password.trim()
     }
 

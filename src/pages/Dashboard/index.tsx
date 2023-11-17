@@ -23,12 +23,14 @@ const Dashboard = () => {
   const [listSpecialty, setListSpecialty] = useState<ISpecialty[]>([]);
   const [listDoctor, setListDoctor] = useState<any>([]);
 
+  const [isChuckDoctor, setIsChuckDoctor] = useState<boolean>(false);
+  const [isChuckSpecialty, setIsChuckSpecialty] = useState<boolean>(false);
+
   const url_api = process.env.REACT_APP_API_URL;
 
   const navigate = useNavigate();
 
-  const { isLogin } = useAppSelector((state) => state.authSlice)
-
+  const { isLogin } = useAppSelector((state) => state.authSlice);
 
   //Get all doctor
   useEffect(() => {
@@ -38,8 +40,14 @@ const Dashboard = () => {
       .get(url, defineConfigGet({ page: START_PAGE, size: 1000 }))
       .then((resp: any) => {
         if (resp) {
-          const dataChuck = chunkArraySplice(resp.data.content, 3);
-          setListDoctor(dataChuck);
+          const data = resp.data.content;
+          if (data.length > 9) {
+            const dataChuck = chunkArraySplice(data, 3);
+            setListDoctor(dataChuck);
+            setIsChuckDoctor(true);
+            return;
+          }
+          setListDoctor(data);
         }
       })
       .catch((err: any) => {
@@ -55,8 +63,14 @@ const Dashboard = () => {
       .get(url, defineConfigGet({ page: START_PAGE, size: 9 }))
       .then((resp: any) => {
         if (resp) {
-          const dataChuck = chunkArraySplice(resp.data.content, 3);
-          setListSpecialty(dataChuck);
+          const data = resp.data.content;
+          if (data.length > 3) {
+            const dataChuck = chunkArraySplice(data, 3);
+            setListSpecialty(dataChuck);
+            setIsChuckSpecialty(true);
+            return;
+          }
+          setListSpecialty(data);
         }
       })
       .catch((err: any) => {
@@ -214,13 +228,14 @@ const Dashboard = () => {
     );
   };
 
-  const _renderOurTopService = () => {
+  const _renderOurTopSpecialty = () => {
     return (
       <section className="our-top-service">
         <div className="mx-auto heading-title">
           <h3 className="mb-3 fs-1 fw-bold">Our Top Specialty</h3>
           <p className="color-dark">
-            Experience high quality medical services that meet international standards at SEP490 Hospital
+            Experience high quality medical services that meet international
+            standards at SEP490 Hospital
           </p>
         </div>
 
@@ -252,34 +267,65 @@ const Dashboard = () => {
             ></button>
           </div>
           <div className="carousel-inner">
-            {listSpecialty && listSpecialty.map((specialty: any, idxSpecialty: number) => {
-              return (
-                <div
-                  className={`carousel-item ${idxSpecialty === 0 ? "active" : ""
+            {isChuckSpecialty ? (
+              listSpecialty &&
+              listSpecialty.map((specialty: any, idxSpecialty: number) => {
+                return (
+                  <div
+                    className={`carousel-item ${
+                      idxSpecialty === 0 ? "active" : ""
                     }`}
-                >
-                  <div className="row">
-                    {specialty?.map((item: ISpecialty, idx: number) => {
-                      return (
-                        <div
-                          className="col-4"
-                          onClick={() => navigate(`/specialty/${item.id}`)}
-                        >
-                          <div className="box-item">
-                            <img
-                              className="d-block w-100"
-                              src={item.photo}
-                              alt={item.photo}
-                            />
-                            <p>{item.name}</p>
+                  >
+                    <div className="row">
+                      {specialty?.map((item: ISpecialty, idx: number) => {
+                        return (
+                          <div
+                            className="col-4"
+                            onClick={() => navigate(`/specialty/${item.id}`)}
+                          >
+                            <div className="box-item">
+                              <img
+                                className="d-block w-100"
+                                src={item.photo}
+                                alt={item.photo}
+                              />
+                              <p>{item.name}</p>
+                            </div>
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
+                );
+              })
+            ) : (
+              <div className={`carousel-item active`}>
+                <div className="row">
+                  {listSpecialty &&
+                    listSpecialty.map(
+                      (specialty: any) => {
+                        return (
+                          <div
+                            className="col-4"
+                            onClick={() =>
+                              navigate(`/specialty/${specialty.id}`)
+                            }
+                          >
+                            <div className="box-item">
+                              <img
+                                className="d-block w-100"
+                                src={specialty.photo}
+                                alt="img specialty"
+                              />
+                              <p>{specialty.name}</p>
+                            </div>
+                          </div>
+                        );
+                      }
+                    )}
                 </div>
-              );
-            })}
+              </div>
+            )}
           </div>
           <button
             className="carousel-control-prev"
@@ -321,18 +367,19 @@ const Dashboard = () => {
           </p>
           <div className="mt-5">
             <div className="row gy-3">
-              {listDepartment && listDepartment.map((item: IDepartment, idx: number) => {
-                return (
-                  <div className="col-4">
-                    <Link to={`departments/${item.id}`} className="d-flex">
-                      <img src={item.photo} alt="img department" />
-                      <span className="my-auto ms-3 color-gray-light">
-                        {item.title}
-                      </span>
-                    </Link>
-                  </div>
-                );
-              })}
+              {listDepartment &&
+                listDepartment.map((item: IDepartment, idx: number) => {
+                  return (
+                    <div className="col-4">
+                      <Link to={`departments/${item.id}`} className="d-flex">
+                        <img src={item.photo} alt="img department" />
+                        <span className="my-auto ms-3 color-gray-light">
+                          {item.title}
+                        </span>
+                      </Link>
+                    </div>
+                  );
+                })}
             </div>
           </div>
         </div>
@@ -375,34 +422,78 @@ const Dashboard = () => {
             ></button>
           </div>
           <div className="carousel-inner">
-            {listDoctor && listDoctor.map((doctors: any, idxDoctor: number) => {
-              return (
-                <div className={`carousel-item ${idxDoctor === 0 ? "active" : " "}`}>
-                  <div className="row g-5">
-                    {doctors?.map((item: any, idx: number) => {
-                      const photo = item.practitionerTarget.photo[0];
-                      const src = `data:${photo.contentType};base64,${photo.data}`;
+            {isChuckDoctor ? (
+              listDoctor &&
+              listDoctor.map((doctors: any, idxDoctor: number) => {
+                return (
+                  <div
+                    className={`carousel-item ${
+                      idxDoctor === 0 ? "active" : " "
+                    }`}
+                  >
+                    <div className="row g-5">
+                      {doctors?.map((item: any, idx: number) => {
+                        const photo = item.practitionerTarget.photo[0];
+                        const src = `data:${photo.contentType};base64,${photo.data}`;
 
+                        return (
+                          <div
+                            className="col-4 d-flex"
+                            onClick={() => navigate(`/doctors/${item.id}`)}
+                          >
+                            <img src={src} alt="img doctor" />
+                            <div className="ms-3">
+                              <p className="color-dark fw-bold">
+                                {item.practitioner.display}
+                              </p>
+                              <span className="text-small">
+                                {item.specialty &&
+                                  item.specialty.map((spec: any) => {
+                                    return (
+                                      <span>{spec.coding[0].display} ,</span>
+                                    );
+                                  })}
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className={`carousel-item active`}>
+                <div className="row g-5">
+                  {listDoctor &&
+                    listDoctor.map((doctor: any) => {
+                      const photo = doctor.practitionerTarget.photo[0];
+                      const src = `data:${photo.contentType};base64,${photo.data}`;
                       return (
-                        <div className="col-4 d-flex" onClick={() => navigate(`/doctors/${item.id}`)}>
-                          <img src={src} alt="img doctor"/>
+                        <div
+                          className="col-4 d-flex"
+                          onClick={() => navigate(`/doctors/${doctor.id}`)}
+                        >
+                          <img src={src} alt="img doctor" />
                           <div className="ms-3">
-                            <p className="color-dark fw-bold">{item.practitionerTarget.nameFirstRep.text}</p>
+                            <p className="color-dark fw-bold">
+                              {doctor.practitioner.display}
+                            </p>
                             <span className="text-small">
-                              {item.specialty && item.specialty.map((spec: any) => {
-                                return (
-                                  <span>{spec.coding[0].display} ,</span>
-                                )
-                              })}
+                              {doctor.specialty &&
+                                doctor.specialty.map((spec: any) => {
+                                  return (
+                                    <span>{spec.coding[0].display} ,</span>
+                                  );
+                                })}
                             </span>
                           </div>
                         </div>
-                      )
+                      );
                     })}
-                  </div>
                 </div>
-              )
-            })}
+              </div>
+            )}
           </div>
           <button
             className="carousel-control-prev"
@@ -457,7 +548,10 @@ const Dashboard = () => {
             <p className="mt-3">It's 2019: time to sink o r swim.</p>
             <p className="mt-3">We are your Social Media Marketing Agency.</p>
 
-            <button className="button button--primary button--large mt-3" onClick={() => navigate("/about")}>
+            <button
+              className="button button--primary button--large mt-3"
+              onClick={() => navigate("/about")}
+            >
               See More
             </button>
           </div>
@@ -466,22 +560,24 @@ const Dashboard = () => {
     );
   };
 
-
   const _renderButtonChat = () => {
     return (
-      <div className='chat-icon cursor-pointer' onClick={() => navigate("/chat")}>
+      <div
+        className="chat-icon cursor-pointer"
+        onClick={() => navigate("/chat")}
+      >
         <span>
           <i className="bi bi-chat-dots-fill text-white fs-3"></i>
         </span>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <section className="dashboard">
       {_renderBanner()}
       {_renderExperienceOfBusiness()}
-      {_renderOurTopService()}
+      {_renderOurTopSpecialty()}
       {_renderOurDepartment()}
       {_renderOurDoctor()}
       <MakeAppointment />
