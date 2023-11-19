@@ -32,7 +32,7 @@ const Register = () => {
       confirmPassword: cfPassword.trim(),
       name: name,
       phoneNumber: phoneNumber,
-      type: "Patient",
+      type: "PATIENT",
       dateOfBirth: birthday,
       photo: "",
       city: "",
@@ -80,8 +80,14 @@ const Register = () => {
     }
   };
 
+  const handleKeyEnter = (event: any) => {
+    if (event.key === 'Enter') {
+      handleRegister()
+    }
+  }
+
   return (
-    <div className="register">
+    <div className="register" onKeyDown={handleKeyEnter}>
       <div className="register-container">
         <div className="register-container-header">
           <img src={LOGO_HOSPITAL} alt="" />
@@ -137,9 +143,8 @@ const Register = () => {
                   />
                   <button onClick={() => setIsShowPassword(!isShowPassword)}>
                     <i
-                      className={`bi ${
-                        isShowPassword ? "bi-eye-slash" : "bi-eye-fill"
-                      } fs-5`}
+                      className={`bi ${isShowPassword ? "bi-eye-slash" : "bi-eye-fill"
+                        } fs-5`}
                     />
                   </button>
                 </div>
@@ -176,9 +181,8 @@ const Register = () => {
                     onClick={() => setIsShowCfPassword(!isShowCfPassword)}
                   >
                     <i
-                      className={`bi ${
-                        isShowCfPassword ? "bi-eye-slash" : "bi-eye-fill"
-                      } fs-5`}
+                      className={`bi ${isShowCfPassword ? "bi-eye-slash" : "bi-eye-fill"
+                        } fs-5`}
                     />
                   </button>
                 </div>

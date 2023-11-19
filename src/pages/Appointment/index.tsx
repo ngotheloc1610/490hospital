@@ -8,7 +8,7 @@ import { DOCTOR, ICON_GRADUATION, ICON_PEOPLE_TEAM } from "../../assets";
 import { API_CREATE_APPOINTMENT, API_GET_DOCTOR_APPOINTMENT, API_GET_PATIENT_APPOINTMENT, API_GET_SLOT, API_GET_SPECIALTY_APPOINTMENT, API_PROFILE_PATIENT } from "../../Contants/api.constant";
 import { defineConfigGet, defineConfigPost } from "../../components/Common/utils";
 import { ISpecialty } from "../../interface/general.interface";
-import { warn } from "../../components/Common/notify";
+import { success, warn } from "../../components/Common/notify";
 import { useAppSelector } from "../../redux/hooks";
 import { useNavigate } from "react-router-dom";
 
@@ -53,7 +53,9 @@ const Appointment = () => {
   }, [])
 
   useEffect(() => {
-    getDoctor(specialty);
+    if (specialty) {
+      getDoctor(specialty);
+    }
   }, [specialty])
 
   useEffect(() => {
@@ -66,6 +68,10 @@ const Appointment = () => {
     setStartDate(moment(`${date} ${startTime}`).format(FORMAT_DATE_TIME));
     setEndDate(moment(`${date} ${endTime}`).format(FORMAT_DATE_TIME));
   }, [startTime, endTime, date]);
+
+  useEffect(() => {
+    getPractitionerInfo()
+  }, []);
 
   const getPatient = () => {
     const url = `${url_api}${API_GET_PATIENT_APPOINTMENT}`;
@@ -114,10 +120,6 @@ const Appointment = () => {
       console.log("err:", err)
     })
   }
-
-  useEffect(() => {
-    getPractitionerInfo()
-  }, []);
 
   const getPractitionerInfo = () => {
     const url = `${url_api}${API_PROFILE_PATIENT}`;
@@ -194,7 +196,7 @@ const Appointment = () => {
 
     axios.post(url, params, defineConfigPost()).then((resp: any) => {
       if (resp) {
-        console.log("resp:", resp)
+        success("Book successfully!");
         setIsBooking(true);
       }
     }).catch((err: any) => {
@@ -272,8 +274,8 @@ const Appointment = () => {
     return (
       <>
         <option hidden>Select Specialty</option>
-        {listSpecialty?.length > 0 ? (
-          listSpecialty?.map((item: any) => (
+        {listSpecialty ? (
+          listSpecialty.map((item: any) => (
             <option value={item.name} key={item.code}>
               {item.name}
             </option>
@@ -435,8 +437,8 @@ const Appointment = () => {
           <div className="mt-3">
             <h5 className="fw-bold mb-3">Select Doctor</h5>
             <div className="row">
-              {listDoctor?.map((item: any, idx: number) => {
-                const name = item?.practitionerTarget?.nameFirstRep.text;
+              {listDoctor && listDoctor.map((item: any, idx: number) => {
+                const name = item?.practitioner.display;
                 const photo = item?.practitionerTarget.photo[0];
                 const src = `data:${photo.contentType};base64,${photo.data}`;
 

@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { defineConfigGet, defineConfigPost } from "../../components/Common/utils";
+import { defineConfigPost } from "../../components/Common/utils";
 import { error, success } from "../../components/Common/notify";
 import { API_PROFILE_PATIENT, API_UPDATE_PATIENT } from "../../Contants/api.constant";
 import { GENDER } from "../../Contants";
-import { DOCTOR } from "../../assets";
+import { USER } from "../../assets";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().min(3).required("Required"),
@@ -38,24 +38,24 @@ const defaultValue = {
 const EditPatient = () => {
     const url_api = process.env.REACT_APP_API_URL;
 
-    const params = useParams();
     const navigate = useNavigate();
     const inputRef = useRef<any>(null);
     const [image, setImage] = useState<any>("");
 
-    const [patientInfo, setPatientInfo] = useState(defaultValue);
+    const [patientInfo, setPatientInfo] = useState<any>(defaultValue);
 
     useEffect(() => {
-        getPatientInfo(params.patientId)
-    }, [params.patientId])
+        getPatientInfo()
+    }, [])
 
-    const getPatientInfo = (id: any) => {
+    const getPatientInfo = () => {
         const url = `${url_api}${API_PROFILE_PATIENT}`;
 
         axios
-            .get(url, defineConfigGet({}))
+            .get(url, defineConfigPost())
             .then((resp: any) => {
                 if (resp) {
+                    console.log("resp:", resp)
                     const data = resp.data;
                     const patientDetail = {
                         id: data.id,
@@ -76,12 +76,12 @@ const EditPatient = () => {
     }
 
     const updatePatient = (values: any) => {
-        const url = `${url_api}${API_UPDATE_PATIENT}${values.id}`;
+        const url = `${url_api}${API_UPDATE_PATIENT}`;
 
         const param = {
             username: values.name,
             email: values.email,
-            password:"",
+            password: "",
             name: values.name,
             phoneNumber: values.phoneNumber,
             dateOfBirth: values.dateOfBirth,
@@ -114,7 +114,15 @@ const EditPatient = () => {
 
     const handleChangeImage = (event: any) => {
         const file = event.target.files[0];
-        setImage(file);
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImage(reader.result);
+            };
+
+            reader.readAsDataURL(file);
+        }
     };
 
     const handlePickImage = () => {
@@ -232,8 +240,8 @@ const EditPatient = () => {
             <div className="h-100 d-flex flex-column" onClick={handlePickImage}>
                 <div className="h-100">
                     <img
-                        src={image ? URL.createObjectURL(image) : DOCTOR}
-                        alt=""
+                        src={patientInfo?.photo.length > 0 ? `data:${patientInfo?.photo[0]?.contentType};base64,${patientInfo.photo[0]?.data}` : image ? image : USER}
+                        alt="img patient"
                         className={`h-100 w-100 d-block m-auto ${image ? "" : "bg-image"}`}
                         style={{ objectFit: "cover" }}
                     />

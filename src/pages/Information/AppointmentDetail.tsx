@@ -10,38 +10,38 @@ import PopUpCancel from "./PopUpCancel";
 
 
 const AppointmentDetail = () => {
-    const url_api = process.env.REACT_APP_API_URL;
-    const params = useParams();
+  const url_api = process.env.REACT_APP_API_URL;
+  const params = useParams();
 
-    const [appointment, setAppointment] = useState<any>();
-    const [isShowPopUp, setIsShowPopUp] = useState<boolean>(false);
+  const [appointment, setAppointment] = useState<any>();
+  const [isShowPopUp, setIsShowPopUp] = useState<boolean>(false);
 
-    useEffect(() => {
-        getAppointment(params.appointmentId)
-    }, [params.appointmentId])
+  useEffect(() => {
+    getAppointment(params.appointmentId)
+  }, [params.appointmentId])
 
-    const getAppointment = (id: string | undefined) => {
-        const url = `${url_api}${API_GET_DETAIL_APPOINTMENT}${id}`;
+  const getAppointment = (id: string | undefined) => {
+    const url = `${url_api}${API_GET_DETAIL_APPOINTMENT}${id}`;
 
-        axios
-            .get(url, defineConfigPost())
-            .then((resp: any) => {
-                if (resp) {
-                    setAppointment(resp.data);
-                }
-            })
-            .catch((err: any) => {
-                console.log("err:", err);
-            });
-    }
+    axios
+      .get(url, defineConfigPost())
+      .then((resp: any) => {
+        if (resp) {
+          setAppointment(resp.data);
+        }
+      })
+      .catch((err: any) => {
+        console.log("error get appointment detail:", err);
+      });
+  }
 
-    const handleCancel = () => {
-        setIsShowPopUp(true);
-    }
+  const handleCancel = () => {
+    setIsShowPopUp(true);
+  }
 
-    return (
-        <div>
-            <div className="border border-3 rounded p-3">
+  return (
+    <div>
+      <div className="border border-3 rounded p-3">
         <div className="border-bottom">
           <p className="fw-bold text-uppercase">patient details</p>
           <div className="row">
@@ -114,13 +114,13 @@ const AppointmentDetail = () => {
               <tr>
                 <td>Specialty</td>
                 <td>
-                    {appointment.specialty && appointment.specialty.map((item: any) => {
-                        return (
-                            <p>{"["}<span className="text-info">{item.coding[0].code}</span>{"]"} {item.coding[0].display && "-"}
-                            {item.coding[0].display}</p>
-                        )
-                        })
-                    }
+                  {appointment.specialty && appointment.specialty.map((item: any) => {
+                    return (
+                      <p>{"["}<span className="text-info">{item.coding[0].code}</span>{"]"} {item.coding[0].display && "-"}
+                        {item.coding[0].display}</p>
+                    )
+                  })
+                  }
                 </td>
               </tr>
               <tr>
@@ -139,14 +139,14 @@ const AppointmentDetail = () => {
         </div>
 
         <div>
-            <button className="button button--primary">Back</button>
-            <button className="button button--primary" onClick={() => handleCancel()}>Cancel</button>
+          <button className="button button--primary">Back</button>
+          <button className="button button--primary" onClick={() => handleCancel()}>Cancel</button>
         </div>
       </div>
 
-      {isShowPopUp && <PopUpCancel handleShowPopUp={setIsShowPopUp} appointmentId={appointment?.id}/>}
-        </div>
-    )
+      {isShowPopUp && <PopUpCancel handleShowPopUp={setIsShowPopUp} appointmentId={appointment?.id} />}
+    </div>
+  )
 }
 
 export default AppointmentDetail

@@ -1,10 +1,11 @@
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
 import { useNavigate, useOutlet } from "react-router-dom";
+
 import { convertToDate, convertToTime, defineConfigGet } from "../../components/Common/utils";
 import PaginationComponent from "../../components/Common/Pagination";
 import { API_GET_LIST_APPOINTMENT_PATIENT, API_PROFILE_PATIENT } from "../../Contants/api.constant";
-import { DOCTOR } from "../../assets";
+import { USER } from "../../assets";
 import EditPatient from "./EditPatient";
 import { setId } from "../../redux/features/auth/authSlice";
 import { useAppDispatch } from "../../redux/hooks";
@@ -14,10 +15,8 @@ const Information = () => {
     const [itemPerPage, setItemPerPage] = useState<number>(3);
     const [totalItem, setTotalItem] = useState<number>(0);
 
-    const inputRef = useRef<any>(null);
     const [patient, setPatient] = useState<any>({});
     const [listAppointment, setListAppointment] = useState<any>([]);
-    const [image, setImage] = useState<any>("");
 
     const outlet = useOutlet();
     const navigate = useNavigate();
@@ -39,11 +38,12 @@ const Information = () => {
             .get(url, defineConfigGet({}))
             .then((resp: any) => {
                 if (resp) {
+                    console.log("resp:", resp)
                     setPatient(resp.data);
                 }
             })
             .catch((err) => {
-                console.log("err:", err);
+                console.log("error get info patient:", err);
             });
     }
 
@@ -58,16 +58,8 @@ const Information = () => {
                 }
             })
             .catch((err) => {
-                console.log("err:", err);
+                console.log("error get appointment for patient:", err);
             });
-    }
-    const handleChangeImage = (event: any) => {
-        const file = event.target.files[0];
-        setImage(file);
-    };
-
-    const handlePickImage = () => {
-        inputRef.current.click();
     }
 
     const getCurrentPage = (item: number) => {
@@ -91,7 +83,7 @@ const Information = () => {
                                     navigate("/change-password");
                                     dispatch(setId(patient?.id));
                                 }}>Change Password</button>
-                                <button className="button button--primary button--small" onClick={() =>{ navigate(`/information/edit`); dispatch(setId(patient?.id));}}>Edit</button>
+                                <button className="button button--primary button--small" onClick={() => { navigate(`/information/edit`); dispatch(setId(patient?.id)); }}>Edit</button>
                             </div>
                         </div>
 
@@ -109,48 +101,34 @@ const Information = () => {
                                         </tr>
                                         <tr>
                                             <th scope="row">Address</th>
-                                            <td>{patient?.addressFirstRep?.text}</td>
+                                            <td>{patient?.address}</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">Citizen identification</th>
-                                            <td>{patient?.addressFirstRep?.city}</td>
+                                            <td>{patient?.postalCode}</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">Phone number</th>
-                                            <td>{patient?.telecom?.find((i: any) => i?.system === "phone")
-                                                ?.value}</td>
+                                            <td>{patient?.phoneNumber}</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">Email</th>
-                                            <td>
-                                                {
-                                                    patient?.telecom?.find((i: any) => i?.system === "email")
-                                                        ?.value
-                                                }
-                                            </td>
+                                            <td>{patient?.email}</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                             <div className="col-4">
-                                <div className="h-100 d-flex flex-column" onClick={handlePickImage}>
+                                <div className="h-100 d-flex flex-column" >
                                     <div className="h-100">
                                         <img
-                                            src={image ? URL.createObjectURL(image) : DOCTOR}
-                                            alt=""
-                                            className={`h-100 w-100 d-block m-auto ${image ? "" : "bg-image"}`}
+                                            src={patient?.photo ? `data:${patient?.photo[0]?.contentType};base64,${patient.photo[0]?.data}` : USER}
+                                            alt="img patient"
+                                            className={`h-100 w-100 d-block m-auto ${patient?.photo ? "" : "bg-image"}`}
                                             style={{ objectFit: "cover" }}
                                         />
-                                        <input
-                                            type="file"
-                                            className="d-none"
-                                            ref={inputRef}
-                                            onChange={handleChangeImage}
-                                        />
                                     </div>
-                                    <button className="button button--small button--primary w-90 mx-auto mt-3">
-                                        {image ? "Edit" : "Add"} profile picture
-                                    </button>
+
                                 </div>
                             </div>
                         </div>

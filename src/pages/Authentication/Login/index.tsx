@@ -21,7 +21,7 @@ const Login = () => {
 
   const url_api = process.env.REACT_APP_API_URL;
 
-  const handleLogin = () => {
+  const requestLogin = () => {
     const url = `${url_api}${API_LOGIN}`;
 
     const params = {
@@ -46,15 +46,21 @@ const Login = () => {
         }
       })
       .catch((err: any) => {
-        if (err?.response?.data?.error?.code === "400") {
-          error(err?.response?.data?.error?.message)
-        }
-        console.log("err:", err);
+        error(err?.response?.data?.error?.message)
+        console.log("error Login:", err);
       });
   }
 
+  const handleKeyEnter = (event: any) => {
+    if (gmail !== '' && password !== '') {
+      if (event.key === 'Enter') {
+        requestLogin();
+      }
+    }
+  }
+
   return (
-    <div className="contain">
+    <div className="contain" onKeyDown={handleKeyEnter}>
       <div className="login-container">
         <div className="login-container-header">
           <img src={LOGO_HOSPITAL} alt="" />
@@ -95,7 +101,7 @@ const Login = () => {
               />
             </button>
           </div>
-          <button className="button button--large button--large--primary w-100" onClick={() => handleLogin()}>Login</button>
+          <button className="button button--large button--large--primary w-100" onClick={() => requestLogin()}>Login</button>
           <p className="text-end mt-3">
             <Link to="/forgot-password">Forgot Password?</Link>
           </p>
