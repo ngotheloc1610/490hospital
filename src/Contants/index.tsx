@@ -1,8 +1,8 @@
 export const GENDER = [
-  { title: "Male", value: "male" },
+  { title: "Male", value: "MALE" },
   {
     title: "Female",
-    value: "female",
+    value: "FEMALE",
   },
 ];
 
