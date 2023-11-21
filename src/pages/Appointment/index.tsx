@@ -46,7 +46,6 @@ const Appointment = () => {
   const [typeOfAppointment, setTypeOfAppointment] = useState<string>("");
   const [doctor, setDoctor] = useState<any>();
   const [description, setDescription] = useState<string>("");
-  const [namePatient, setNamePatient] = useState<string>("");
 
   useEffect(() => {
     getSpecialty();
@@ -72,18 +71,6 @@ const Appointment = () => {
   useEffect(() => {
     getPractitionerInfo()
   }, []);
-
-  const getPatient = () => {
-    const url = `${url_api}${API_GET_PATIENT_APPOINTMENT}`;
-
-    axios.get(url, defineConfigGet({ namePatient: namePatient })).then((resp: any) => {
-      if (resp) {
-        setListPatient(resp.data);
-      }
-    }).catch((err: any) => {
-      console.log("err:", err)
-    })
-  }
 
   const getSpecialty = () => {
     const url = `${url_api}${API_GET_SPECIALTY_APPOINTMENT}`;
@@ -227,21 +214,18 @@ const Appointment = () => {
     setStep(step - 1);
   };
 
-  const handleSearchPatient = () => {
-    getPatient()
-  }
-
   const disabled = (item: any) => {
     if (timeBusy.length > 0) {
-      timeBusy.find((time: any) => {
-        if (time.start === new Date(Date.parse(item.startTime)) && time.end === new Date(Date.parse(item.endTime))) {
-          return true;
-        } else {
-          return false;
-        }
+      const existedBusy = timeBusy.find((time: any) => {
+        return moment(time.start).format("HH:mm:ss") === item.startTime && moment(time.end).format("HH:mm:ss") === item.endTime;
       })
-    }
-    return false;
+
+      if(existedBusy) {
+        return true;
+      }
+      return false;
+  }
+  return false;
   }
 
   const _renderTimeBook = useCallback(
@@ -350,66 +334,13 @@ const Appointment = () => {
   const _renderStep1 = () => {
     return (
       <div className="container">
-        {/* <div className="patient-detail border-bottom pb-3">
-          <h5 className="mb-3 fw-bold">Patient Details</h5>
-          <div className="row m-auto" style={{ width: "70%" }}>
-            <div className="col-8 d-flex">
-              <label htmlFor="patient" className="form-label">Select Patient </label>
-              <div className="input-group mb-3">
-                <input type="text" className="form-control" id="patient" placeholder="Enter patient name or patient email" value={namePatient} onChange={(e: any) => setNamePatient(e.target.value)} />
-              </div>
-            </div>
-            <div className="col-4">
-              <button className="button-apply" onClick={() => handleSearchPatient()}>Apply</button>
-            </div>
-          </div>
-
-          <div>
-            {listPatient.length > 0 && <table className="table table-striped">
-              <thead className="table-light">
-                <tr>
-                  <th scope="col">Name</th>
-                  <th scope="col">Gender</th>
-                  <th scope="col">Date of Birth</th>
-                  <th scope="col">Phone number</th>
-                  <th scope="col">Email</th>
-                </tr>
-              </thead>
-              <tbody>
-                {listPatient?.map((item: any, idx: number) => {
-                  const email = item.telecom?.find(
-                    (i: any) => i?.system === "email"
-                  )?.value;
-                  const phone = item.telecom?.find(
-                    (i: any) => i?.system === "phone"
-                  )?.value;
-
-                  return (
-                    <tr className={`${idx % 2 === 1 ? "table-light" : ""}`}>
-                      <td >
-                        {item.nameFirstRep.nameAsSingleString}
-                      </td>
-                      <td >{item.gender}</td>
-                      <td >{item.birthDate}</td>
-                      <td >
-                        {phone}
-                      </td>
-                      <td >{email}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>}
-
-          </div>
-        </div> */}
-
         <div className="mt-3">
           <h5 className="mb-3 fw-bold">Booking details</h5>
           <div className="m-auto" style={{ width: "70%" }}>
-            <div className="d-flex mb-4">
-              <label htmlFor="typeOfAppointment">Type of appointment</label>
+            <div className="d-flex justify-content-between mb-4">
+              <label htmlFor="typeOfAppointment" className="my-auto">Type of appointment</label>
               <select
+              style={{width:"75%"}}
                 className="form-select"
                 id="typeOfAppointment"
                 onChange={(e: any) => setTypeOfAppointment(e.target.value)}
@@ -419,9 +350,10 @@ const Appointment = () => {
               </select>
             </div>
 
-            <div className="d-flex">
-              <label htmlFor="specialty">Select specialty</label>
+            <div className="d-flex justify-content-between">
+              <label htmlFor="specialty" className="my-auto">Select specialty</label>
               <select
+              style={{width:"75%"}}
                 id="specialty"
                 className="form-select"
                 onChange={(e: any) => {
@@ -529,7 +461,7 @@ const Appointment = () => {
                   </tr>
                   <tr>
                     <td>Date of birth</td>
-                    <td>{moment(patient.dateOfBirth).format(FORMAT_DATE_MONTH_YEAR)}</td>
+                    <td>{patient.dateOfBirth ? moment(patient.dateOfBirth).format(FORMAT_DATE_MONTH_YEAR) : ""}</td>
                   </tr>
                   <tr>
                     <td>Address</td>
@@ -564,7 +496,7 @@ const Appointment = () => {
               <tr>
                 <td>Appointment time</td>
                 <td>
-                  <span>{moment(startDate).format("HH:mm")}</span> - <span>{moment(endDate).format("HH:mm")}</span>
+                  <span>{moment(startDate).format("HH:mm A")}</span> - <span>{moment(endDate).format("HH:mm A")}</span>
                 </td>
               </tr>
               <tr>
@@ -580,6 +512,12 @@ const Appointment = () => {
                 <td>
                   {"["}<span className="text-info">{specialtyCode}</span>{"]"} {specialtyDisplay && "- "}
                   {specialtyDisplay}</td>
+              </tr>
+              <tr>
+                <td>Room</td>
+                <td>
+                  {doctor?.location.map((item:any) =>item.display)}
+                </td>
               </tr>
               <tr>
                 <td>Status</td>
