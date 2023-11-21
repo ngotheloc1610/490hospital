@@ -21,7 +21,7 @@ const ChangePassword = () => {
 
     const { id } = useAppSelector((state) => state.authSlice)
 
-    const changePassword = (id: string) => {
+    const changePassword = () => {
         const url = `${url_api}${API_CHANGE_PASSWORD}${id}`;
 
         const params = {
@@ -43,11 +43,20 @@ const ChangePassword = () => {
     }
 
     const handleChangePassword = () => {
+        if(oldPassword){
+            warn("Vui lòng nhập mật khẩu cũ!");
+            return;
+        }
+        if(oldPassword === password){
+            warn("Trùng với mật khẩu cũ ! Vui lòng nhập lại.");
+            return;
+        }
+
         if (password !== cfPassword) {
             warn("Mật khẩu không trùng khớp!");
             return;
         }
-        changePassword(id)
+        changePassword()
     }
 
     const _renderChangePassword = () => {

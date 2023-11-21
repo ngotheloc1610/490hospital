@@ -26,7 +26,7 @@ const DoctorDetail = () => {
                 setDoctor(resp.data)
             }
         }).catch((err: any) => {
-            console.log("err:", err)
+            console.log("error get doctor detail:", err)
         })
     }, [params.doctocId])
 

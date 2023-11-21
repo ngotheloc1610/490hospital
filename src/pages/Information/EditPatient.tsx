@@ -15,12 +15,7 @@ const validationSchema = Yup.object().shape({
     gender: Yup.string().required("Required"),
     address: Yup.string().required("Required"),
     city: Yup.string().required("Required"),
-    // phoneNumber: Yup.number()
-    //   .positive("A phone number can't start with a minus")
-    //   .integer("A phone number can't include a decimal point")
-    //   .min(10)
-    //   .max(11)
-    //   .required("Required"),
+    phoneNumber: Yup.number().required("Required"),
     email: Yup.string().email().required("Required"),
 });
 
@@ -177,8 +172,8 @@ const EditPatient = () => {
                                 }`}
                         >
                             {GENDER.map((item: any) => (
-                                <option value={item.code} key={item.code}>
-                                    {item.name}
+                                <option value={item.value} key={item.value}>
+                                    {item.title}
                                 </option>
                             ))}
                         </Field>
@@ -240,9 +235,9 @@ const EditPatient = () => {
             <div className="h-100 d-flex flex-column" onClick={handlePickImage}>
                 <div className="h-100">
                     <img
-                        src={patientInfo?.photo.length > 0 ? `data:${patientInfo?.photo[0]?.contentType};base64,${patientInfo.photo[0]?.data}` : image ? image : USER}
+                        src={patientInfo?.photo?.length > 0 ? `data:${patientInfo?.photo[0]?.contentType};base64,${patientInfo.photo[0]?.data}` : image ? image : USER}
                         alt="img patient"
-                        className={`h-100 w-100 d-block m-auto ${image ? "" : "bg-image"}`}
+                        className={`d-block m-auto ${image ? "" : "bg-image"}`}
                         style={{ objectFit: "cover" }}
                     />
                     <input

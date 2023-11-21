@@ -1,9 +1,19 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { defineConfigGet } from "../../../components/Common/utils";
 import axios from "axios";
 import { API_FORGOT_PASSWORD } from "../../../Contants/api.constant";
 
+// import OTPInput, { ResendOTP } from "otp-input-react";
+// import 'otp-input-react/build/style.css'; 
+
+const customInputStyle = {
+  width: '2rem', // Adjust the width as needed
+  height: '2rem', // Adjust the height as needed
+  margin: '0.5rem', // Adjust the margin as needed
+  fontSize: '1.5rem', // Adjust the font size as needed
+  borderRadius: '4px', // Adjust the border radius as needed
+  border: '1px solid #ccc', // Adjust the border style and color as needed
+};
 
 const ForgotPassword = () => {
   const url_api = process.env.REACT_APP_API_URL;
@@ -12,6 +22,9 @@ const ForgotPassword = () => {
   const [isShowCfPassword, setIsShowCfPassword] = useState(false);
 
   const [email, setEmail] = useState<string>("");
+  const [OTP, setOTP] = useState<string>("");
+
+  const [isSendMail, setIsSendMail] = useState<boolean>(false)
 
   const handleSendMail = () => {
     const url = `${url_api}${API_FORGOT_PASSWORD}`;
@@ -21,6 +34,7 @@ const ForgotPassword = () => {
       .then((resp: any) => {
         if (resp) {
           console.log("resp:", resp)
+          setIsSendMail(true);
         }
       })
       .catch((err: any) => {
@@ -118,7 +132,7 @@ const ForgotPassword = () => {
           </p>
           <h3 className="text-center mb-3">Success</h3>
           <p className="text-center mb-5">
-            You have successfully reset your{" "}
+            You have successfully reset your
             <span className="text-center d-block mt-2">password.</span>
           </p>
           <p className="text-center">Re-directing to your homepage...</p>
@@ -133,13 +147,13 @@ const ForgotPassword = () => {
         <div className="forgot-container">
           <h3>Enter Verification Code</h3>
           <p>Enter code that we have sent to your Email</p>
-
+          {/* <OTPInput inputClassName="custom-otp-input"  inputStyle={customInputStyle} value={OTP} onChange={setOTP} autoFocus OTPLength={4} otpType="number" disabled={false} secure /> */}
           <button className="button button--large button--large--primary w-100">
             Verify
           </button>
-          <p className="mt-5 text-center ">
-            Didn’t receive the code? <Link to="" className="text-resend">Resend</Link>
-          </p>
+          {/* <p className="mt-5 text-center ">
+            Didn’t receive the code? <ResendOTP onResendClick={() => console.log("Resend clicked")} />
+          </p> */}
         </div>
       </div>
     );
@@ -148,9 +162,9 @@ const ForgotPassword = () => {
   return (
     <>
       {_renderForgotYourPw()}
-      {/* {_renderCreateNewPw()}
+      {_renderVerifyCode()}
+      {_renderCreateNewPw()}
       {_renderSuccess()}
-      {_renderVerifyCode()} */}
     </>
   );
 };

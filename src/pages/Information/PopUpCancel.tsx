@@ -28,7 +28,7 @@ const PopUpCancel = (props: IProps) => {
         navigate("/information");
       }
     }).catch((err: any) => {
-      console.log("err:", err)
+      console.log("error cancel appointment:", err)
     })
   }
 

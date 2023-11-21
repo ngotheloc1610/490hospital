@@ -20,6 +20,7 @@ const Register = () => {
   const [cfPassword, setCfPassword] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [gender, setGender] = useState<string>("");
+  const [isValidEmail, setIsValidEmail] = useState<boolean>(true);
 
   const url_api = process.env.REACT_APP_API_URL;
 
@@ -31,17 +32,12 @@ const Register = () => {
       password: password.trim(),
       confirmPassword: cfPassword.trim(),
       name: name,
+      gender: gender,
       phoneNumber: phoneNumber,
       type: "PATIENT",
       dateOfBirth: birthday,
-      photo: "",
-      city: "",
-      district: "",
-      state: "",
+      photo: null,
       address: "",
-      gender: gender,
-      country: "",
-      postalCode: "",
     };
 
     axios
@@ -55,7 +51,7 @@ const Register = () => {
         }
       })
       .catch((err: any) => {
-        console.log("err:", err);
+        console.log("error create patient:", err);
         error(err.response.data.error.message);
       });
   };
@@ -68,7 +64,8 @@ const Register = () => {
       birthday &&
       name &&
       phoneNumber &&
-      gender
+      gender && 
+      isValidEmail
     ) {
       if (password === cfPassword) {
         registerPatient();
@@ -84,6 +81,14 @@ const Register = () => {
     if (event.key === 'Enter') {
       handleRegister()
     }
+  }
+
+  const handleChangeGmail = (event:any) => {
+    setGmail(event.target.value);
+
+    // Email validation using a regular expression
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setIsValidEmail(emailRegex.test(event.target.value));
   }
 
   return (
@@ -104,12 +109,12 @@ const Register = () => {
                   </label>
                   <input
                     type="text"
-                    className="form-control"
+                    className={`form-control ${!isValidEmail ?  "is-invalid" : ""}`}
                     id="gmail"
                     placeholder="Gmail"
                     autoComplete="new-password"
                     value={gmail}
-                    onChange={(e: any) => setGmail(e.target.value)}
+                    onChange={handleChangeGmail}
                   />
                 </div>
               </div>

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useOutlet } from "react-router-dom";
 
-import { convertToDate, convertToTime, defineConfigGet } from "../../components/Common/utils";
+import { convertToDate, convertToTime, defineConfigGet, defineConfigPost } from "../../components/Common/utils";
 import PaginationComponent from "../../components/Common/Pagination";
 import { API_GET_LIST_APPOINTMENT_PATIENT, API_PROFILE_PATIENT } from "../../Contants/api.constant";
 import { USER } from "../../assets";
@@ -35,7 +35,7 @@ const Information = () => {
         const url = `${url_api}${API_PROFILE_PATIENT}`;
 
         axios
-            .get(url, defineConfigGet({}))
+            .get(url, defineConfigPost())
             .then((resp: any) => {
                 if (resp) {
                     console.log("resp:", resp)
@@ -124,7 +124,7 @@ const Information = () => {
                                         <img
                                             src={patient?.photo ? `data:${patient?.photo[0]?.contentType};base64,${patient.photo[0]?.data}` : USER}
                                             alt="img patient"
-                                            className={`h-100 w-100 d-block m-auto ${patient?.photo ? "" : "bg-image"}`}
+                                            className={`d-block m-auto ${patient?.photo ? "" : "bg-image"}`}
                                             style={{ objectFit: "cover" }}
                                         />
                                     </div>
