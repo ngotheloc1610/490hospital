@@ -11,6 +11,8 @@ export const FORMAT_DATE = "YYYY-MM-DD";
 
 export const FORMAT_DATE_TIME = "YYYY-MM-DD HH:mm:ss";
 
+export const FORMAT_DATE_TIME_2 = "YYYY-MM-DD HH:mm";
+
 export const START_PAGE = 0;
 
 export const PAGE_SIZE_SERVICE = 4;
