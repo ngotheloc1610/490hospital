@@ -8,7 +8,7 @@ import { API_GET_LIST_APPOINTMENT_PATIENT, API_PROFILE_PATIENT } from "../../Con
 import { USER } from "../../assets";
 import EditPatient from "./EditPatient";
 import { setId } from "../../redux/features/auth/authSlice";
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 
 const Information = () => {
     const [currentPage, setCurrentPage] = useState<number>(0);
@@ -22,14 +22,17 @@ const Information = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch()
     const url_api = process.env.REACT_APP_API_URL;
+    const { triggerCancel } = useAppSelector(state => state.appointmentSlice);
 
     useEffect(() => {
         getPatientDetail()
     }, []);
 
     useEffect(() => {
-        getListAppointment(patient?.id)
-    }, [patient?.id, currentPage, itemPerPage]);
+        if (patient?.id) {
+            getListAppointment(patient.id)
+        }
+    }, [patient?.id, currentPage, itemPerPage, triggerCancel]);
 
     const getPatientDetail = () => {
         const url = `${url_api}${API_PROFILE_PATIENT}`;
