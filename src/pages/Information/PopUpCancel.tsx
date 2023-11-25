@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { defineConfigPost } from "../../components/Common/utils";
 import { API_CANCEL_APPOINTMENT } from "../../Contants/api.constant";
-import { success } from "../../components/Common/notify";
+import { error, success } from "../../components/Common/notify";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setTriggerCancel } from "../../redux/features/appointment/appointmentSlice";
 
@@ -34,6 +34,7 @@ const PopUpCancel = (props: IProps) => {
       }
     }).catch((err: any) => {
       console.log("error cancel appointment:", err)
+      error(err.response.data.error)
     })
   }
 

@@ -95,9 +95,7 @@ const EditPatient = () => {
                 }
             })
             .catch((err: any) => {
-                if (err.response.data.status === 401) {
-                    error(err.response.data.error)
-                }
+                error(err.response.data.error)
                 console.log("error update profile patient:", err);
             });
     }

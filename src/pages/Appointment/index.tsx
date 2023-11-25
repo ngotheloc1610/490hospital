@@ -8,7 +8,7 @@ import { DOCTOR, ICON_GRADUATION, ICON_PEOPLE_TEAM } from "../../assets";
 import { API_CREATE_APPOINTMENT, API_GET_DOCTOR_APPOINTMENT, API_GET_PATIENT_APPOINTMENT, API_GET_SLOT, API_GET_SPECIALTY_APPOINTMENT, API_PROFILE_PATIENT } from "../../Contants/api.constant";
 import { defineConfigGet, defineConfigPost } from "../../components/Common/utils";
 import { ISpecialty } from "../../interface/general.interface";
-import { success, warn } from "../../components/Common/notify";
+import { error, success, warn } from "../../components/Common/notify";
 import { useAppSelector } from "../../redux/hooks";
 import { useNavigate } from "react-router-dom";
 
@@ -187,6 +187,7 @@ const Appointment = () => {
       }
     }).catch((err: any) => {
       setIsBooking(false);
+      error(err.response.data.error);
       console.log("err:", err)
     })
   }
