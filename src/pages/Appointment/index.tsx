@@ -26,7 +26,6 @@ const Appointment = () => {
 
   const [listSpecialty, setListSpecialty] = useState<ISpecialty[]>([]);
   const [listDoctor, setListDoctor] = useState([]);
-  const [listPatient, setListPatient] = useState([]);
 
   const [patient, setPatient] = useState<any>({});
 
@@ -220,12 +219,12 @@ const Appointment = () => {
         return moment(time.start).format("HH:mm:ss") === item.startTime && moment(time.end).format("HH:mm:ss") === item.endTime;
       })
 
-      if(existedBusy) {
+      if (existedBusy) {
         return true;
       }
       return false;
-  }
-  return false;
+    }
+    return false;
   }
 
   const _renderTimeBook = useCallback(
@@ -340,7 +339,7 @@ const Appointment = () => {
             <div className="d-flex justify-content-between mb-4">
               <label htmlFor="typeOfAppointment" className="my-auto">Type of appointment</label>
               <select
-              style={{width:"75%"}}
+                style={{ width: "75%" }}
                 className="form-select"
                 id="typeOfAppointment"
                 onChange={(e: any) => setTypeOfAppointment(e.target.value)}
@@ -353,7 +352,7 @@ const Appointment = () => {
             <div className="d-flex justify-content-between">
               <label htmlFor="specialty" className="my-auto">Select specialty</label>
               <select
-              style={{width:"75%"}}
+                style={{ width: "75%" }}
                 id="specialty"
                 className="form-select"
                 onChange={(e: any) => {
@@ -371,8 +370,8 @@ const Appointment = () => {
             <div className="row">
               {listDoctor && listDoctor.map((item: any, idx: number) => {
                 const name = item?.practitioner.display;
-                const photo = item?.practitionerTarget.photo[0];
-                const src = `data:${photo.contentType};base64,${photo.data}`;
+                const photo = item?.practitionerTarget?.photo[0];
+                const src = `data:${photo?.contentType};base64,${photo?.data}`;
 
                 return (
                   <div className={`col-6 row mb-3 ${item.id === doctor?.id ? "doctor-selected" : ""}`} onClick={() => setDoctor(item)}>
@@ -501,7 +500,7 @@ const Appointment = () => {
               </tr>
               <tr>
                 <td>Doctor</td>
-                <td>{doctor?.practitionerTarget?.nameFirstRep?.text}</td>
+                <td>{doctor?.practitioner?.display}</td>
               </tr>
               <tr>
                 <td>Type of appointment</td>
@@ -516,7 +515,7 @@ const Appointment = () => {
               <tr>
                 <td>Room</td>
                 <td>
-                  {doctor?.location.map((item:any) =>item.display)}
+                  {doctor?.location.map((item: any) => item.display)}
                 </td>
               </tr>
               <tr>

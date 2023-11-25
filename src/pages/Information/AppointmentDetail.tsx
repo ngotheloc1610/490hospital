@@ -139,7 +139,7 @@ const AppointmentDetail = () => {
         </div>
 
         <div>
-          <button className="button button--primary">Back</button>
+          <button className="button button--primary me-2">Back</button>
           <button className="button button--primary" onClick={() => handleCancel()}>Cancel</button>
         </div>
       </div>
