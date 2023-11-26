@@ -40,3 +40,16 @@ export const convertToTime = (time: string) => {
     const date = moment(time, "ddd MMM DD hh:mm:ss Z YYYY");
     return date.format(FORMAT_DATE_MONTH_YEAR);
 }
+
+export const styleStatus = (status: string) => {
+    switch (status) {
+        case "No Show":
+            return "no-show";
+        case "Cancel":
+            return "canceled";
+        case "Fulfilled":
+            return "fulfilled";
+        default:
+            return;
+    }
+}

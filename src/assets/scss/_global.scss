@@ -215,3 +215,24 @@ button {
 
   }
 }
+
+.no-show {
+  border-radius: 6px;
+  background: #b3e5fc;
+  color: #1a8fe3;
+  padding: 5px;
+}
+
+.canceled {
+  border-radius: 6px;
+  background: rgba(255, 59, 59, 0.14);
+  color: #ff3b3b;
+  padding: 5px;
+}
+
+.fulfilled {
+  border-radius: 6px;
+  background: #c8e6c9;
+  color: #0ea961;
+  padding: 5px;
+}
