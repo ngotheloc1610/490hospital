@@ -5,7 +5,7 @@ import axios from "axios";
 import { LIST_TIME, TYPE_OF_APPOINTMENT } from "../../Contants";
 import { FORMAT_DATE, FORMAT_DATE_MONTH_YEAR, FORMAT_DATE_TIME, TOTAL_STEP } from "../../Contants/general.constant";
 import { DOCTOR, ICON_GRADUATION, ICON_PEOPLE_TEAM } from "../../assets";
-import { API_CREATE_APPOINTMENT, API_GET_DOCTOR_APPOINTMENT, API_GET_PATIENT_APPOINTMENT, API_GET_SLOT, API_GET_SPECIALTY_APPOINTMENT, API_PROFILE_PATIENT } from "../../Contants/api.constant";
+import { API_CREATE_APPOINTMENT, API_GET_DOCTOR_APPOINTMENT, API_GET_SLOT, API_GET_SPECIALTY_APPOINTMENT, API_PROFILE_PATIENT } from "../../Contants/api.constant";
 import { defineConfigGet, defineConfigPost } from "../../components/Common/utils";
 import { ISpecialty } from "../../interface/general.interface";
 import { error, success, warn } from "../../components/Common/notify";
