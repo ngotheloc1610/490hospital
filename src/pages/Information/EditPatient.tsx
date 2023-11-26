@@ -8,6 +8,8 @@ import { error, success } from "../../components/Common/notify";
 import { API_PROFILE_PATIENT, API_UPDATE_PATIENT } from "../../Contants/api.constant";
 import { GENDER } from "../../Contants";
 import { USER } from "../../assets";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { setTrigger } from "../../redux/features/profile/profileSlice";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().min(3).required("Required"),
@@ -20,7 +22,6 @@ const validationSchema = Yup.object().shape({
 });
 
 const defaultValue = {
-    id: "",
     name: "",
     dateOfBirth: "",
     gender: "",
@@ -38,6 +39,8 @@ const EditPatient = () => {
     const [image, setImage] = useState<any>("");
 
     const [patientInfo, setPatientInfo] = useState<any>(defaultValue);
+    const { trigger } = useAppSelector(state => state.profileSlice);
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         getPatientInfo()
@@ -52,7 +55,6 @@ const EditPatient = () => {
                 if (resp) {
                     const data = resp.data;
                     const patientDetail = {
-                        id: data.id,
                         name: data?.name,
                         dateOfBirth: data?.dateOfBirth,
                         gender: data?.gender,
@@ -73,6 +75,7 @@ const EditPatient = () => {
         const url = `${url_api}${API_UPDATE_PATIENT}`;
 
         const param = {
+            username: "",
             email: values.email,
             password: null,
             name: values.name,
@@ -90,12 +93,13 @@ const EditPatient = () => {
                 if (resp) {
                     actions.setSubmitting(false);
                     actions.resetForm();
+                    dispatch(setTrigger(!trigger))
                     success("Update Successfully!!!");
                     navigate("/information");
                 }
             })
             .catch((err: any) => {
-                error(err.response.data.error)
+                error(err.response.data.error || err.response.data.error.message)
                 console.log("error update profile patient:", err);
             });
     }

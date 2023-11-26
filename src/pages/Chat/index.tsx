@@ -86,20 +86,19 @@ const Chat = () => {
     const getListInboxRoom = () => {
         const url = `${url_api}${API_INBOX_ROOM_LIST}`;
 
-        const params ={
+        const params = {
             patientId: "",
-            organizationId:""
+            organizationId: null
         }
 
         axios
-            .post(url,params, defineConfigPost())
+            .post(url, params, defineConfigPost())
             .then((resp: any) => {
                 if (resp) {
                     setListRoom(resp.data.inboxRooms);
                 }
             })
             .catch((err) => {
-                // error(err.response.data.errors.message)
                 console.log("error get rooms:", err);
             });
     }
@@ -115,7 +114,6 @@ const Chat = () => {
                 }
             })
             .catch((err) => {
-                error(err.response.data.errors.message)
                 console.log("error get message by room:", err);
             });
     }
@@ -187,99 +185,99 @@ const Chat = () => {
 
     return (
         <section className="chat">
-          <div className="chat-container">
-                    <div className='chat-room'>
-                        <div className='chat-room-header'>
-                            <div className='d-flex justify-content-between mb-3'>
-                                <h3>Message</h3>
-                                <span onClick={() => setIsShowPopUp(true)}>
-                                    <AddCommentOutlinedIcon />
-                                </span>
-                            </div>
-                            <div className="input-group">
-                                <input type="text" className="form-control" placeholder="Search by patient name" value={nameRoom} onChange={(e: any) => setNameRoom(e.target.value)} />
-                                <span className="input-group-text cursor-pointer" onClick={() => handleSearchRoom()}><i className="bi bi-search" ></i></span>
-                            </div>
+            <div className="chat-container">
+                <div className='chat-room'>
+                    <div className='chat-room-header'>
+                        <div className='d-flex justify-content-between mb-3'>
+                            <h3>Message</h3>
+                            <span onClick={() => setIsShowPopUp(true)}>
+                                <AddCommentOutlinedIcon />
+                            </span>
                         </div>
-                        <div className='chat-room-content'>
-                            {listRoom && listRoom.map((item: any) => {
-                                return (
-                                    <div className="chat-room-content-item d-flex justify-content-between" onClick={() => { handleGetMessageByRoom(item.id); setIdRoom(item.id) }}>
-                                        <div>
-                                            <img src={USER} alt="" />
-                                        </div>
-                                        <div>
-                                            <p>{item.patient.mail}</p>
-                                            <p>{item.lastMessage.message}</p>
-                                        </div>
-                                        <div>
-                                            <p>{moment(item.lastMessage.updateAt).format(FORMAT_DATE)}</p>
-                                            <p>{moment(item.lastMessage.updateAt).format(FORMAT_TIME)}</p>
-                                        </div>
-                                    </div>
-                                )
-                            })}
+                        <div className="input-group">
+                            <input type="text" className="form-control" placeholder="Search by patient name" value={nameRoom} onChange={(e: any) => setNameRoom(e.target.value)} />
+                            <span className="input-group-text cursor-pointer" onClick={() => handleSearchRoom()}><i className="bi bi-search" ></i></span>
                         </div>
                     </div>
-                    <div className='chat-message'>
-                        {idRoom ? <>
-                            {listRoom && listRoom.filter((item: any) => { return item.id === idRoom }).map((item: any) => {
-                                return (
-                                    <div className="d-flex chat-message-header">
-                                        <div>
-                                            <img src={USER} alt="" />
-                                            <span className="fw-bold ms-3">{item.patient.mail}</span>
-                                        </div>
-
-                                        <span className="my-auto cursor-pointer">
-                                            <InfoOutlinedIcon />
-                                        </span>
+                    <div className='chat-room-content'>
+                        {listRoom && listRoom.map((item: any) => {
+                            return (
+                                <div className="chat-room-content-item d-flex justify-content-between" onClick={() => { handleGetMessageByRoom(item.id); setIdRoom(item.id) }}>
+                                    <div>
+                                        <img src={USER} alt="" />
                                     </div>
-                                )
-                            })}
-
-                            <div className="chat-message-content">
-                                {messageRoom && messageRoom.map((item: any) => {
-                                    return (
-                                        <div className="chat-message-content-msg">
-                                            <span className='text-message mb-1'>{item.message}</span>
-                                            <span>{moment(item.createdAt).format(FORMAT_DATE_TIME_2)}</span>
-                                            <div ref={messageRef}></div>
-                                        </div>
-                                    )
-                                })}
-                            </div>
-
-                            <div className="chat-message-footer">
-                                <span className="m-auto cursor-pointer" >
-                                    <SentimentSatisfiedAltIcon />
-                                </span>
-                                <div className="message-input">
-                                    <input type="text" className="form-control" placeholder="Write a message..." value={message} onChange={(e: any) => setMessage(e.target.value)} />
+                                    <div>
+                                        <p>{item.patient.mail}</p>
+                                        <p>{item.lastMessage.message}</p>
+                                    </div>
+                                    <div>
+                                        <p>{moment(item.lastMessage.updateAt).format(FORMAT_DATE)}</p>
+                                        <p>{moment(item.lastMessage.updateAt).format(FORMAT_TIME)}</p>
+                                    </div>
                                 </div>
-                                <div className="m-auto " >
-                                    <span className="me-1 cursor-pointer" onClick={handleClickFile}>
-                                        <AttachFileIcon />
-                                    </span>
-                                    <input type="file" className="d-none" ref={fileInputRef} onChange={handleFileChange} />
-
-                                    <span className="me-1 cursor-pointer" onClick={handleClickFileImage}><AddPhotoAlternateIcon /></span>
-                                    <input type="file" className="d-none" ref={fileImageInputRef} onChange={handleFileImageChange} />
-
-                                    <span className="send-message cursor-pointer" onClick={() => sendMessage()}>
-                                        <SendIcon />
-                                    </span>
-                                </div>
-                            </div>
-                        </> : <>
-                            <div className="">
-                                <span className="">Select a chat to start message</span>
-                            </div>
-                        </>}
+                            )
+                        })}
                     </div>
                 </div>
+                <div className='chat-message'>
+                    {idRoom ? <>
+                        {listRoom && listRoom.filter((item: any) => { return item.id === idRoom }).map((item: any) => {
+                            return (
+                                <div className="d-flex chat-message-header">
+                                    <div>
+                                        <img src={USER} alt="" />
+                                        <span className="fw-bold ms-3">{item.patient.mail}</span>
+                                    </div>
 
-                {isShowPopUp && <PopUpCreateRoom handleShowPopUp={setIsShowPopUp}/>}
+                                    <span className="my-auto cursor-pointer">
+                                        <InfoOutlinedIcon />
+                                    </span>
+                                </div>
+                            )
+                        })}
+
+                        <div className="chat-message-content">
+                            {messageRoom && messageRoom.map((item: any) => {
+                                return (
+                                    <div className="chat-message-content-msg">
+                                        <span className='text-message mb-1'>{item.message}</span>
+                                        <span>{moment(item.createdAt).format(FORMAT_DATE_TIME_2)}</span>
+                                        <div ref={messageRef}></div>
+                                    </div>
+                                )
+                            })}
+                        </div>
+
+                        <div className="chat-message-footer">
+                            <span className="m-auto cursor-pointer" >
+                                <SentimentSatisfiedAltIcon />
+                            </span>
+                            <div className="message-input">
+                                <input type="text" className="form-control" placeholder="Write a message..." value={message} onChange={(e: any) => setMessage(e.target.value)} />
+                            </div>
+                            <div className="m-auto " >
+                                <span className="me-1 cursor-pointer" onClick={handleClickFile}>
+                                    <AttachFileIcon />
+                                </span>
+                                <input type="file" className="d-none" ref={fileInputRef} onChange={handleFileChange} />
+
+                                <span className="me-1 cursor-pointer" onClick={handleClickFileImage}><AddPhotoAlternateIcon /></span>
+                                <input type="file" className="d-none" ref={fileImageInputRef} onChange={handleFileImageChange} />
+
+                                <span className="send-message cursor-pointer" onClick={() => sendMessage()}>
+                                    <SendIcon />
+                                </span>
+                            </div>
+                        </div>
+                    </> : <>
+                        <div className="">
+                            <span className="">Select a chat to start message</span>
+                        </div>
+                    </>}
+                </div>
+            </div>
+
+            {isShowPopUp && <PopUpCreateRoom handleShowPopUp={setIsShowPopUp} />}
         </section>
     )
 }

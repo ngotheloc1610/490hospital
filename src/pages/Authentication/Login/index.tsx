@@ -46,7 +46,7 @@ const Login = () => {
         }
       })
       .catch((err: any) => {
-        error(err?.response?.data?.error?.message)
+        error(err?.response?.data?.error.message || err?.response?.data?.error)
         console.log("error Login:", err);
       });
   }

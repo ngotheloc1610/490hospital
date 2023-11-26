@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useOutlet } from "react-router-dom";
 
-import { convertToDate, convertToTime, defineConfigGet, defineConfigPost } from "../../components/Common/utils";
+import { convertToDate, convertToTime, defineConfigGet, defineConfigPost, styleStatus } from "../../components/Common/utils";
 import PaginationComponent from "../../components/Common/Pagination";
 import { API_GET_LIST_APPOINTMENT_PATIENT, API_PROFILE_PATIENT } from "../../Contants/api.constant";
 import { USER } from "../../assets";
@@ -23,10 +23,11 @@ const Information = () => {
     const dispatch = useAppDispatch()
     const url_api = process.env.REACT_APP_API_URL;
     const { triggerCancel } = useAppSelector(state => state.appointmentSlice);
+    const { trigger } = useAppSelector(state => state.profileSlice);
 
     useEffect(() => {
         getPatientDetail()
-    }, []);
+    }, [trigger]);
 
     useEffect(() => {
         if (patient?.id) {
@@ -41,7 +42,6 @@ const Information = () => {
             .get(url, defineConfigPost())
             .then((resp: any) => {
                 if (resp) {
-                    console.log("resp:", resp)
                     setPatient(resp.data);
                 }
             })
@@ -166,7 +166,9 @@ const Information = () => {
                                                 <span>{convertToTime(item.appointmentTimeEnd)}</span>
                                             </td>
                                             <td >{item.doctorName}</td>
-                                            <td >{item.status}</td>
+                                            <td >
+                                                <span className={styleStatus(item.status)}>{item.status}</span>
+                                            </td>
                                         </tr>
                                     );
                                 })}
