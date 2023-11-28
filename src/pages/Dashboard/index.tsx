@@ -272,9 +272,8 @@ const Dashboard = () => {
               listSpecialty.map((specialty: any, idxSpecialty: number) => {
                 return (
                   <div
-                    className={`carousel-item ${
-                      idxSpecialty === 0 ? "active" : ""
-                    }`}
+                    className={`carousel-item ${idxSpecialty === 0 ? "active" : ""
+                      }`}
                   >
                     <div className="row">
                       {specialty?.map((item: ISpecialty, idx: number) => {
@@ -427,14 +426,13 @@ const Dashboard = () => {
               listDoctor.map((doctors: any, idxDoctor: number) => {
                 return (
                   <div
-                    className={`carousel-item ${
-                      idxDoctor === 0 ? "active" : " "
-                    }`}
+                    className={`carousel-item ${idxDoctor === 0 ? "active" : " "
+                      }`}
                   >
                     <div className="row g-5">
                       {doctors?.map((item: any, idx: number) => {
-                        const photo = item.practitionerTarget.photo[0];
-                        const src = `data:${photo.contentType};base64,${photo.data}`;
+                        const photo = item.practitionerTarget?.photo[0];
+                        const src = `data:${photo?.contentType};base64,${photo?.data}`;
 
                         return (
                           <div
@@ -467,8 +465,8 @@ const Dashboard = () => {
                 <div className="row g-5">
                   {listDoctor &&
                     listDoctor.map((doctor: any) => {
-                      const photo = doctor.practitionerTarget.photo[0];
-                      const src = `data:${photo.contentType};base64,${photo.data}`;
+                      const photo = doctor.practitionerTarget?.photo[0];
+                      const src = `data:${photo?.contentType};base64,${photo?.data}`;
                       return (
                         <div
                           className="col-4 d-flex"
