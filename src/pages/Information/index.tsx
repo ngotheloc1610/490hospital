@@ -9,6 +9,8 @@ import { USER } from "../../assets";
 import EditPatient from "./EditPatient";
 import { setId } from "../../redux/features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import moment from "moment";
+import { FORMAT_DATE_MONTH_YEAR } from "../../Contants/general.constant";
 
 const Information = () => {
     const [currentPage, setCurrentPage] = useState<number>(0);
@@ -100,7 +102,7 @@ const Information = () => {
                                         </tr>
                                         <tr>
                                             <th scope="row">Date of birth</th>
-                                            <td>{patient?.birthDate}</td>
+                                            <td>{patient.dateOfBirth ? moment(patient.dateOfBirth).format(FORMAT_DATE_MONTH_YEAR) : ""}</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">Address</th>
