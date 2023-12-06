@@ -15,6 +15,7 @@ import { defineConfigPost } from "../../components/Common/utils";
 import axios from "axios";
 import moment from "moment";
 import { FORMAT_DATE_MONTH_YEAR } from "../../Contants/general.constant";
+import { useParams } from "react-router-dom";
 
 ChartJS.register(
   CategoryScale,
@@ -27,6 +28,7 @@ ChartJS.register(
 
 const PatientMonitorDetail = () => {
   const url_api = process.env.REACT_APP_API_URL;
+  const params = useParams();
 
   const [isHeartRate, setIsHeartRate] = useState<boolean>(true);
   const [isBloodPressure, setIsBloodPressure] = useState<boolean>(false);
@@ -98,12 +100,14 @@ const PatientMonitorDetail = () => {
   };
 
   useEffect(() => {
-    getProfilePatient("651b8db3d10aa661ad1b70e9")
-    getBookingDetail("651b8db3d10aa661ad1b70e9")
-    getPreviousEncounter("651b8db3d10aa661ad1b70e9")
-    getUpcomingAppointment("651b8db3d10aa661ad1b70e9")
-    getEncounterHistory("651b8db3d10aa661ad1b70e9")
-  }, [])
+    if (params.encounterId) {
+      getProfilePatient(params.encounterId)
+      getBookingDetail(params.encounterId)
+      getPreviousEncounter(params.encounterId)
+      getUpcomingAppointment(params.encounterId)
+      getEncounterHistory(params.encounterId)
+    }
+  }, [params.encounterId])
 
   const getProfilePatient = (encounterId: string) => {
     const url = `${url_api}${API_DIAGNOSTIC_PATIENT_PROFILE}${encounterId}`;
@@ -323,18 +327,18 @@ const PatientMonitorDetail = () => {
             </tr>
           </thead>
           <tbody>
-          {listPreviousEncounter && listPreviousEncounter.map((item: any, idx: number) => {
-                return (
-                  <tr>
-                    <td>{item?.conditionName}</td>
-                    <td>{item?.bodySite}</td>
-                    <td>{item?.severity}</td>
-                    <td>{item?.clinicalStatus}</td>
-                    <td>{item?.onset}</td>
-                    <td>{item.recordedDate ? moment(item.recordedDate).format(FORMAT_DATE_MONTH_YEAR) : ""}</td>
-                    <td>{item?.note}</td>
-                    <td>{item.encounterDate ? moment(item.encounterDate).format(FORMAT_DATE_MONTH_YEAR) : ""}</td>
-                    {/* <td>
+            {listPreviousEncounter && listPreviousEncounter.map((item: any, idx: number) => {
+              return (
+                <tr>
+                  <td>{item?.conditionName}</td>
+                  <td>{item?.bodySite}</td>
+                  <td>{item?.severity}</td>
+                  <td>{item?.clinicalStatus}</td>
+                  <td>{item?.onset}</td>
+                  <td>{item.recordedDate ? moment(item.recordedDate).format(FORMAT_DATE_MONTH_YEAR) : ""}</td>
+                  <td>{item?.note}</td>
+                  <td>{item.encounterDate ? moment(item.encounterDate).format(FORMAT_DATE_MONTH_YEAR) : ""}</td>
+                  {/* <td>
                       <span className="ms-1 cursor-pointer">
                         <ICON_PENCIL />
                       </span>
@@ -342,9 +346,9 @@ const PatientMonitorDetail = () => {
                         <ICON_TRASH />
                       </span>
                     </td> */}
-                  </tr>
-                )
-              })}
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>
@@ -367,7 +371,7 @@ const PatientMonitorDetail = () => {
                     <img src={USER} alt="" />
                   </div>
                   <div>
-                  <p><span className="fw-bold">Name: </span><span>{patientDetail && patientDetail?.nameFirstRep?.text}</span></p>
+                    <p><span className="fw-bold">Name: </span><span>{patientDetail && patientDetail?.nameFirstRep?.text}</span></p>
                     <p><span className="fw-bold">Gender: </span><span>{patientDetail && patientDetail?.gender}</span></p>
                     <p><span className="fw-bold">Date of birth: </span><span>{patientDetail && moment(patientDetail?.birthDate).format(FORMAT_DATE_MONTH_YEAR)}</span></p>
                     <p><span className="fw-bold">Address: </span><span>{patientDetail && patientDetail?.addressFirstRep?.text}</span></p>
@@ -384,7 +388,7 @@ const PatientMonitorDetail = () => {
                   <h5 className="fw-bold">Booking details</h5>
                 </div>
                 <div>
-                <p><span className="fw-bold">Appointment Date: </span><span>{bookingDetail.appointmentDate}</span></p>
+                  <p><span className="fw-bold">Appointment Date: </span><span>{bookingDetail.appointmentDate}</span></p>
                   <p><span className="fw-bold">Appointment Time: </span><span>{bookingDetail.time}</span></p>
                   <p><span className="fw-bold">Doctor: </span><span>{bookingDetail.nameDoctor}</span></p>
                   <p><span className="fw-bold">Specialty: </span><span>{bookingDetail.specialty}</span></p>

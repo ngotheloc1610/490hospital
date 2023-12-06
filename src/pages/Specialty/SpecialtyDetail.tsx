@@ -55,10 +55,10 @@ const SpecialtyDetail = () => {
   };
 
   const getDoctorForSpecialty = (id: any) => {
-    const url = `${url_api}${API_GET_DOCTOR_FOR_SPECIALTY}${id}`;
+    const url = `${url_api}${API_GET_DOCTOR_FOR_SPECIALTY}`;
 
     axios
-      .get(url, defineConfigGet({}))
+      .get(url, defineConfigGet({ code: id }))
       .then((resp: any) => {
         if (resp) {
           setListDoctor(resp.data);
@@ -92,11 +92,10 @@ const SpecialtyDetail = () => {
                   international standards at SEP490 Hospital
                 </p>
 
-                {listDoctor &&
+                {listDoctor && listDoctor.length > 0 &&
                   listDoctor.map((doctor: any, idx: number) => {
                     const name = doctor.practitioner.display;
-                    const photo = doctor.practitionerTarget.photo[0];
-                    const src = `data:${photo.contentType};base64,${photo.data}`;
+                    const src = doctor?.practitionerTarget?.photo[0]?.url;
 
                     return (
                       <div
@@ -111,7 +110,7 @@ const SpecialtyDetail = () => {
                           <p className="ms-3">
                             <span>
                               <ICON_GRADUATION />
-                            </span>{" "}
+                            </span>
                             {doctor.educations &&
                               doctor.educations.map((edu: any) => {
                                 return <span>{edu.detail}</span>;
@@ -120,7 +119,7 @@ const SpecialtyDetail = () => {
                           <p className="ms-3">
                             <span>
                               <ICON_PEOPLE_TEAM />
-                            </span>{" "}
+                            </span>
                             {doctor.specialty &&
                               doctor.specialty.map((spec: any) => {
                                 return <span>{spec.display}, </span>;

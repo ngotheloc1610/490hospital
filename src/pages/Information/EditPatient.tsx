@@ -36,7 +36,8 @@ const EditPatient = () => {
 
     const navigate = useNavigate();
     const inputRef = useRef<any>(null);
-    const [image, setImage] = useState<any>("");
+    const [image, setImage] = useState<any>(null);
+    const [pathImage, setPathImage] = useState<any>(null);
 
     const [patientInfo, setPatientInfo] = useState<any>(defaultValue);
     const { trigger } = useAppSelector(state => state.profileSlice);
@@ -81,10 +82,11 @@ const EditPatient = () => {
             name: values.name,
             identifier: values.identifier,
             phoneNumber: values.phoneNumber,
-            photo: null,
             dateOfBirth: values.dateOfBirth,
             address: values.address,
             gender: values.gender,
+            mediaFileName: image ? image.name : "",
+            mediaFilePath: pathImage ? pathImage : null
         }
 
         axios
@@ -106,11 +108,12 @@ const EditPatient = () => {
 
     const handleChangeImage = (event: any) => {
         const file = event.target.files[0];
+        setImage(file);
 
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setImage(reader.result);
+                setPathImage(reader.result);
             };
 
             reader.readAsDataURL(file);
@@ -232,7 +235,7 @@ const EditPatient = () => {
             <div className="h-100 d-flex flex-column" onClick={handlePickImage}>
                 <div className="h-100">
                     <img
-                        src={patientInfo?.photo?.length > 0 ? `data:${patientInfo?.photo[0]?.contentType};base64,${patientInfo.photo[0]?.data}` : image ? image : USER}
+                        src={patientInfo?.photo?.length > 0 ? `data:${patientInfo?.photo[0]?.contentType};base64,${patientInfo.photo[0]?.data}` : image ? URL.createObjectURL(image) : USER}
                         alt="img patient"
                         className={`d-block m-auto ${image ? "" : "bg-image"}`}
                         style={{ objectFit: "cover" }}

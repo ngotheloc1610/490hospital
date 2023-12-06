@@ -1,5 +1,5 @@
 import moment from "moment";
-import { FORMAT_DATE_MONTH_YEAR, KEY_LOCAL_STORAGE } from "../../Contants/general.constant";
+import { FORMAT_DATE_MONTH_YEAR, FORMAT_TIME, KEY_LOCAL_STORAGE } from "../../Contants/general.constant";
 
 export const defineConfigGet = (param: any) => {
     const data = {
@@ -38,7 +38,7 @@ export const convertToDate = (time: string) => {
 
 export const convertToTime = (time: string) => {
     const date = moment(time, "ddd MMM DD hh:mm:ss Z YYYY");
-    return date.format(FORMAT_DATE_MONTH_YEAR);
+    return date.format(`${FORMAT_TIME} A`);
 }
 
 export const styleStatus = (status: string) => {

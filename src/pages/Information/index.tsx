@@ -157,7 +157,7 @@ const Information = () => {
                             <tbody>
                                 {listAppointment && listAppointment.map((item: any, idx: number) => {
                                     return (
-                                        <tr className={`${idx % 2 === 1 ? "table-light" : ""}`} onClick={() => navigate(`appointment/${item.id}`)}>
+                                        <tr className={`${idx % 2 === 1 ? "table-light" : ""}`} onClick={() => navigate(`diagnostic/${item.id}`)}>
                                             <td >
                                                 {item.patientName}
                                             </td>
