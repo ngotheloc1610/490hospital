@@ -6,7 +6,7 @@ export const API_CHANGE_PASSWORD = "/password/changePass/";
 
 export const API_ALL_GET_SPECIALTY = "/homepage/listSpecialty";
 export const API_GET_SPECIALTY = "/homepage/Specialty/detail/";
-export const API_GET_DOCTOR_FOR_SPECIALTY = "/homepage/specialty/listDoctor/"
+export const API_GET_DOCTOR_FOR_SPECIALTY = "/homepage/specialty/listDoctor"
 
 export const API_ALL_GET_DOCTOR = "/homepage/listDoctor";
 export const API_GET_DOCTOR = "/homepage/doctor/detail/";

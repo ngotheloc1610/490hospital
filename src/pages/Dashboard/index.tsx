@@ -42,7 +42,7 @@ const Dashboard = () => {
         if (resp) {
           const data = resp.data.content;
           if (data.length > 9) {
-            const dataChuck = chunkArraySplice(data, 3);
+            const dataChuck = chunkArraySplice(data, 9);
             setListDoctor(dataChuck);
             setIsChuckDoctor(true);
             return;
@@ -286,7 +286,7 @@ const Dashboard = () => {
                               <img
                                 className="d-block w-100"
                                 src={item.photo}
-                                alt={item.photo}
+                                alt="img specialty"
                               />
                               <p>{item.name}</p>
                             </div>
@@ -365,7 +365,7 @@ const Dashboard = () => {
             standards at SEP490 Hospital
           </p>
           <div className="mt-5">
-            <div className="row gy-3">
+            <div className="row g-3">
               {listDepartment &&
                 listDepartment.map((item: IDepartment, idx: number) => {
                   return (
@@ -431,8 +431,7 @@ const Dashboard = () => {
                   >
                     <div className="row g-5">
                       {doctors?.map((item: any, idx: number) => {
-                        const photo = item.practitionerTarget?.photo[0];
-                        const src = `data:${photo?.contentType};base64,${photo?.data}`;
+                        const src = item.practitionerTarget?.photo[0]?.url;
 
                         return (
                           <div

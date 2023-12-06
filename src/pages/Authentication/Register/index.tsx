@@ -34,10 +34,7 @@ const Register = () => {
       name: name,
       gender: gender,
       phoneNumber: phoneNumber,
-      type: "PATIENT",
       dateOfBirth: birthday,
-      photo: null,
-      address: "",
     };
 
     axios
@@ -52,7 +49,7 @@ const Register = () => {
       })
       .catch((err: any) => {
         console.log("error create patient:", err);
-        error(err.response.data.error.message);
+        error(err.response?.data?.error || err.response?.data?.error?.message || err.response?.data?.error?.code);
       });
   };
 
@@ -64,7 +61,7 @@ const Register = () => {
       birthday &&
       name &&
       phoneNumber &&
-      gender && 
+      gender &&
       isValidEmail
     ) {
       if (password === cfPassword) {
@@ -83,7 +80,7 @@ const Register = () => {
     }
   }
 
-  const handleChangeGmail = (event:any) => {
+  const handleChangeGmail = (event: any) => {
     setGmail(event.target.value);
 
     // Email validation using a regular expression
@@ -109,7 +106,7 @@ const Register = () => {
                   </label>
                   <input
                     type="text"
-                    className={`form-control ${!isValidEmail ?  "is-invalid" : ""}`}
+                    className={`form-control ${!isValidEmail ? "is-invalid" : ""}`}
                     id="gmail"
                     placeholder="Gmail"
                     autoComplete="new-password"
