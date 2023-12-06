@@ -114,8 +114,10 @@ const Header = () => {
             </a>
 
             <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <li><a className="dropdown-item" href="/information">Information</a></li>
-              <li><a className="dropdown-item" href="#" onClick={() => handleLogout()}>Log out</a></li>
+              <li className="p-1 cursor-pointer">
+                <span onClick={() => navigate("/information")}>Information</span>
+              </li>
+              <li className="p-1 cursor-pointer"><span onClick={() => handleLogout()}>Log out</span></li>
             </ul>
           </div> : <div className="header-auth">
             <Link to="/register" className="header-signin">

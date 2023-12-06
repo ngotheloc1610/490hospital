@@ -8,24 +8,25 @@ import { error, success } from "../../components/Common/notify";
 import { API_PROFILE_PATIENT, API_UPDATE_PATIENT } from "../../Contants/api.constant";
 import { GENDER } from "../../Contants";
 import { USER } from "../../assets";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { setTrigger } from "../../redux/features/profile/profileSlice";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().min(3).required("Required"),
     dateOfBirth: Yup.string().required("Required"),
     gender: Yup.string().required("Required"),
     address: Yup.string().required("Required"),
-    city: Yup.string().required("Required"),
+    identifier: Yup.string().required("Required"),
     phoneNumber: Yup.number().required("Required"),
     email: Yup.string().email().required("Required"),
 });
 
 const defaultValue = {
-    id: "",
     name: "",
     dateOfBirth: "",
     gender: "",
     address: "",
-    city: "",
+    identifier: "",
     phoneNumber: "",
     email: "",
 };
@@ -38,6 +39,8 @@ const EditPatient = () => {
     const [image, setImage] = useState<any>("");
 
     const [patientInfo, setPatientInfo] = useState<any>(defaultValue);
+    const { trigger } = useAppSelector(state => state.profileSlice);
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         getPatientInfo()
@@ -50,60 +53,54 @@ const EditPatient = () => {
             .get(url, defineConfigPost())
             .then((resp: any) => {
                 if (resp) {
-                    console.log("resp:", resp)
                     const data = resp.data;
                     const patientDetail = {
-                        id: data.id,
-                        name: data.nameFirstRep.text,
-                        dateOfBirth: data.birthDate,
-                        gender: data.gender,
-                        phoneNumber: data?.telecom?.find((i: any) => i?.system === "phone")?.value,
-                        email: data?.telecom?.find((i: any) => i?.system === "email")?.value,
-                        address: data?.addressFirstRep?.text,
-                        city: data?.addressFirstRep?.city,
+                        name: data?.name,
+                        dateOfBirth: data?.dateOfBirth,
+                        gender: data?.gender,
+                        phoneNumber: data?.phoneNumber,
+                        email: data?.email,
+                        address: data?.address,
+                        identifier: data?.postalCode,
                     }
                     setPatientInfo(patientDetail);
                 }
             })
             .catch((err: any) => {
-                console.log("err:", err);
+                console.log("error get profile patient:", err);
             });
     }
 
-    const updatePatient = (values: any) => {
+    const updatePatient = (values: any, actions: any) => {
         const url = `${url_api}${API_UPDATE_PATIENT}`;
 
         const param = {
-            username: values.name,
+            username: "",
             email: values.email,
-            password: "",
+            password: null,
             name: values.name,
+            identifier: values.identifier,
             phoneNumber: values.phoneNumber,
+            photo: null,
             dateOfBirth: values.dateOfBirth,
-            city: values.city,
-            district: "",
-            ward: "",
             address: values.address,
-            address2: "",
             gender: values.gender,
-            country: "",
-            postalCode: "",
         }
 
         axios
             .put(url, param, defineConfigPost())
             .then((resp: any) => {
                 if (resp) {
+                    actions.setSubmitting(false);
+                    actions.resetForm();
+                    dispatch(setTrigger(!trigger))
                     success("Update Successfully!!!");
                     navigate("/information");
-                    console.log("resp:", resp)
                 }
             })
             .catch((err: any) => {
-                if (err.response.data.status === 401) {
-                    error(err.response.data.error)
-                }
-                console.log("err:", err);
+                error(err.response.data.error || err.response.data.error.message)
+                console.log("error update profile patient:", err);
             });
     }
 
@@ -191,14 +188,14 @@ const EditPatient = () => {
                         />
                     </div>
                     <div className="col-6 mb-3">
-                        <label htmlFor="city">
+                        <label htmlFor="identifier">
                             Citizen identification <span className="text-danger">*</span>
                         </label>
                         <Field
-                            name="city"
+                            name="identifier"
                             type="text"
-                            id="city"
-                            className={`form-control ${errors?.city && touched?.city ? "is-invalid" : ""
+                            id="identifier"
+                            className={`form-control ${errors?.identifier && touched?.identifier ? "is-invalid" : ""
                                 }`}
                         />
                     </div>
@@ -260,9 +257,8 @@ const EditPatient = () => {
             enableReinitialize={true}
             validationSchema={validationSchema}
             onSubmit={(values, actions) => {
-                updatePatient(values)
-                actions.setSubmitting(false);
-                actions.resetForm();
+                updatePatient(values, actions);
+
             }}
         >
             {({ errors, touched, submitForm }) => (

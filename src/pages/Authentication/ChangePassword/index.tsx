@@ -4,6 +4,7 @@ import { defineConfigPost } from "../../../components/Common/utils";
 import { API_CHANGE_PASSWORD } from "../../../Contants/api.constant";
 import { useAppSelector } from "../../../redux/hooks";
 import { warn } from "../../../components/Common/notify";
+import { useNavigate } from "react-router-dom";
 
 
 const ChangePassword = () => {
@@ -19,7 +20,8 @@ const ChangePassword = () => {
 
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
-    const { id } = useAppSelector((state) => state.authSlice)
+    const { id } = useAppSelector((state) => state.authSlice);
+    const navigate = useNavigate();
 
     const changePassword = () => {
         const url = `${url_api}${API_CHANGE_PASSWORD}${id}`;
@@ -43,11 +45,11 @@ const ChangePassword = () => {
     }
 
     const handleChangePassword = () => {
-        if(oldPassword){
+        if (!oldPassword) {
             warn("Vui lòng nhập mật khẩu cũ!");
             return;
         }
-        if(oldPassword === password){
+        if (oldPassword === password) {
             warn("Trùng với mật khẩu cũ ! Vui lòng nhập lại.");
             return;
         }
@@ -153,7 +155,7 @@ const ChangePassword = () => {
                         You have successfully change your
                         <span className="text-center d-block mt-2">password.</span>
                     </p>
-                    <p className="text-center">Re-directing to your homepage...</p>
+                    <p className="text-center cursor-pointer" onClick={() => navigate("/")}>Re-directing to your homepage...</p>
                 </div>
             </div>
         );
