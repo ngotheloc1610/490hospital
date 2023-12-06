@@ -1,4 +1,5 @@
 export const API_LOGIN = "/patient/login";
+export const API_VERIFY = "/patient/verify";
 export const API_FORGOT_PASSWORD = "/password/sendMail";
 export const API_CHANGE_PASSWORD_NEW = "/password/changePassfromEmail";
 export const API_CHANGE_PASSWORD = "/password/changePass/";
@@ -32,6 +33,16 @@ export const API_INBOX_ROOM_LIST = "/inbox-room";
 export const API_CREATE_ROOM = "/inbox-room/create/";
 
 export const API_GET_MESSAGE_BY_ROOM = "/inbox-message/";
+
+export const API_DIAGNOSTIC_UPCOMING = "/diagnostic/upcomingAppointment/";
+export const API_DIAGNOSTIC_ENCOUNTER_HISTORY = "/diagnostic/encounterHistory/";
+export const API_DIAGNOSTIC_PATIENT_PROFILE = "/diagnostic/patientProfile/";
+export const API_DIAGNOSTIC_BOOK_DETAIL = "/diagnostic/appointmentBookDetail/";
+export const API_DIAGNOSTIC_CONDITIONS = "/diagnostic/condition/"
+export const API_DIAGNOSTIC_OBSERVATION = "/diagnostic/observations/"
+export const API_DIAGNOSTIC_CREATE_ENCOUNTER = "/diagnostic/create_encounter/"
+export const API_DIAGNOSTIC_CREATE_DIAGNOSTIC = "/diagnostic/createDisgnostic"
+export const API_DIAGNOSTIC_CONDITION_BY_PATIENT = "/diagnostic/getAllCondition/"
 
 
 

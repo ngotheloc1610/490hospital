@@ -44,9 +44,9 @@ const Login = () => {
           dispatch(setLogin(true));
           navigate("/")
         }
-      })
+      })  
       .catch((err: any) => {
-        error(err?.response?.data?.error.message || err?.response?.data?.error)
+        error(err?.message || err?.response?.data?.error ||err?.response?.data?.error?.message)
         console.log("error Login:", err);
       });
   }
