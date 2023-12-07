@@ -1,6 +1,5 @@
 import { Button, Modal } from "react-bootstrap";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { defineConfigPost } from "../../components/Common/utils";
 import { API_CANCEL_APPOINTMENT } from "../../Contants/api.constant";
 import { error, success } from "../../components/Common/notify";
@@ -18,7 +17,6 @@ const PopUpCancel = (props: IProps) => {
 
   const url_api = process.env.REACT_APP_API_URL;
 
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { triggerCancel } = useAppSelector(state => state.appointmentSlice);
 
@@ -29,18 +27,13 @@ const PopUpCancel = (props: IProps) => {
     axios.post(url, defineConfigPost()).then(resp => {
       if (resp) {
         success("Cancel Successfully");
-        navigate("/information");
         dispatch(setTriggerCancel(!triggerCancel));
       }
     }).catch((err: any) => {
       console.log("error cancel appointment:", err)
-      error(err.response.data.error)
+      error(err.response.data.error || err.response.data.error.message)
     })
   }
-
-  const handleCancel = () => {
-    cancelAppointment()
-  };
 
   return (
     <>
@@ -56,12 +49,12 @@ const PopUpCancel = (props: IProps) => {
             <i className="bi bi-exclamation-circle text-warning"></i>
           </span>
           <span className="ms-3 fs-18 fw-600 text-center">
-            Are you sure to cancel <span className="fw-bold">{appointmentId}</span>？
+            Are you sure to cancel？
           </span>
         </Modal.Body>
         <Modal.Footer className="justify-content-center">
           <Button
-            className="button button--small button--outline"
+            className="button button--outline"
             onClick={() => {
               handleShowPopUp(false)
             }}
@@ -69,8 +62,8 @@ const PopUpCancel = (props: IProps) => {
             No
           </Button>
           <Button
-            className="button button--small button--primary"
-            onClick={() => handleCancel()}
+            className="button button--primary"
+            onClick={() => cancelAppointment()}
           >
             Yes
           </Button>

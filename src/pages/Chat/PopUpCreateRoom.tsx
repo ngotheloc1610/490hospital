@@ -57,7 +57,7 @@ const PopUpCreateRoom = (props: IProps) => {
         </Modal.Body>
         <Modal.Footer className="justify-content-center">
           <Button
-            className="button button--small button--outline"
+            className="button button--outline"
             onClick={() => {
                 handleShowPopUp(false)
             }}
@@ -65,7 +65,7 @@ const PopUpCreateRoom = (props: IProps) => {
             Close
           </Button>
           <Button
-            className="button button--small button--primary"
+            className="button button--primary"
             onClick={() => handleCreateRoom()}
           >
             Save

@@ -247,7 +247,7 @@ const EditPatient = () => {
                         onChange={handleChangeImage}
                     />
                 </div>
-                <button className="button button--small button--primary w-90 mx-auto mt-3">
+                <button className="button button--primary w-90 mx-auto mt-3">
                     {image ? "Edit" : "Add"} profile picture
                 </button>
             </div>
@@ -283,14 +283,14 @@ const EditPatient = () => {
                     </Form>
                     <div className="mt-3 d-flex justify-content-end">
                         <button
-                            className="button button--small button--danger me-3"
+                            className="button button--danger me-3"
                             onClick={() => navigate("/information")}
                         >
                             Cancel
                         </button>
 
                         <button
-                            className="button button--small button--primary"
+                            className="button button--primary"
                             onClick={submitForm}
                         >
                             Save

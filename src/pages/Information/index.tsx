@@ -1,24 +1,25 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate, useOutlet } from "react-router-dom";
+import { Outlet, useNavigate, useOutlet } from "react-router-dom";
 
 import { convertToDate, convertToTime, defineConfigGet, defineConfigPost, styleStatus } from "../../components/Common/utils";
 import PaginationComponent from "../../components/Common/Pagination";
 import { API_GET_LIST_APPOINTMENT_PATIENT, API_PROFILE_PATIENT } from "../../Contants/api.constant";
 import { USER } from "../../assets";
-import EditPatient from "./EditPatient";
 import { setId } from "../../redux/features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import moment from "moment";
 import { FORMAT_DATE_MONTH_YEAR } from "../../Contants/general.constant";
+import PopUpCancel from "./PopUpCancel";
 
 const Information = () => {
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [itemPerPage, setItemPerPage] = useState<number>(3);
     const [totalItem, setTotalItem] = useState<number>(0);
-
+  const [isShowPopUp, setIsShowPopUp] = useState<boolean>(false);
     const [patient, setPatient] = useState<any>({});
     const [listAppointment, setListAppointment] = useState<any>([]);
+    const [appointmentId, setAppointmentId] = useState<any>();
 
     const outlet = useOutlet();
     const navigate = useNavigate();
@@ -60,6 +61,7 @@ const Information = () => {
             .then((resp: any) => {
                 if (resp) {
                     setListAppointment(resp.data.content);
+                    setTotalItem(resp.data.totalElements);
                 }
             })
             .catch((err) => {
@@ -76,19 +78,24 @@ const Information = () => {
         setCurrentPage(0);
     };
 
+    const handleCancel = (id:string) => {
+        setIsShowPopUp(true);
+        setAppointmentId(id);
+    }
+
     return (
         <section className="patient-detail container">
-            {outlet ? <EditPatient /> :
+            {outlet ? <Outlet/> :
                 <>
                     <div>
                         <div className="pb-3 mb-3 d-flex justify-content-between">
                             <h3 className="fw-bold text-uppercase">{patient?.nameFirstRep?.text}</h3>
                             <div>
-                                <button className="button button--info button--small me-3" onClick={() => {
+                                <button className="button button--info me-3" onClick={() => {
                                     navigate("/change-password");
                                     dispatch(setId(patient?.id));
                                 }}>Change Password</button>
-                                <button className="button button--primary button--small" onClick={() => { navigate(`/information/edit`); dispatch(setId(patient?.id)); }}>Edit</button>
+                                <button className="button button--primary" onClick={() => { navigate(`/information/edit`); dispatch(setId(patient?.id)); }}>Edit</button>
                             </div>
                         </div>
 
@@ -127,7 +134,7 @@ const Information = () => {
                                 <div className="h-100 d-flex flex-column" >
                                     <div className="h-100">
                                         <img
-                                            src={patient?.photo ? `data:${patient?.photo[0]?.contentType};base64,${patient.photo[0]?.data}` : USER}
+                                            src={patient?.photo ? patient?.photo[0]?.url : USER}
                                             alt="img patient"
                                             className={`d-block m-auto ${patient?.photo ? "" : "bg-image"}`}
                                             style={{ objectFit: "cover" }}
@@ -152,24 +159,29 @@ const Information = () => {
                                     <th scope="col">Appointment Time</th>
                                     <th scope="col">Doctor</th>
                                     <th scope="col">Status</th>
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {listAppointment && listAppointment.map((item: any, idx: number) => {
+                                {listAppointment && listAppointment.length > 0 && listAppointment.map((item: any, idx: number) => {
                                     return (
-                                        <tr className={`${idx % 2 === 1 ? "table-light" : ""}`} onClick={() => navigate(`diagnostic/${item.id}`)}>
-                                            <td >
+                                        <tr className={`${idx % 2 === 1 ? "table-light" : ""}`} >
+                                            <td onClick={() => navigate(`/information/diagnostic/${item.idEncounter}`)}>
                                                 {item.patientName}
                                             </td>
 
-                                            <td >{convertToDate(item.appointDate)}</td>
-                                            <td >
-                                                <span>{convertToTime(item.appointmentTimeStart)} </span> -
+                                            <td onClick={() => navigate(`/information/diagnostic/${item.idEncounter}`)}>{convertToDate(item.appointDate)}</td>
+                                            <td onClick={() => navigate(`/information/diagnostic/${item.idEncounter}`)}>
+                                                <span>{convertToTime(item.appointmentTimeStart)} </span>
+                                                <span> - </span>
                                                 <span>{convertToTime(item.appointmentTimeEnd)}</span>
                                             </td>
-                                            <td >{item.doctorName}</td>
-                                            <td >
+                                            <td onClick={() => navigate(`/information/diagnostic/${item.idEncounter}`)}>{item.doctorName}</td>
+                                            <td onClick={() => navigate(`/information/diagnostic/${item.idEncounter}`)}>
                                                 <span className={styleStatus(item.status)}>{item.status}</span>
+                                            </td>
+                                            <td>
+                                                {item.status.trim() === "Pending" && <button className="button button--small button--danger m-auto d-block" onClick={() => handleCancel(item.idEncounter)}>Cancel</button>}
                                             </td>
                                         </tr>
                                     );
@@ -186,6 +198,9 @@ const Information = () => {
                     </div>
                 </>
             }
+
+      {isShowPopUp && <PopUpCancel handleShowPopUp={setIsShowPopUp} appointmentId={appointmentId} />}
+
         </section>
     )
 }

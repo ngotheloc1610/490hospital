@@ -14,7 +14,6 @@ const AppointmentDetail = () => {
   const params = useParams();
 
   const [appointment, setAppointment] = useState<any>();
-  const [isShowPopUp, setIsShowPopUp] = useState<boolean>(false);
 
   useEffect(() => {
     getAppointment(params.appointmentId)
@@ -33,10 +32,6 @@ const AppointmentDetail = () => {
       .catch((err: any) => {
         console.log("error get appointment detail:", err);
       });
-  }
-
-  const handleCancel = () => {
-    setIsShowPopUp(true);
   }
 
   return (
@@ -140,11 +135,9 @@ const AppointmentDetail = () => {
 
         <div>
           <button className="button button--primary me-2">Back</button>
-          <button className="button button--primary" onClick={() => handleCancel()}>Cancel</button>
         </div>
       </div>
 
-      {isShowPopUp && <PopUpCancel handleShowPopUp={setIsShowPopUp} appointmentId={appointment?.id} />}
     </div>
   )
 }
