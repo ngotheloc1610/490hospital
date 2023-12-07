@@ -356,7 +356,7 @@ const PatientMonitorDetail = () => {
   };
 
   return (
-    <section className="container patient-monitor">
+    <section className="container patient-monitor mb-5">
       <div className="row g-3">
         <div className="col-9 ">
           <div className="row g-3">
