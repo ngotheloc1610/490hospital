@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LOGO_HOSPITAL } from "../../../assets";
 import { GENDER_ALL } from "../../../Contants";
-import { defineConfigPost } from "../../../components/Common/utils";
+import { defineConfigGet, defineConfigPost } from "../../../components/Common/utils";
 import axios from "axios";
 import { API_CREATE_PATIENT } from "../../../Contants/api.constant";
 import { error, success, warn } from "../../../components/Common/notify";
 import { useNavigate } from "react-router-dom";
+import queryString from "query-string";
 
 const Register = () => {
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
@@ -21,8 +22,32 @@ const Register = () => {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [gender, setGender] = useState<string>("");
   const [isValidEmail, setIsValidEmail] = useState<boolean>(true);
+  const [isVerify, setIsVerify] = useState<boolean>(true);
 
   const url_api = process.env.REACT_APP_API_URL;
+
+  const paramStr = window.location.search;
+  const queryParam = queryString.parse(paramStr);
+
+  useEffect(() => {
+    verifyCode();
+  }, [queryParam.code])
+
+    const verifyCode = () => {
+      const url = `${url_api}${API_CREATE_PATIENT}`;
+
+      axios
+        .get(url, defineConfigGet({code :queryParam.code}))
+        .then((resp: any) => {
+          if (resp) {
+            resp.include("verify_success") ? setIsVerify(true) : setIsVerify(false);
+          }
+        })
+        .catch((err: any) => {
+          console.log("error verify code:", err);
+          error(err.response?.data?.error || err.response?.data?.error?.message || err.response?.data?.error?.code);
+        });
+    }
 
   const registerPatient = () => {
     const url = `${url_api}${API_CREATE_PATIENT}`;
@@ -42,8 +67,7 @@ const Register = () => {
       .then((resp: any) => {
         if (resp) {
           if (resp.status === 200) {
-            success("Register successfully!");
-            navigate("/login");
+            warn("Please go to your email to verify!");
           }
         }
       })
@@ -236,6 +260,19 @@ const Register = () => {
           </button>
         </div>
       </div>
+
+      {isVerify && <div className="forgot">
+                <div className="forgot-container">
+                    <p className="icon-success mb-4">
+                        <i className="bi bi-check-lg fs-1"></i>
+                    </p>
+                    <h3 className="text-center mb-3">Success</h3>
+                    <p className="text-center mb-5">
+                        You have successfully register account
+                    </p>
+                    <p className="text-center cursor-pointer text-reset" onClick={() => navigate("/login")}>Re-directing to login...</p>
+                </div>
+            </div>}
     </div>
   );
 };
