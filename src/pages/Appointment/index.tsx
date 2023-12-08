@@ -182,7 +182,7 @@ const Appointment = () => {
 
     axios.post(url, params, defineConfigPost()).then((resp: any) => {
       if (resp) {
-        success("Book successfully!");
+        success(resp.data);
         setIsBooking(true);
       }
     }).catch((err: any) => {
