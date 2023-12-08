@@ -55,7 +55,7 @@ const Departments = () => {
                 return (
                   <div className="col-4" onClick={() => navigate(item.id)}>
                     <div className="d-flex">
-                      <img src={item.photo} alt="img department" />
+                      <img src={item.photo} alt="img department" style={{width:"150px", height:"150px", objectFit:"cover", borderRadius:"100rem"}}/>
                       <span className="my-auto ms-3 color-gray-light">
                         {item.title}
                       </span>

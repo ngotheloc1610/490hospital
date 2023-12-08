@@ -81,7 +81,7 @@ const DepartmentDetail = () => {
                   return (
                     <>
                       <div className="col-6">
-                        <img src={item.specialistTeamPhoto} alt="img specialty team" />
+                        <img src={item.photo} alt="img specialty team" />
                       </div>
                       <div className="col-6">
                         <p className="lh-base">

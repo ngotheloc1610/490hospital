@@ -95,7 +95,7 @@ const SpecialtyDetail = () => {
                 {listDoctor && listDoctor.length > 0 &&
                   listDoctor.map((doctor: any, idx: number) => {
                     const name = doctor.practitioner.display;
-                    const src = doctor?.practitionerTarget?.photo[0]?.url;
+                    const src = doctor?.photo;
 
                     return (
                       <div

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { defineConfigPost } from "../../components/Common/utils";
 import { error, success } from "../../components/Common/notify";
-import { API_PROFILE_PATIENT, API_UPDATE_PATIENT } from "../../Contants/api.constant";
+import { API_PROFILE_PATIENT, API_UPDATE_PATIENT, API_UPLOAD_FILE } from "../../Contants/api.constant";
 import { GENDER } from "../../Contants";
 import { USER } from "../../assets";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
@@ -37,7 +37,7 @@ const EditPatient = () => {
     const navigate = useNavigate();
     const inputRef = useRef<any>(null);
     const [image, setImage] = useState<any>(null);
-    const [pathImage, setPathImage] = useState<any>(null);
+    const [imagePath, setImagePath] = useState<any>(null);
 
     const [patientInfo, setPatientInfo] = useState<any>(defaultValue);
     const { trigger } = useAppSelector(state => state.profileSlice);
@@ -46,6 +46,31 @@ const EditPatient = () => {
     useEffect(() => {
         getPatientInfo()
     }, [])
+
+    useEffect(() => {
+        uploadImage()
+    }, [image])
+
+
+    const uploadImage = () => {
+        const url = `${url_api}${API_UPLOAD_FILE}`;
+
+        const params = {
+            mediaFileName: image ? image.name : "",
+            mediaFilePath: "https://drive.google.com/drive/u/1/folders/1NX5IFqy-nMg8zvWrbjxbuXlIflCK3i6X"
+        }
+
+        axios
+            .post(url, params,defineConfigPost())
+            .then((resp: any) => {
+                if (resp) {
+                   console.log("resp:", resp)
+                }
+            })
+            .catch((err: any) => {
+                console.log("error upload image:", err);
+            });
+    }
 
     const getPatientInfo = () => {
         const url = `${url_api}${API_PROFILE_PATIENT}`;
@@ -62,7 +87,8 @@ const EditPatient = () => {
                         phoneNumber: data?.phoneNumber,
                         email: data?.email,
                         address: data?.address,
-                        identifier: data?.postalCode,
+                        identifier: data?.identifier,
+                        photo: data?.photo
                     }
                     setPatientInfo(patientDetail);
                 }
@@ -85,14 +111,13 @@ const EditPatient = () => {
             dateOfBirth: values.dateOfBirth,
             address: values.address,
             gender: values.gender,
-            mediaFileName: image ? image.name : "",
-            mediaFilePath: pathImage ? pathImage : null
         }
 
         axios
             .put(url, param, defineConfigPost())
             .then((resp: any) => {
                 if (resp) {
+                    uploadImage()
                     actions.setSubmitting(false);
                     actions.resetForm();
                     dispatch(setTrigger(!trigger))
@@ -112,12 +137,15 @@ const EditPatient = () => {
 
         if (file) {
             const reader = new FileReader();
+      
             reader.onloadend = () => {
-                setPathImage(reader.result);
+              const imageDataUrl = reader.result;
+              console.log("imageDataUrl:", imageDataUrl)
+              setImagePath(imageDataUrl);
             };
-
+      
             reader.readAsDataURL(file);
-        }
+          }
     };
 
     const handlePickImage = () => {
@@ -235,7 +263,7 @@ const EditPatient = () => {
             <div className="h-100 d-flex flex-column" onClick={handlePickImage}>
                 <div className="h-100">
                     <img
-                        src={patientInfo?.photo?.length > 0 ? `data:${patientInfo?.photo[0]?.contentType};base64,${patientInfo.photo[0]?.data}` : image ? URL.createObjectURL(image) : USER}
+                        src={patientInfo?.photo > 0 ? patientInfo.photo : image ? URL.createObjectURL(image) : USER}
                         alt="img patient"
                         className={`d-block m-auto ${image ? "" : "bg-image"}`}
                         style={{ objectFit: "cover" }}
@@ -247,9 +275,9 @@ const EditPatient = () => {
                         onChange={handleChangeImage}
                     />
                 </div>
-                <button className="button button--primary w-90 mx-auto mt-3">
+                {/* <button className="button button--primary w-90 mx-auto mt-3" onClick={handlePickImage}>
                     {image ? "Edit" : "Add"} profile picture
-                </button>
+                </button> */}
             </div>
         );
     };
@@ -261,7 +289,6 @@ const EditPatient = () => {
             validationSchema={validationSchema}
             onSubmit={(values, actions) => {
                 updatePatient(values, actions);
-
             }}
         >
             {({ errors, touched, submitForm }) => (
