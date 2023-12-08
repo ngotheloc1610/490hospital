@@ -95,7 +95,8 @@ const SpecialtyDetail = () => {
                 {listDoctor && listDoctor.length > 0 &&
                   listDoctor.map((doctor: any, idx: number) => {
                     const name = doctor.practitioner.display;
-                    const src = doctor?.photo;
+                    const src = doctor?.photo?.url;
+                    const educations = doctor.practitionerTarget?.qualification.filter((item:any) => item.code.coding[0].code === "Edu")
 
                     return (
                       <div
@@ -111,9 +112,9 @@ const SpecialtyDetail = () => {
                             <span>
                               <ICON_GRADUATION />
                             </span>
-                            {doctor.educations &&
-                              doctor.educations.map((edu: any) => {
-                                return <span>{edu.detail}</span>;
+                            {educations &&
+                              educations.map((edu: any) => {
+                                return <span>{edu.code.display}</span>;
                               })}
                           </p>
                           <p className="ms-3">
@@ -122,7 +123,7 @@ const SpecialtyDetail = () => {
                             </span>
                             {doctor.specialty &&
                               doctor.specialty.map((spec: any) => {
-                                return <span>{spec.display}, </span>;
+                                return <span>{spec.display} {doctor.specialty.length > 1 && <span>, </span>}</span>;
                               })}
                           </p>
                         </div>
