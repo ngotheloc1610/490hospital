@@ -48,6 +48,10 @@ const EditPatient = () => {
     }, [])
 
     useEffect(() => {
+        if(image){
+            console.log("path", URL.createObjectURL(image));
+        }
+        
         uploadImage()
     }, [image])
 
@@ -57,7 +61,8 @@ const EditPatient = () => {
 
         const params = {
             mediaFileName: image ? image.name : "",
-            mediaFilePath: "https://drive.google.com/drive/u/1/folders/1NX5IFqy-nMg8zvWrbjxbuXlIflCK3i6X"
+            // mediaFilePath: "https://drive.google.com/drive/u/1/folders/1NX5IFqy-nMg8zvWrbjxbuXlIflCK3i6X"
+            mediaFilePath: image ? URL.createObjectURL(image) : ""
         }
 
         axios

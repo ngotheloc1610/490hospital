@@ -447,7 +447,7 @@ const Dashboard = () => {
                                 {item.specialty &&
                                   item.specialty.map((spec: any) => {
                                     return (
-                                      <span>{spec.coding[0].display} ,</span>
+                                      <span>{spec.coding[0].display} {item.specialty.length > 1 && <span>, </span>}</span>
                                     );
                                   })}
                               </span>
@@ -464,8 +464,7 @@ const Dashboard = () => {
                 <div className="row g-5">
                   {listDoctor &&
                     listDoctor.map((doctor: any) => {
-                      const photo = doctor.practitionerTarget?.photo[0];
-                      const src = `data:${photo?.contentType};base64,${photo?.data}`;
+                      const src = doctor.practitionerTarget?.photo[0].url;
                       return (
                         <div
                           className="col-4 d-flex"
@@ -480,7 +479,7 @@ const Dashboard = () => {
                               {doctor.specialty &&
                                 doctor.specialty.map((spec: any) => {
                                   return (
-                                    <span>{spec.coding[0].display} ,</span>
+                                    <span>{spec.coding[0].display} {doctor.specialty.length > 1 && <span>, </span>}</span>
                                   );
                                 })}
                             </span>

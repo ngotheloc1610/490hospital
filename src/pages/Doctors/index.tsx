@@ -117,8 +117,9 @@ const Doctors = () => {
             <div className='container'>
                 {doctorList && doctorList.map((doctor: any, idx: number) => {
                     const name = doctor.practitioner.display;
-                    const photo = doctor.practitionerTarget.photo[0];
-                    const src = `data:${photo.contentType};base64,${photo.data}`;
+                    const src = doctor.practitionerTarget.photo[0].url;
+                    const listEducation = doctor.practitionerTarget?.qualification.filter((item:any) => item.code.coding[0].code === "Edu");
+            
 
                     return (
                         <div className='row gy-3 py-3 mb-3' onClick={() => navigate(doctor.id)}>
@@ -127,9 +128,9 @@ const Doctors = () => {
                             </div>
                             <div className='col-8'>
                                 <h3 className='mb-3'>{name}</h3>
-                                <p className='ms-3'><span><ICON_GRADUATION /></span> {doctor.educations && doctor.educations.map((edu: any) => {
+                                <p className='ms-3'><span><ICON_GRADUATION /></span> {listEducation.length > 0 && listEducation.map((edu: any) => {
                                     return (
-                                        <span>{edu.detail}</span>
+                                        <span>{edu.code.display} {listEducation.length > 1 && <span>, </span>}</span>
                                     )
                                 })}</p>
                                 <p className='ms-3'><span><ICON_PEOPLE_TEAM /></span> {doctor.specialty && doctor.specialty.map((spec: any) => {
