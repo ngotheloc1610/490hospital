@@ -44,6 +44,8 @@ export const API_DIAGNOSTIC_CREATE_ENCOUNTER = "/diagnostic/create_encounter/"
 export const API_DIAGNOSTIC_CREATE_DIAGNOSTIC = "/diagnostic/createDisgnostic"
 export const API_DIAGNOSTIC_CONDITION_BY_PATIENT = "/diagnostic/getAllCondition/"
 
+export const API_UPLOAD_FILE = "/media/upload";
+
 
 
 

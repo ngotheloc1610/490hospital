@@ -117,7 +117,7 @@ const Information = () => {
                                         </tr>
                                         <tr>
                                             <th scope="row">Citizen identification</th>
-                                            <td>{patient?.postalCode}</td>
+                                            <td>{patient?.identifier}</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">Phone number</th>
@@ -134,7 +134,7 @@ const Information = () => {
                                 <div className="h-100 d-flex flex-column" >
                                     <div className="h-100">
                                         <img
-                                            src={patient?.photo ? patient?.photo[0]?.url : USER}
+                                            src={patient.photo ? patient.photo : USER}
                                             alt="img patient"
                                             className={`d-block m-auto ${patient?.photo ? "" : "bg-image"}`}
                                             style={{ objectFit: "cover" }}
