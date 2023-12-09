@@ -3,8 +3,8 @@ import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { defineConfigPost } from "../../components/Common/utils";
-import { error, success } from "../../components/Common/notify";
+import { defineConfigGet, defineConfigPost } from "../../components/Common/utils";
+import { error, success, warn } from "../../components/Common/notify";
 import { API_PROFILE_PATIENT, API_UPDATE_PATIENT, API_UPLOAD_FILE } from "../../Contants/api.constant";
 import { GENDER } from "../../Contants";
 import { USER } from "../../assets";
@@ -36,8 +36,7 @@ const EditPatient = () => {
 
     const navigate = useNavigate();
     const inputRef = useRef<any>(null);
-    const [image, setImage] = useState<any>(null);
-    const [imagePath, setImagePath] = useState<any>(null);
+    const [selectedFile, setSelectedFile] = useState<any>(null);
 
     const [patientInfo, setPatientInfo] = useState<any>(defaultValue);
     const { trigger } = useAppSelector(state => state.profileSlice);
@@ -48,32 +47,37 @@ const EditPatient = () => {
     }, [])
 
     useEffect(() => {
-        if(image){
-            console.log("path", URL.createObjectURL(image));
+        if (selectedFile) {
+            console.log("path", URL.createObjectURL(selectedFile));
+            uploadImage()
         }
-        
-        uploadImage()
-    }, [image])
+
+    }, [selectedFile])
 
 
     const uploadImage = () => {
         const url = `${url_api}${API_UPLOAD_FILE}`;
 
-        const params = {
-            mediaFileName: image ? image.name : "",
-            // mediaFilePath: "https://drive.google.com/drive/u/1/folders/1NX5IFqy-nMg8zvWrbjxbuXlIflCK3i6X"
-            mediaFilePath: image ? URL.createObjectURL(image) : ""
+        if (!selectedFile) {
+            warn('Please select an image file before uploading.');
+            return;
         }
 
+        let formData = new FormData();
+        formData.append('image', selectedFile);
+
+        const params = { file: formData }
+
         axios
-            .post(url, params,defineConfigPost())
+            .post(url, defineConfigGet(params))
             .then((resp: any) => {
                 if (resp) {
-                   console.log("resp:", resp)
+                    console.log("resp:", resp)
                 }
             })
             .catch((err: any) => {
                 console.log("error upload image:", err);
+                error(err.response.data.error);
             });
     }
 
@@ -138,19 +142,13 @@ const EditPatient = () => {
 
     const handleChangeImage = (event: any) => {
         const file = event.target.files[0];
-        setImage(file);
 
-        if (file) {
-            const reader = new FileReader();
-      
-            reader.onloadend = () => {
-              const imageDataUrl = reader.result;
-              console.log("imageDataUrl:", imageDataUrl)
-              setImagePath(imageDataUrl);
-            };
-      
-            reader.readAsDataURL(file);
-          }
+        // Check if the selected file is an image
+        if (file && file.type.startsWith('image/')) {
+            setSelectedFile(file);
+        } else {
+            warn('Please select a valid image file.');
+        }
     };
 
     const handlePickImage = () => {
@@ -268,9 +266,9 @@ const EditPatient = () => {
             <div className="h-100 d-flex flex-column" onClick={handlePickImage}>
                 <div className="h-100">
                     <img
-                        src={patientInfo?.photo > 0 ? patientInfo.photo : image ? URL.createObjectURL(image) : USER}
+                        src={patientInfo?.photo > 0 ? patientInfo.photo : selectedFile ? URL.createObjectURL(selectedFile) : USER}
                         alt="img patient"
-                        className={`d-block m-auto ${image ? "" : "bg-image"}`}
+                        className={`d-block m-auto ${selectedFile ? "" : "bg-image"}`}
                         style={{ objectFit: "cover" }}
                     />
                     <input

@@ -28,6 +28,7 @@ const PopUpCancel = (props: IProps) => {
       if (resp) {
         success("Cancel Successfully");
         dispatch(setTriggerCancel(!triggerCancel));
+        handleShowPopUp(false);
       }
     }).catch((err: any) => {
       console.log("error cancel appointment:", err)

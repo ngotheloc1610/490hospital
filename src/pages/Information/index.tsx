@@ -16,7 +16,7 @@ const Information = () => {
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [itemPerPage, setItemPerPage] = useState<number>(3);
     const [totalItem, setTotalItem] = useState<number>(0);
-  const [isShowPopUp, setIsShowPopUp] = useState<boolean>(false);
+    const [isShowPopUp, setIsShowPopUp] = useState<boolean>(false);
     const [patient, setPatient] = useState<any>({});
     const [listAppointment, setListAppointment] = useState<any>([]);
     const [appointmentId, setAppointmentId] = useState<any>();
@@ -78,14 +78,14 @@ const Information = () => {
         setCurrentPage(0);
     };
 
-    const handleCancel = (id:string) => {
+    const handleCancel = (id: string) => {
         setIsShowPopUp(true);
         setAppointmentId(id);
     }
 
     return (
         <section className="patient-detail container">
-            {outlet ? <Outlet/> :
+            {outlet ? <Outlet /> :
                 <>
                     <div>
                         <div className="pb-3 mb-3 d-flex justify-content-between">
@@ -181,7 +181,7 @@ const Information = () => {
                                                 <span className={styleStatus(item.status)}>{item.status}</span>
                                             </td>
                                             <td>
-                                                {item.status.trim() === "Pending" && <button className="button button--small button--danger m-auto d-block" onClick={() => handleCancel(item.idEncounter)}>Cancel</button>}
+                                                {(item.status.trim() === "Pending" || item.status.trim() === "Booked") && <button className="button button--small button--danger m-auto d-block" onClick={() => handleCancel(item.idAppointment)}>Cancel</button>}
                                             </td>
                                         </tr>
                                     );
@@ -199,7 +199,7 @@ const Information = () => {
                 </>
             }
 
-      {isShowPopUp && <PopUpCancel handleShowPopUp={setIsShowPopUp} appointmentId={appointmentId} />}
+            {isShowPopUp && <PopUpCancel handleShowPopUp={setIsShowPopUp} appointmentId={appointmentId} />}
 
         </section>
     )
