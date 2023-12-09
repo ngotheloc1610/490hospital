@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { defineConfigPost } from "../../../components/Common/utils";
+import { defineConfigGet, defineConfigPost } from "../../../components/Common/utils";
 import { API_CHANGE_PASSWORD } from "../../../Contants/api.constant";
 import { useAppSelector } from "../../../redux/hooks";
 import { warn } from "../../../components/Common/notify";
@@ -32,7 +32,7 @@ const ChangePassword = () => {
         }
 
         axios
-            .post(url, params, defineConfigPost())
+            .post(url, defineConfigGet(params))
             .then((resp: any) => {
                 if (resp) {
                     setIsSuccess(true);

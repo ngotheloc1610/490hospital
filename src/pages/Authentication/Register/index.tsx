@@ -33,21 +33,21 @@ const Register = () => {
     verifyCode();
   }, [queryParam.code])
 
-    const verifyCode = () => {
-      const url = `${url_api}${API_CREATE_PATIENT}`;
+  const verifyCode = () => {
+    const url = `${url_api}${API_CREATE_PATIENT}`;
 
-      axios
-        .get(url, defineConfigGet({code :queryParam.code}))
-        .then((resp: any) => {
-          if (resp) {
-            resp.include("verify_success") ? setIsVerify(true) : setIsVerify(false);
-          }
-        })
-        .catch((err: any) => {
-          console.log("error verify code:", err);
-          error(err.response?.data?.error || err.response?.data?.error?.message || err.response?.data?.error?.code);
-        });
-    }
+    axios
+      .get(url, defineConfigGet({ code: queryParam.code }))
+      .then((resp: any) => {
+        if (resp) {
+          resp.include("verify_success") ? setIsVerify(true) : setIsVerify(false);
+        }
+      })
+      .catch((err: any) => {
+        console.log("error verify code:", err);
+        error(err.response?.data?.error || err.response?.data?.error?.message || err.response?.data?.error?.code);
+      });
+  }
 
   const registerPatient = () => {
     const url = `${url_api}${API_CREATE_PATIENT}`;
@@ -114,7 +114,18 @@ const Register = () => {
 
   return (
     <div className="register" onKeyDown={handleKeyEnter}>
-      <div className="register-container">
+      {isVerify ? <div className="forgot">
+        <div className="forgot-container">
+          <p className="icon-success mb-4">
+            <i className="bi bi-check-lg fs-1"></i>
+          </p>
+          <h3 className="text-center mb-3">Success</h3>
+          <p className="text-center mb-5">
+            You have successfully register account
+          </p>
+          <p className="text-center cursor-pointer text-reset" onClick={() => navigate("/login")}>Re-directing to login...</p>
+        </div>
+      </div> : <div className="register-container">
         <div className="register-container-header">
           <img src={LOGO_HOSPITAL} alt="" />
           <h3>Register</h3>
@@ -259,20 +270,7 @@ const Register = () => {
             Register
           </button>
         </div>
-      </div>
-
-      {isVerify && <div className="forgot">
-                <div className="forgot-container">
-                    <p className="icon-success mb-4">
-                        <i className="bi bi-check-lg fs-1"></i>
-                    </p>
-                    <h3 className="text-center mb-3">Success</h3>
-                    <p className="text-center mb-5">
-                        You have successfully register account
-                    </p>
-                    <p className="text-center cursor-pointer text-reset" onClick={() => navigate("/login")}>Re-directing to login...</p>
-                </div>
-            </div>}
+      </div>}
     </div>
   );
 };
