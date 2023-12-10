@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { defineConfigGet } from "../../../components/Common/utils";
 import axios from "axios";
-import { API_FORGOT_PASSWORD } from "../../../Contants/api.constant";
+import { API_FORGOT_PASSWORD, API_SEND_MAIL } from "../../../Contants/api.constant";
+import { warn } from "../../../components/Common/notify";
 
 // import OTPInput, { ResendOTP } from "otp-input-react";
 // import 'otp-input-react/build/style.css'; 
@@ -23,10 +24,54 @@ const ForgotPassword = () => {
 
   const [email, setEmail] = useState<string>("");
   const [OTP, setOTP] = useState<string>("");
+  const [password, setPassword] = useState<string>("")
+  const [cfPassword, setCfPassword] = useState<string>("")
 
   const [isSendMail, setIsSendMail] = useState<boolean>(false)
+  const [isCreateNewPass, setIsCreateNewPass] = useState<boolean>(false)
 
   const handleSendMail = () => {
+    if (!email) {
+      warn("Vui lòng nhập email!");
+      return;
+    }
+    sendMail()
+  }
+
+  const handleCreateNewPass = () => {
+    if (!password || !cfPassword) {
+      warn("Vui lòng nhập mật khẩu!");
+      return;
+    }
+    if (password !== cfPassword) {
+      warn("Mật khẩu không trùng khớp!");
+      return;
+    }
+    forgotPassword()
+  }
+
+  const sendMail = () => {
+    const url = `${url_api}${API_SEND_MAIL}`;
+
+    const params = {
+      email: email,
+      newPass: password
+    }
+
+    axios
+      .post(url, defineConfigGet(params))
+      .then((resp: any) => {
+        if (resp) {
+          console.log("resp:", resp)
+          setIsCreateNewPass(true);
+        }
+      })
+      .catch((err: any) => {
+        console.log("err:", err);
+      });
+  }
+
+  const forgotPassword = () => {
     const url = `${url_api}${API_FORGOT_PASSWORD}`;
 
     axios
@@ -75,14 +120,16 @@ const ForgotPassword = () => {
           <h3>Create New Password</h3>
           <p>Create your new password to login</p>
           <div className="input-group mb-4 mt-4">
-            <label htmlFor="cfPassword" className="m-auto">
+            <label htmlFor="password" className="m-auto">
               <i className="bi bi-lock-fill fs-5"></i>
             </label>
             <input
               type={isShowPassword ? "text" : "password"}
               className="form-control"
               placeholder="Password"
-              id="cfPassword"
+              id="password"
+              value={password}
+              onChange={(e: any) => setPassword(e.target.value)}
             />
             <button
               onClick={() => setIsShowPassword(!isShowPassword)}
@@ -104,6 +151,8 @@ const ForgotPassword = () => {
               className="form-control"
               placeholder="Confirm Password"
               id="cfPassword"
+              value={cfPassword}
+              onChange={(e: any) => setCfPassword(e.target.value)}
             />
             <button
               onClick={() => setIsShowCfPassword(!isShowCfPassword)}
@@ -115,7 +164,7 @@ const ForgotPassword = () => {
               />
             </button>
           </div>
-          <button className="button button--large button--large--primary w-100">
+          <button className="button button--large button--large--primary w-100" onClick={() => handleCreateNewPass()}>
             Create password
           </button>
         </div>
@@ -162,9 +211,9 @@ const ForgotPassword = () => {
   return (
     <>
       {_renderForgotYourPw()}
-      {_renderVerifyCode()}
-      {_renderCreateNewPw()}
-      {_renderSuccess()}
+      {/* {_renderVerifyCode()} */}
+      {isSendMail && _renderCreateNewPw()}
+      {isSendMail && isCreateNewPass && _renderSuccess()}
     </>
   );
 };

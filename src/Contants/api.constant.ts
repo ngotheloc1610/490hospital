@@ -1,7 +1,7 @@
 export const API_LOGIN = "/patient/login";
 export const API_VERIFY = "/patient/verify";
-export const API_FORGOT_PASSWORD = "/password/sendMail";
-export const API_CHANGE_PASSWORD_NEW = "/password/changePassfromEmail";
+export const API_SEND_MAIL = "/password/sendMail";
+export const API_FORGOT_PASSWORD = "/password/forgotPassfromEmail";
 export const API_CHANGE_PASSWORD = "/password/changePass/";
 
 export const API_ALL_GET_SPECIALTY = "/homepage/listSpecialty";
