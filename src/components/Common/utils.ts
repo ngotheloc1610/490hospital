@@ -32,12 +32,12 @@ export function convertDateToTimeStamp(value: string, time: string) {
 }
 
 export const convertToDate = (time: string) => {
-    const date = moment(time, "ddd MMM DD hh:mm:ss Z YYYY");
+    const date = moment(time);
     return date.format(FORMAT_DATE_MONTH_YEAR);
 }
 
 export const convertToTime = (time: string) => {
-    const date = moment(time, "ddd MMM DD hh:mm:ss Z YYYY");
+    const date = moment(time);
     return date.format(`${FORMAT_TIME} A`);
 }
 
