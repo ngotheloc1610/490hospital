@@ -10,7 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { API_DIAGNOSTIC_BOOK_DETAIL, API_DIAGNOSTIC_CONDITION_BY_PATIENT, API_DIAGNOSTIC_ENCOUNTER_HISTORY, API_DIAGNOSTIC_PATIENT_PROFILE, API_DIAGNOSTIC_UPCOMING } from "../../Contants/api.constant";
+import { API_DIAGNOSTIC_BOOK_DETAIL, API_DIAGNOSTIC_CONDITION_BY_PATIENT, API_DIAGNOSTIC_ENCOUNTER_HISTORY, API_DIAGNOSTIC_OBSERVATION, API_DIAGNOSTIC_PATIENT_PROFILE, API_DIAGNOSTIC_UPCOMING } from "../../Contants/api.constant";
 import { defineConfigPost } from "../../components/Common/utils";
 import axios from "axios";
 import moment from "moment";
@@ -49,6 +49,7 @@ const PatientMonitorDetail = () => {
   const [listPreviousEncounter, setListPreviousEncounter] = useState<any>([]);
   const [listUpcomingAppointment, setListUpcomingAppointment] = useState<any>([]);
   const [listEncounterHistory, setListEncounterHistory] = useState<any>([]);
+  const [observations, setObservations] = useState<any>([]);
 
   const options = {
     plugins: {
@@ -106,6 +107,7 @@ const PatientMonitorDetail = () => {
       getPreviousEncounter(params.encounterId)
       getUpcomingAppointment(params.encounterId)
       getEncounterHistory(params.encounterId)
+      getObservations(params.encounterId)
     }
   }, [params.encounterId])
 
@@ -181,6 +183,21 @@ const PatientMonitorDetail = () => {
       })
       .catch((err: any) => {
         console.log("error get encounter history:", err);
+      });
+  }
+
+  const getObservations = (encounterId: string) => {
+    const url = `${url_api}${API_DIAGNOSTIC_OBSERVATION}${encounterId}`;
+
+    axios
+      .get(url, defineConfigPost())
+      .then((resp: any) => {
+        if (resp) {
+          setObservations(resp.data);
+        }
+      })
+      .catch((err: any) => {
+        console.log("error get encounter by appointment:", err);
       });
   }
 

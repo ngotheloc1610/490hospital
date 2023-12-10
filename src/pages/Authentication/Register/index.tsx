@@ -22,7 +22,7 @@ const Register = () => {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [gender, setGender] = useState<string>("");
   const [isValidEmail, setIsValidEmail] = useState<boolean>(true);
-  const [isVerify, setIsVerify] = useState<boolean>(true);
+  const [isVerify, setIsVerify] = useState<boolean>(false);
 
   const url_api = process.env.REACT_APP_API_URL;
 
