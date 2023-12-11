@@ -11,7 +11,7 @@ import {
   Legend,
 } from "chart.js";
 import { API_DIAGNOSTIC_BOOK_DETAIL, API_DIAGNOSTIC_CONDITION_BY_PATIENT, API_DIAGNOSTIC_ENCOUNTER_HISTORY, API_DIAGNOSTIC_OBSERVATION, API_DIAGNOSTIC_PATIENT_PROFILE, API_DIAGNOSTIC_UPCOMING } from "../../Contants/api.constant";
-import { defineConfigPost } from "../../components/Common/utils";
+import { convertToDate, convertToTime, defineConfigPost, styleStatus } from "../../components/Common/utils";
 import axios from "axios";
 import moment from "moment";
 import { FORMAT_DATE_MONTH_YEAR } from "../../Contants/general.constant";
@@ -423,27 +423,41 @@ const PatientMonitorDetail = () => {
         <div className="col-3">
           <div className="box h-100 p-3">
             <p className="fw-bold">Upcoming Appointment</p>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th scope="col">Date</th>
-                  <th scope="col">Time</th>
-                  <th scope="col">Data</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Mark</td>
-                  <td>Otto</td>
-                  <td>@mdo</td>
-                </tr>
-                <tr>
-                  <td>Jacob</td>
-                  <td>Thornton</td>
-                  <td>@fat</td>
-                </tr>
-              </tbody>
+           <div className="table-responsive">
+           <table className="table table-sm">
+            <thead className="table-light">
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Appointment Date</th>
+                                    <th scope="col">Appointment Time</th>
+                                    <th scope="col">Doctor</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {listUpcomingAppointment && listUpcomingAppointment.length > 0 && listUpcomingAppointment.map((item: any, idx: number) => {
+                                    return (
+                                        <tr className={`${idx % 2 === 1 ? "table-light" : ""}`} >
+                                            <td >
+                                                {item.patientName}
+                                            </td>
+
+                                            <td >{convertToDate(item.appointDate)}</td>
+                                            <td >
+                                                <span>{convertToTime(item.appointmentTimeStart)} </span>
+                                                <span> - </span>
+                                                <span>{convertToTime(item.appointmentTimeEnd)}</span>
+                                            </td>
+                                            <td >{item.doctorName}</td>
+                                            <td >
+                                                <p className={`${styleStatus(item.status)} text-center d-inline-block mb-0`}>{item.status}</p>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
             </table>
+           </div>
           </div>
         </div>
 
@@ -538,18 +552,23 @@ const PatientMonitorDetail = () => {
           <div className="box h-100 p-3">
             <p className="fw-bold">Encounter History</p>
             <div>
-              <div className="border-bottom">
-                <div className="d-flex">
-                  <div className="me-3">
-                    <img src={USER} alt="" style={{ height: "40px", width: "40px", borderRadius: "100rem" }} />
+              {listEncounterHistory && listEncounterHistory.length > 0 && listEncounterHistory.map((item:any) => {
+                return (
+                  <div className="border-bottom">
+                  <div className="d-flex">
+                    <div className="me-3">
+                      <img src={USER} alt="" style={{ height: "40px", width: "40px", borderRadius: "100rem" }} />
+                    </div>
+                    <div>
+                      <p className="fw-bold">title</p>
+                      <span>desc</span>
+                    </div>
                   </div>
-                  <div>
-                    <p className="fw-bold">title</p>
-                    <span>desc</span>
-                  </div>
+                  <p className="mt-2"><span className="fw-bold color-primary">Final diagnosis: </span> <span>{item.finalDiagnosis}</span></p>
                 </div>
-                <p className="mt-2"><span className="fw-bold color-primary">Final diagnosis: </span> aaadasdasdasdasd</p>
-              </div>
+                )
+              })}
+            
             </div>
 
           </div>

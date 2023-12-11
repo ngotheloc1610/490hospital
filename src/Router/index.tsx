@@ -14,7 +14,6 @@ import Information from "../pages/Information";
 import EditPatient from "../pages/Information/EditPatient";
 import ChangePassword from "../pages/Authentication/ChangePassword";
 import Chat from "../pages/Chat";
-import AppointmentDetail from "../pages/Information/AppointmentDetail";
 import PatientMonitorDetail from "../pages/Information/PatientMonitorDetail";
 
 const loading = (
@@ -58,7 +57,6 @@ const RouterDom = () => {
           <Route path="/information" element={<Information />} >
             <Route path="edit" element={<EditPatient />} />
             <Route path="diagnostic/:encounterId" element={<PatientMonitorDetail />} />
-            <Route path="appointment/:appointmentId" element={<AppointmentDetail />} />
           </Route>
 
           <Route path="/login" element={<Login />} />

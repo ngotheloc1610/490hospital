@@ -4,7 +4,7 @@ import { GENDER_ALL } from "../../../Contants";
 import { defineConfigGet, defineConfigPost } from "../../../components/Common/utils";
 import axios from "axios";
 import { API_CREATE_PATIENT } from "../../../Contants/api.constant";
-import { error, success, warn } from "../../../components/Common/notify";
+import { error, warn } from "../../../components/Common/notify";
 import { useNavigate } from "react-router-dom";
 import queryString from "query-string";
 

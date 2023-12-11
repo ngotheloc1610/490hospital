@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useState } from "react";
-import { defineConfigGet, defineConfigPost } from "../../../components/Common/utils";
+import { defineConfigPost } from "../../../components/Common/utils";
 import { API_CHANGE_PASSWORD } from "../../../Contants/api.constant";
 import { useAppSelector } from "../../../redux/hooks";
-import { warn } from "../../../components/Common/notify";
+import { success, warn } from "../../../components/Common/notify";
 import { useNavigate } from "react-router-dom";
 
 
@@ -27,19 +27,20 @@ const ChangePassword = () => {
         const url = `${url_api}${API_CHANGE_PASSWORD}${id}`;
 
         const params = {
+            email:null,
             oldPass: oldPassword.trim(),
             newPass: password.trim()
         }
 
         axios
-            .post(url, defineConfigGet(params))
+            .post(url, params,defineConfigPost())
             .then((resp: any) => {
                 if (resp) {
+                    success(resp.data)
                     setIsSuccess(true);
                 }
             })
             .catch((err: any) => {
-
                 console.log("err:", err);
             });
     }
@@ -155,7 +156,7 @@ const ChangePassword = () => {
                         You have successfully change your
                         <span className="text-center d-block mt-2">password.</span>
                     </p>
-                    <p className="text-center cursor-pointer" onClick={() => navigate("/")}>Re-directing to your homepage...</p>
+                    <p className="text-center cursor-pointer text-reset" onClick={() => navigate("/")}>Re-directing to your homepage...</p>
                 </div>
             </div>
         );
@@ -163,7 +164,7 @@ const ChangePassword = () => {
 
     return (
         <>
-            {_renderChangePassword()}
+            {!isSuccess && _renderChangePassword()}
             {isSuccess && _renderSuccess()}
         </>
     );

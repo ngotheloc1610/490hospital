@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { defineConfigGet } from "../../../components/Common/utils";
+import React, { useState } from "react";
+import { defineConfigPost } from "../../../components/Common/utils";
 import axios from "axios";
 import { API_FORGOT_PASSWORD, API_SEND_MAIL } from "../../../Contants/api.constant";
 import { warn } from "../../../components/Common/notify";
 
-// import OTPInput, { ResendOTP } from "otp-input-react";
+import OTPInput, { ResendOTP } from "otp-input-react";
 // import 'otp-input-react/build/style.css'; 
 
 const customInputStyle = {
@@ -29,6 +29,7 @@ const ForgotPassword = () => {
 
   const [isSendMail, setIsSendMail] = useState<boolean>(false)
   const [isCreateNewPass, setIsCreateNewPass] = useState<boolean>(false)
+  const [isVerifyCode, setIsVerifyCode] = useState<boolean>(false)
 
   const handleSendMail = () => {
     if (!email) {
@@ -54,12 +55,13 @@ const ForgotPassword = () => {
     const url = `${url_api}${API_SEND_MAIL}`;
 
     const params = {
-      email: email,
-      newPass: password
+      email: email.trim(),
+      newPass: null,
+      oldPass:null
     }
 
     axios
-      .post(url, defineConfigGet(params))
+      .post(url,params, defineConfigPost())
       .then((resp: any) => {
         if (resp) {
           console.log("resp:", resp)
@@ -74,8 +76,14 @@ const ForgotPassword = () => {
   const forgotPassword = () => {
     const url = `${url_api}${API_FORGOT_PASSWORD}`;
 
+    const params = {
+      email: email.trim(),
+      newPass: password.trim(),
+      oldPass:null
+    }
+
     axios
-      .post(url, defineConfigGet({ email: email }))
+      .post(url,params, defineConfigPost())
       .then((resp: any) => {
         if (resp) {
           console.log("resp:", resp)
@@ -196,24 +204,40 @@ const ForgotPassword = () => {
         <div className="forgot-container">
           <h3>Enter Verification Code</h3>
           <p>Enter code that we have sent to your Email</p>
-          {/* <OTPInput inputClassName="custom-otp-input"  inputStyle={customInputStyle} value={OTP} onChange={setOTP} autoFocus OTPLength={4} otpType="number" disabled={false} secure /> */}
+          <OTPInput inputClassName="custom-otp-input"  inputStyle={customInputStyle} value={OTP} onChange={setOTP} autoFocus OTPLength={4} otpType="number" disabled={false} secure />
           <button className="button button--large button--large--primary w-100">
             Verify
           </button>
-          {/* <p className="mt-5 text-center ">
-            Didn’t receive the code? <ResendOTP onResendClick={() => console.log("Resend clicked")} />
-          </p> */}
+          <p className="mt-5 text-center ">
+            Didn’t receive the code? <ResendOTP renderButton={renderButton} renderTime={renderTime}  onResendClick={() => console.log("Resend clicked")} />
+          </p>
         </div>
       </div>
     );
   };
 
+  const renderButton = (buttonProps:any) => {
+    return <button {...buttonProps}>Resend</button>;
+  };
+  const renderTime = (remainingTime:any) => {
+    return <span>{remainingTime} seconds remaining</span>;
+  };
+
+  // const renderButton = (buttonProps:any) => {
+  //   return (
+  //     <button {...buttonProps}>
+  //       {buttonProps.remainingTime !== 0 ? `Please wait for ${buttonProps.remainingTime} sec` : "Resend"}
+  //     </button>
+  //   );
+  // };
+  // const renderTime = () => React.Fragment;
+
   return (
     <>
-      {_renderForgotYourPw()}
-      {/* {_renderVerifyCode()} */}
-      {isSendMail && _renderCreateNewPw()}
-      {isSendMail && isCreateNewPass && _renderSuccess()}
+      {!isSendMail && !isCreateNewPass && !isVerifyCode&& _renderForgotYourPw()}
+      {isSendMail && _renderVerifyCode()}
+      {isSendMail && isVerifyCode && _renderCreateNewPw()}
+      {isSendMail && isCreateNewPass && isVerifyCode && _renderSuccess()}
     </>
   );
 };
