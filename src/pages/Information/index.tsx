@@ -178,7 +178,7 @@ const Information = () => {
                                             </td>
                                             <td onClick={() => navigate(`/information/diagnostic/${item.idEncounter}`)}>{item.doctorName}</td>
                                             <td onClick={() => navigate(`/information/diagnostic/${item.idEncounter}`)}>
-                                                <span className={styleStatus(item.status)}>{item.status}</span>
+                                                <p className={`${styleStatus(item.status)} text-center d-inline-block mb-0`}>{item.status}</p>
                                             </td>
                                             <td>
                                                 {(item.status.trim() === "Pending" || item.status.trim() === "Booked") && <button className="button button--small button--danger m-auto d-block" onClick={() => handleCancel(item.idAppointment)}>Cancel</button>}
