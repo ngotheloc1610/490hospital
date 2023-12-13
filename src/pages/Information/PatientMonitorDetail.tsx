@@ -14,7 +14,7 @@ import { API_DIAGNOSTIC_BOOK_DETAIL, API_DIAGNOSTIC_CONDITION_BY_PATIENT, API_DI
 import { convertToDate, convertToTime, defineConfigPost, styleStatus } from "../../components/Common/utils";
 import axios from "axios";
 import moment from "moment";
-import { FORMAT_DATE_MONTH_YEAR } from "../../Contants/general.constant";
+import { FORMAT_DATE, FORMAT_DATE_MONTH_YEAR } from "../../Contants/general.constant";
 import { useParams } from "react-router-dom";
 
 ChartJS.register(
@@ -393,8 +393,8 @@ const PatientMonitorDetail = () => {
                     <p><span className="fw-bold">Date of birth: </span><span>{patientDetail && moment(patientDetail?.birthDate).format(FORMAT_DATE_MONTH_YEAR)}</span></p>
                     <p><span className="fw-bold">Address: </span><span>{patientDetail && patientDetail?.addressFirstRep?.text}</span></p>
                     <p><span className="fw-bold">Citizen identification: </span><span>{patientDetail && patientDetail?.identifierFirstRep?.value}</span></p>
-                    <p><span className="fw-bold">Phone number: </span><span>{patientDetail && patientDetail?.telecom.filter((item: any) => item.system === "phone")?.value}</span></p>
-                    <p><span className="fw-bold">Email: </span><span>{patientDetail && patientDetail?.telecom.filter((item: any) => item.system === "email")?.value}</span></p>
+                    <p><span className="fw-bold">Phone number: </span><span>{patientDetail && patientDetail?.telecom.filter((item: any) => item.system === "phone")[0]?.value}</span></p>
+                    <p><span className="fw-bold">Email: </span><span>{patientDetail && patientDetail?.telecom.filter((item: any) => item.system === "email")[0]?.value}</span></p>
                   </div>
                 </div>
               </div>
@@ -409,7 +409,7 @@ const PatientMonitorDetail = () => {
                   <p><span className="fw-bold">Appointment Time: </span><span>{bookingDetail.time}</span></p>
                   <p><span className="fw-bold">Doctor: </span><span>{bookingDetail.nameDoctor}</span></p>
                   <p><span className="fw-bold">Specialty: </span><span>{bookingDetail.specialty}</span></p>
-                  <p><span className="fw-bold">Location: </span><span>{bookingDetail.room}</span></p>
+                  <p><span className="fw-bold">Room: </span><span>{bookingDetail.room}</span></p>
                   <p><span className="fw-bold">Appointment Type: </span><span>{bookingDetail.typeOfAppointment}</span></p>
                   <p><span className="fw-bold">Appointment Status: </span><span>{bookingDetail.appointmentStatus}</span></p>
                 </div>
@@ -435,7 +435,7 @@ const PatientMonitorDetail = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {listUpcomingAppointment && listUpcomingAppointment.length > 0 && listUpcomingAppointment.map((item: any, idx: number) => {
+                                {listUpcomingAppointment && listUpcomingAppointment.length > 0 ? listUpcomingAppointment.map((item: any, idx: number) => {
                                     return (
                                         <tr className={`${idx % 2 === 1 ? "table-light" : ""}`} >
                                             <td >
@@ -454,7 +454,7 @@ const PatientMonitorDetail = () => {
                                             </td>
                                         </tr>
                                     );
-                                })}
+                                }): <span>Không có dữ liệu.</span>}
                             </tbody>
             </table>
            </div>
@@ -552,22 +552,23 @@ const PatientMonitorDetail = () => {
           <div className="box h-100 p-3">
             <p className="fw-bold">Encounter History</p>
             <div>
-              {listEncounterHistory && listEncounterHistory.length > 0 && listEncounterHistory.map((item:any) => {
+            {listEncounterHistory.length > 0 ? listEncounterHistory.map((item: any) => {
                 return (
                   <div className="border-bottom">
-                  <div className="d-flex">
-                    <div className="me-3">
-                      <img src={USER} alt="" style={{ height: "40px", width: "40px", borderRadius: "100rem" }} />
+                    <div className="d-flex">
+                      <div className="me-3">
+                        <img src={USER} alt="" style={{ height: "40px", width: "40px", borderRadius: "100rem" }} />
+                      </div>
+                      <div>
+                        <p className="fw-bold">{item?.nameDoctor}</p>
+                        <p>{item?.specialty}</p>
+                        <span>Appt.date: {item.date ? moment(item.date).format(FORMAT_DATE_MONTH_YEAR) : ""}</span>
+                      </div>
                     </div>
-                    <div>
-                      <p className="fw-bold">title</p>
-                      <span>desc</span>
-                    </div>
+                    <p className="mt-2"><span className="fw-bold color-primary">Final diagnosis: </span> <span>{item?.finalDiagnosis}</span></p>
                   </div>
-                  <p className="mt-2"><span className="fw-bold color-primary">Final diagnosis: </span> <span>{item.finalDiagnosis}</span></p>
-                </div>
                 )
-              })}
+              }) : <span>Không có dữ liệu.</span>}
             
             </div>
 
