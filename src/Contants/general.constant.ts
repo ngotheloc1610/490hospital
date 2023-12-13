@@ -5,6 +5,8 @@ export const KEY_LOCAL_STORAGE = {
     SUB: "sub",
 };
 
+export const GENERATED_MESSAGING_KEY = "BPtCV3KlXtPFOPeeOUJM_mH4TTBdHHiTg7AQkd0sbJlHBJDunqP4FUDNPG76zEg1ZJ6f34tc-r7_lrzyMEb8FUo"
+
 export const TOTAL_STEP = 2;
 
 export const FORMAT_DATE = "YYYY-MM-DD";

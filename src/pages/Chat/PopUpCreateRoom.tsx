@@ -17,7 +17,7 @@ const PopUpCreateRoom = (props: IProps) => {
     const url = `${url_api}${API_CREATE_ROOM}`;
 
     const params = {
-        organizationId: ""
+        patientId: ""
     }
 
     axios

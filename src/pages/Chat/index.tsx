@@ -15,6 +15,7 @@ import { FORMAT_DATE, FORMAT_DATE_TIME_2, FORMAT_TIME } from "../../Contants/gen
 import { error } from "../../components/Common/notify";
 import { defineConfigGet, defineConfigPost } from "../../components/Common/utils";
 import { API_GET_MESSAGE_BY_ROOM, API_INBOX_ROOM_LIST } from "../../Contants/api.constant";
+import { requestForToken } from "../../firebase";
 
 const Chat = () => {
     const url_api = process.env.REACT_APP_API_URL;
@@ -24,8 +25,9 @@ const Chat = () => {
     const [message, setMessage] = useState<string>("");
     const [nameRoom, setNameRoom] = useState<string>("");
     const [idRoom, setIdRoom] = useState<string>("");
-
     const [isShowPopUp, setIsShowPopUp] = useState<boolean>(false);
+    const [selectFile, setSelectFile] = useState<any>(null)
+    const [selectFileImage, setSelectFileImage] = useState<any>(null)
 
     const fileInputRef = useRef<any>(null);
     const fileImageInputRef = useRef<any>(null);
@@ -37,51 +39,8 @@ const Chat = () => {
 
     useEffect(() => {
         getListInboxRoom()
+        requestForToken()
     }, [])
-
-    useEffect(() => {
-        // var sock = new SockJS(url_ws);
-        // console.log("sock:", sock)
-        // sock.onopen = function () {
-        //     console.log('open');
-        //     sock.send('test');
-        // };
-
-        // sock.onmessage = function (e) {
-        //     console.log('message', e.data);
-        //     sock.close();
-        // };
-
-        // sock.onclose = function () {
-        //     console.log('close');
-        // };
-        // registerUser();
-    }, [])
-
-
-    // const registerUser = () => {
-    //     let sockJS = new SockJS(url_ws)
-    //     console.log("sockJS:", sockJS)
-    //     stompClient?.over(sockJS);
-    //     stompClient?.connect({}, onConnected, onError)
-    // }
-
-    // const onConnected = () => {
-    //     // setUserData({ ...userData, "connected": true })
-    //     stompClient.subscribe("/topic/messages", onPublicMessageReceived)
-    //     // stompClient.subscribe("/topic/messages", onPublicMessageReceived)
-    // }
-
-    // const onError = (error: any) => {
-    //     console.log("error:", error)
-    // }
-
-    // const onPublicMessageReceived = (payload: any) => {
-    //     let payloadData = JSON.parse(payload.body)
-    //     console.log("payloadData:", payloadData)
-
-
-    // }
 
     const getListInboxRoom = () => {
         const url = `${url_api}${API_INBOX_ROOM_LIST}`;
@@ -160,7 +119,6 @@ const Chat = () => {
 
 
     const handleClickFile = () => {
-        // Khi người dùng nhấn vào biểu tượng upload, kích hoạt sự kiện chọn tệp tin
         if (fileInputRef.current) {
             fileInputRef.current.click();
         }
@@ -168,11 +126,10 @@ const Chat = () => {
 
     const handleFileChange = (event: any) => {
         const file = event.target.files[0];
-
+        setSelectFile(file);
     };
 
     const handleClickFileImage = () => {
-        // Khi người dùng nhấn vào biểu tượng upload, kích hoạt sự kiện chọn tệp tin
         if (fileInputRef.current) {
             fileInputRef.current.click();
         }
@@ -180,7 +137,7 @@ const Chat = () => {
 
     const handleFileImageChange = (event: any) => {
         const file = event.target.files[0];
-
+        setSelectFileImage(file)
     };
 
     return (
@@ -202,17 +159,17 @@ const Chat = () => {
                     <div className='chat-room-content'>
                         {listRoom && listRoom.map((item: any) => {
                             return (
-                                <div className="chat-room-content-item d-flex justify-content-between" onClick={() => { handleGetMessageByRoom(item.id); setIdRoom(item.id) }}>
+                                <div className="chat-room-content-item d-flex justify-content-between" onClick={() => { handleGetMessageByRoom(item?.id); setIdRoom(item?.id) }}>
                                     <div>
                                         <img src={USER} alt="" />
                                     </div>
                                     <div>
-                                        <p>{item.patient.mail}</p>
-                                        <p>{item.lastMessage.message}</p>
+                                        <p>{item?.patient?.mail}</p>
+                                        <p>{item?.lastMessage?.message}</p>
                                     </div>
                                     <div>
-                                        <p>{moment(item.lastMessage.updateAt).format(FORMAT_DATE)}</p>
-                                        <p>{moment(item.lastMessage.updateAt).format(FORMAT_TIME)}</p>
+                                        <p>{moment(item?.lastMessage?.updateAt).format(FORMAT_DATE)}</p>
+                                        <p>{moment(item?.lastMessage?.updateAt).format(FORMAT_TIME)}</p>
                                     </div>
                                 </div>
                             )
@@ -226,7 +183,7 @@ const Chat = () => {
                                 <div className="d-flex chat-message-header">
                                     <div>
                                         <img src={USER} alt="" />
-                                        <span className="fw-bold ms-3">{item.patient.mail}</span>
+                                        <span className="fw-bold ms-3">{item?.patient?.mail}</span>
                                     </div>
 
                                     <span className="my-auto cursor-pointer">
@@ -240,8 +197,8 @@ const Chat = () => {
                             {messageRoom && messageRoom.map((item: any) => {
                                 return (
                                     <div className="chat-message-content-msg">
-                                        <span className='text-message mb-1'>{item.message}</span>
-                                        <span>{moment(item.createdAt).format(FORMAT_DATE_TIME_2)}</span>
+                                        <span className='text-message mb-1'>{item?.message}</span>
+                                        <span>{moment(item?.createdAt).format(FORMAT_DATE_TIME_2)}</span>
                                         <div ref={messageRef}></div>
                                     </div>
                                 )
