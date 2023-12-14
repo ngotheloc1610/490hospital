@@ -19,6 +19,7 @@ const ChangePassword = () => {
     const [cfPassword, setCfPassword] = useState<string>("");
 
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const { id } = useAppSelector((state) => state.authSlice);
     const navigate = useNavigate();
@@ -27,14 +28,17 @@ const ChangePassword = () => {
         const url = `${url_api}${API_CHANGE_PASSWORD}${id}`;
 
         const params = {
-            email:null,
+            email: null,
             oldPass: oldPassword.trim(),
             newPass: password.trim()
         }
 
+        setIsLoading(true)
+
         axios
-            .post(url, params,defineConfigPost())
+            .post(url, params, defineConfigPost())
             .then((resp: any) => {
+                setIsLoading(false)
                 if (resp) {
                     success(resp.data)
                     setIsSuccess(true);
@@ -137,7 +141,9 @@ const ChangePassword = () => {
                         </button>
                     </div>
                     <button className="button button--large button--large--primary w-100" onClick={() => handleChangePassword()}>
-                        Change password
+                        {isLoading && <span className="spinner-border" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </span>} <span className="ms-2">Change password</span>
                     </button>
                 </div>
             </div>

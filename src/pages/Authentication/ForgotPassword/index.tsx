@@ -1,20 +1,9 @@
 import React, { useState } from "react";
 import { defineConfigPost } from "../../../components/Common/utils";
 import axios from "axios";
-import { API_FORGOT_PASSWORD, API_SEND_MAIL } from "../../../Contants/api.constant";
-import { warn } from "../../../components/Common/notify";
-
-import OTPInput, { ResendOTP } from "otp-input-react";
-// import 'otp-input-react/build/style.css'; 
-
-const customInputStyle = {
-  width: '2rem', // Adjust the width as needed
-  height: '2rem', // Adjust the height as needed
-  margin: '0.5rem', // Adjust the margin as needed
-  fontSize: '1.5rem', // Adjust the font size as needed
-  borderRadius: '4px', // Adjust the border radius as needed
-  border: '1px solid #ccc', // Adjust the border style and color as needed
-};
+import { API_FORGOT_PASSWORD, API_SEND_MAIL, API_VERIFY_CODE } from "../../../Contants/api.constant";
+import { error, success, warn } from "../../../components/Common/notify";
+import OTPInput from "otp-input-react";
 
 const ForgotPassword = () => {
   const url_api = process.env.REACT_APP_API_URL;
@@ -30,6 +19,8 @@ const ForgotPassword = () => {
   const [isSendMail, setIsSendMail] = useState<boolean>(false)
   const [isCreateNewPass, setIsCreateNewPass] = useState<boolean>(false)
   const [isVerifyCode, setIsVerifyCode] = useState<boolean>(false)
+
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleSendMail = () => {
     if (!email) {
@@ -57,19 +48,60 @@ const ForgotPassword = () => {
     const params = {
       email: email.trim(),
       newPass: null,
-      oldPass:null
+      oldPass: null
     }
 
+    setIsLoading(true)
+
     axios
-      .post(url,params, defineConfigPost())
+      .post(url, params, defineConfigPost())
       .then((resp: any) => {
         if (resp) {
-          console.log("resp:", resp)
-          setIsCreateNewPass(true);
+          if (resp.data === "successful") {
+            setIsSendMail(true);
+            success(resp.data)
+
+          } else {
+            error(resp.data)
+          }
+
+          setIsLoading(false)
         }
       })
       .catch((err: any) => {
         console.log("err:", err);
+      });
+  }
+
+  const verifyCode = () => {
+    const url = `${url_api}${API_VERIFY_CODE}`;
+
+    const params = {
+      email: email.trim(),
+      newPass: OTP.trim(),
+      oldPass: null
+    }
+    setIsLoading(true)
+
+    axios
+      .post(url, params, defineConfigPost())
+      .then((resp: any) => {
+        if (resp) {
+          if (resp.data === "successful") {
+            setIsVerifyCode(true);
+            setIsSendMail(true);
+            success(resp.data)
+          } else {
+            error(resp.data)
+          }
+
+          setIsLoading(false)
+
+        }
+      })
+      .catch((err: any) => {
+        console.log("error Login:", err);
+        error(err.message || err.response.data.error || err.response.data.error.message)
       });
   }
 
@@ -79,15 +111,27 @@ const ForgotPassword = () => {
     const params = {
       email: email.trim(),
       newPass: password.trim(),
-      oldPass:null
+      oldPass: null
     }
 
+    setIsLoading(true)
+
     axios
-      .post(url,params, defineConfigPost())
+      .post(url, params, defineConfigPost())
       .then((resp: any) => {
         if (resp) {
           console.log("resp:", resp)
-          setIsSendMail(true);
+          if (resp.data === "change pass successful") {
+            setIsCreateNewPass(true);
+            setIsVerifyCode(true);
+            setIsSendMail(true);
+            success(resp.data)
+          } else {
+            error(resp.data)
+          }
+
+          setIsLoading(false)
+
         }
       })
       .catch((err: any) => {
@@ -114,7 +158,9 @@ const ForgotPassword = () => {
             </span>
           </div>
           <button className="w-100 button button--large button--large--primary" onClick={() => handleSendMail()}>
-            Send code
+            {isLoading && <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>} <span className="ms-2">Send code</span>
           </button>
         </div>
       </div>
@@ -173,7 +219,9 @@ const ForgotPassword = () => {
             </button>
           </div>
           <button className="button button--large button--large--primary w-100" onClick={() => handleCreateNewPass()}>
-            Create password
+            {isLoading && <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>} <span className="ms-2">Create password</span>
           </button>
         </div>
       </div>
@@ -198,45 +246,35 @@ const ForgotPassword = () => {
     );
   };
 
+  const handleVerifyCode = () => {
+    verifyCode();
+  }
+
   const _renderVerifyCode = () => {
     return (
       <div className="forgot">
         <div className="forgot-container">
           <h3>Enter Verification Code</h3>
           <p>Enter code that we have sent to your Email</p>
-          <OTPInput inputClassName="custom-otp-input"  inputStyle={customInputStyle} value={OTP} onChange={setOTP} autoFocus OTPLength={4} otpType="number" disabled={false} secure />
-          <button className="button button--large button--large--primary w-100">
-            Verify
+          <OTPInput inputClassName="custom-otp-input" value={OTP} onChange={setOTP} autoFocus OTPLength={4} otpType="number" disabled={false} secure />
+          <button className="button button--large button--large--primary w-100 mt-3" onClick={() => handleVerifyCode()}>
+            {isLoading && <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>} <span className="ms-2">Verify</span>
           </button>
-          <p className="mt-5 text-center ">
-            Didn’t receive the code? <ResendOTP renderButton={renderButton} renderTime={renderTime}  onResendClick={() => console.log("Resend clicked")} />
+          <p className="mt-3 text-center text-reset cursor-pointer" onClick={() => handleSendMail()}>
+            Resend code
           </p>
         </div>
       </div>
     );
   };
 
-  const renderButton = (buttonProps:any) => {
-    return <button {...buttonProps}>Resend</button>;
-  };
-  const renderTime = (remainingTime:any) => {
-    return <span>{remainingTime} seconds remaining</span>;
-  };
-
-  // const renderButton = (buttonProps:any) => {
-  //   return (
-  //     <button {...buttonProps}>
-  //       {buttonProps.remainingTime !== 0 ? `Please wait for ${buttonProps.remainingTime} sec` : "Resend"}
-  //     </button>
-  //   );
-  // };
-  // const renderTime = () => React.Fragment;
-
   return (
     <>
-      {!isSendMail && !isCreateNewPass && !isVerifyCode&& _renderForgotYourPw()}
-      {isSendMail && _renderVerifyCode()}
-      {isSendMail && isVerifyCode && _renderCreateNewPw()}
+      {!isSendMail && !isCreateNewPass && !isVerifyCode && _renderForgotYourPw()}
+      {isSendMail && !isVerifyCode && _renderVerifyCode()}
+      {isSendMail && isVerifyCode && !isCreateNewPass && _renderCreateNewPw()}
       {isSendMail && isCreateNewPass && isVerifyCode && _renderSuccess()}
     </>
   );
