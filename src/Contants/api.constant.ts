@@ -3,6 +3,7 @@ export const API_VERIFY = "/patient/verify";
 export const API_SEND_MAIL = "/password/sendMail";
 export const API_FORGOT_PASSWORD = "/password/forgotPassfromEmail";
 export const API_CHANGE_PASSWORD = "/password/changePass/";
+export const API_VERIFY_CODE = "/password/verify";
 
 export const API_ALL_GET_SPECIALTY = "/homepage/listSpecialty";
 export const API_GET_SPECIALTY = "/homepage/Specialty/detail/";
@@ -44,7 +45,7 @@ export const API_DIAGNOSTIC_CREATE_ENCOUNTER = "/diagnostic/create_encounter/"
 export const API_DIAGNOSTIC_CREATE_DIAGNOSTIC = "/diagnostic/createDisgnostic"
 export const API_DIAGNOSTIC_CONDITION_BY_PATIENT = "/diagnostic/getAllCondition/"
 
-export const API_UPLOAD_FILE = "/media/mediaUpload";
+export const API_MEDIA_UPLOAD = "/media/profileMediaUpload"
 
 
 

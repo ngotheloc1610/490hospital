@@ -19,7 +19,7 @@ const messaging = getMessaging(app);
 
 export const requestForToken = () => {
     return getToken(messaging, { vapidKey: GENERATED_MESSAGING_KEY })
-        .then((currentToken) => {
+        .then((currentToken: any) => {
             if (currentToken) {
                 console.log("currentToken:", currentToken)
                 return currentToken;
@@ -31,7 +31,7 @@ export const requestForToken = () => {
                 );
             }
         })
-        .catch((err) => {
+        .catch((err: any) => {
             console.log("An error occurred while retrieving token. ", err);
         });
 };
