@@ -46,6 +46,8 @@ const Appointment = () => {
   const [doctor, setDoctor] = useState<any>();
   const [description, setDescription] = useState<string>("");
 
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
   useEffect(() => {
     getSpecialty();
   }, [])
@@ -189,13 +191,17 @@ const Appointment = () => {
       slot: []
     }
 
+    setIsLoading(true)
+
     axios.post(url, params, defineConfigPost()).then((resp: any) => {
+      setIsLoading(false)
       if (resp) {
         success(resp.data);
         setIsBooking(true);
       }
     }).catch((err: any) => {
       setIsBooking(false);
+      setIsLoading(false)
       error(err.response.data.error);
       console.log("err:", err)
     })
@@ -319,7 +325,9 @@ const Appointment = () => {
               className="button button--primary me-3"
               onClick={() => handleBook()}
             >
-              Book
+              {isLoading && <span className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </span>} <span className="ms-2">Book</span>
             </button>
             <button
               className="button button--gray"

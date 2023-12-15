@@ -23,6 +23,8 @@ const Register = () => {
   const [gender, setGender] = useState<string>("");
   const [isValidEmail, setIsValidEmail] = useState<boolean>(true);
   const [isVerify, setIsVerify] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
 
   const url_api = process.env.REACT_APP_API_URL;
 
@@ -62,9 +64,12 @@ const Register = () => {
       dateOfBirth: birthday,
     };
 
+    setIsLoading(true);
+
     axios
       .post(url, params, defineConfigPost())
       .then((resp: any) => {
+        setIsLoading(false)
         if (resp) {
           if (resp.status === 200) {
             warn("Please go to your email to verify!");
@@ -73,6 +78,7 @@ const Register = () => {
       })
       .catch((err: any) => {
         console.log("error create patient:", err);
+        setIsLoading(false)
         error(err.response?.data?.error || err.response?.data?.error?.message || err.response?.data?.error?.code);
       });
   };
@@ -267,7 +273,9 @@ const Register = () => {
             className="button button--large button--large--primary w-100"
             onClick={() => handleRegister()}
           >
-            Register
+            {isLoading && <span className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </span>} <span className="ms-2">Register</span>
           </button>
         </div>
       </div>}

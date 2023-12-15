@@ -15,7 +15,7 @@ import { FORMAT_DATE, FORMAT_DATE_TIME_2, FORMAT_TIME } from "../../Contants/gen
 import { error } from "../../components/Common/notify";
 import { defineConfigGet, defineConfigPost } from "../../components/Common/utils";
 import { API_GET_MESSAGE_BY_ROOM, API_INBOX_ROOM_LIST } from "../../Contants/api.constant";
-import { requestForToken } from "../../firebase";
+// import { requestForToken } from "../../firebase";
 
 const Chat = () => {
     const url_api = process.env.REACT_APP_API_URL;

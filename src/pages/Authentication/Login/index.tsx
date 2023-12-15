@@ -34,8 +34,8 @@ const Login = () => {
     axios
       .post(url, params, defineConfigPost())
       .then((resp: any) => {
+        setIsLoading(false)
         if (resp) {
-          setIsLoading(false)
           const accessToken = resp.data.accessToken;
 
           localStorage.setItem(KEY_LOCAL_STORAGE.AUTHEN, accessToken);
@@ -50,6 +50,7 @@ const Login = () => {
       })
       .catch((err: any) => {
         error(err?.response?.data?.error?.message)
+        setIsLoading(false)
         console.log("error Login:", err);
       });
   }
