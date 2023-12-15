@@ -136,8 +136,7 @@ const Information = () => {
                                         <img
                                             src={patient.photo ? patient.photo : USER}
                                             alt="img patient"
-                                            className={`d-block m-auto ${patient?.photo ? "" : "bg-image"}`}
-                                            style={{ objectFit: "cover" }}
+                                            className={`d-block m-auto ${patient?.photo ? "" : "bg-image"} w-100 h-100 object-fit-cover`}
                                         />
                                     </div>
 
