@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { defineConfigGet, defineConfigPost } from "../../components/Common/utils";
 import { error, success, warn } from "../../components/Common/notify";
-import { API_PROFILE_PATIENT, API_UPDATE_PATIENT, API_UPLOAD_FILE } from "../../Contants/api.constant";
+import { API_PROFILE_PATIENT, API_UPDATE_PATIENT, API_MEDIA_UPLOAD } from "../../Contants/api.constant";
 import { GENDER } from "../../Contants";
 import { USER } from "../../assets";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
@@ -48,15 +48,13 @@ const EditPatient = () => {
 
     useEffect(() => {
         if (selectedFile) {
-            console.log("path", URL.createObjectURL(selectedFile));
             uploadImage()
         }
-
     }, [selectedFile])
 
 
     const uploadImage = () => {
-        const url = `${url_api}${API_UPLOAD_FILE}`;
+        const url = `${url_api}${API_MEDIA_UPLOAD}`;
 
         if (!selectedFile) {
             warn('Please select an image file before uploading.');
@@ -126,7 +124,6 @@ const EditPatient = () => {
             .put(url, param, defineConfigPost())
             .then((resp: any) => {
                 if (resp) {
-                    uploadImage()
                     actions.setSubmitting(false);
                     actions.resetForm();
                     dispatch(setTrigger(!trigger))
