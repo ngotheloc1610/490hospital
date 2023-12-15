@@ -3,13 +3,14 @@ import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { defineConfigGet, defineConfigPost } from "../../components/Common/utils";
+import { defineConfigPost } from "../../components/Common/utils";
 import { error, success, warn } from "../../components/Common/notify";
 import { API_PROFILE_PATIENT, API_UPDATE_PATIENT, API_MEDIA_UPLOAD } from "../../Contants/api.constant";
 import { GENDER } from "../../Contants";
 import { USER } from "../../assets";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setTrigger } from "../../redux/features/profile/profileSlice";
+import { KEY_LOCAL_STORAGE } from "../../Contants/general.constant";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().min(3).required("Required"),
@@ -37,8 +38,8 @@ const EditPatient = () => {
     const navigate = useNavigate();
     const inputRef = useRef<any>(null);
     const [selectedFile, setSelectedFile] = useState<any>(null);
-
     const [patientInfo, setPatientInfo] = useState<any>(defaultValue);
+    const [isPickImage, setIsPickImage] = useState<boolean>(false);
     const { trigger } = useAppSelector(state => state.profileSlice);
     const dispatch = useAppDispatch()
 
@@ -52,8 +53,7 @@ const EditPatient = () => {
         }
     }, [selectedFile])
 
-
-    const uploadImage = () => {
+    const uploadImage = async () => {
         const url = `${url_api}${API_MEDIA_UPLOAD}`;
 
         if (!selectedFile) {
@@ -61,22 +61,25 @@ const EditPatient = () => {
             return;
         }
 
-        let formData = new FormData();
-        formData.append('image', selectedFile);
+        const formData: FormData = new FormData();
+        formData.append('file', selectedFile);
 
-        const params = { file: formData }
+        try {
+            const config = {
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem(KEY_LOCAL_STORAGE.AUTHEN)}`,
+                    "Content-Type": "multipart/form-data",
+                },
+            }
 
-        axios
-            .post(url, defineConfigGet(params))
-            .then((resp: any) => {
-                if (resp) {
-                    console.log("resp:", resp)
-                }
-            })
-            .catch((err: any) => {
-                console.log("error upload image:", err);
-                error(err.response.data.error);
-            });
+            const { data } = await axios.post(url, formData, config)
+            if(data){
+                
+            }
+        } catch (err: any) {
+            console.log(err);
+            error(err.response.data.error)
+        }
     }
 
     const getPatientInfo = () => {
@@ -143,6 +146,7 @@ const EditPatient = () => {
         // Check if the selected file is an image
         if (file && file.type.startsWith('image/')) {
             setSelectedFile(file);
+            setIsPickImage(true);
         } else {
             warn('Please select a valid image file.');
         }
@@ -262,12 +266,15 @@ const EditPatient = () => {
         return (
             <div className="h-100 d-flex flex-column" onClick={handlePickImage}>
                 <div className="h-100">
-                    <img
-                        src={patientInfo?.photo > 0 ? patientInfo.photo : selectedFile ? URL.createObjectURL(selectedFile) : USER}
-                        alt="img patient"
-                        className={`d-block m-auto ${selectedFile ? "" : "bg-image"}`}
-                        style={{ objectFit: "cover" }}
-                    />
+                {!isPickImage ?  <img
+            src={patientInfo?.photo ? patientInfo?.photo : USER}
+            alt="img patient"
+            className={`${patientInfo?.photo ? "" : "bg-image"} w-100 h-100 object-fit-cover`}
+          /> :  <img
+          src={selectedFile ? URL.createObjectURL(selectedFile) : USER}
+          alt="img patient"
+          className={`${selectedFile ? "" : "bg-image"} w-100 h-100 object-fit-cover`}
+        />}
                     <input
                         type="file"
                         className="d-none"
@@ -275,9 +282,9 @@ const EditPatient = () => {
                         onChange={handleChangeImage}
                     />
                 </div>
-                {/* <button className="button button--primary w-90 mx-auto mt-3" onClick={handlePickImage}>
-                    {image ? "Edit" : "Add"} profile picture
-                </button> */}
+                {/* <button className="button button--small button--primary w-90 mx-auto mt-3">
+          {patientInfo?.photo ? "Edit" : "Add"} profile picture
+        </button> */}
             </div>
         );
     };
