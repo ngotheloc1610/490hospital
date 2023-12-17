@@ -371,7 +371,7 @@ const Dashboard = () => {
                   return (
                     <div className="col-4">
                       <Link to={`departments/${item.id}`} className="d-flex">
-                        <img src={item.photo} alt="img department" style={{width:"100px", height:"100px", objectFit:"cover", borderRadius:"100rem"}} />
+                        <img src={item.photo} alt="img department" style={{ width: "100px", height: "100px", objectFit: "cover", borderRadius: "100rem" }} />
                         <span className="my-auto ms-3 color-gray-light">
                           {item.title}
                         </span>

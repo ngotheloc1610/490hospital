@@ -276,6 +276,11 @@ button {
   --bs-spinner-height: 1rem !important;
 }
 
+.spinner-grow {
+  --bs-spinner-width: 5rem !important;
+  --bs-spinner-height: 5rem !important;
+}
+
 .custom-otp-input {
   width: 80px !important;
   height: 80px !important;
@@ -284,4 +289,16 @@ button {
   border: 2px solid $primary-color;
   border-radius: 5px;
   text-align: center;
+}
+
+.h-50 {
+  height: 50% !important;
+}
+
+.h-200 {
+  height: 200px;
+}
+
+.h-350 {
+  height: 350px;
 }

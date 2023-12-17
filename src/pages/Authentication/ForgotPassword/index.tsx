@@ -254,7 +254,7 @@ const ForgotPassword = () => {
         <div className="forgot-container">
           <h3>Enter Verification Code</h3>
           <p>Enter code that we have sent to your Email</p>
-          <OTPInput inputClassName="custom-otp-input" value={OTP} onChange={setOTP} autoFocus OTPLength={4} otpType="number" disabled={false} secure />
+          <OTPInput inputClassName="custom-otp-input" value={OTP} onChange={setOTP} autoFocus OTPLength={4} otpType="number" disabled={false} />
           <button className="button button--large button--large--primary w-100 mt-3" onClick={() => handleVerifyCode()}>
             {isLoading && <div className="spinner-border" role="status">
               <span className="visually-hidden">Loading...</span>

@@ -7,7 +7,7 @@ import { defineConfigGet } from '../../components/Common/utils';
 import { useAppSelector } from '../../redux/hooks';
 import { warn } from '../../components/Common/notify';
 import moment from 'moment';
-import {FORMAT_DATE_MONTH_YEAR } from '../../Contants/general.constant';
+import { FORMAT_DATE_MONTH_YEAR } from '../../Contants/general.constant';
 
 
 const DoctorDetail = () => {
@@ -20,7 +20,7 @@ const DoctorDetail = () => {
     const [doctor, setDoctor] = useState<any>({});
 
     const [listEducation, setListEducation] = useState<any>([]);
-    const [listSpecialized , setListSpecialized ] = useState<any>([]);
+    const [listSpecialized, setListSpecialized] = useState<any>([]);
     const [listAchievement, setListAchievement] = useState<any>([]);
 
     useEffect(() => {
@@ -31,9 +31,9 @@ const DoctorDetail = () => {
             if (resp) {
                 const data = resp.data;
 
-                const educations = data.practitionerTarget?.qualification.filter((item:any) => item.code.coding[0].code === "Edu")
-                const specActivities = data.practitionerTarget?.qualification.filter((item:any) => item.code.coding[0].code === "SpecActivities")
-                const achievement = data.practitionerTarget?.qualification.filter((item:any) => item.code.coding[0].code === "Achieve")
+                const educations = data.practitionerTarget?.qualification.filter((item: any) => item.code.coding[0].code === "Edu")
+                const specActivities = data.practitionerTarget?.qualification.filter((item: any) => item.code.coding[0].code === "SpecActivities")
+                const achievement = data.practitionerTarget?.qualification.filter((item: any) => item.code.coding[0].code === "Achieve")
 
                 setListEducation(educations)
                 setListSpecialized(specActivities)
@@ -47,19 +47,19 @@ const DoctorDetail = () => {
     }, [params.doctocId])
 
     const handleBookAppointment = () => {
-        if(isLogin){
+        if (isLogin) {
             navigate("/appointment");
-        }else{
+        } else {
             warn("Bạn cần đăng nhập trước khi book lịch");
         }
     }
-    
+
 
     return (
         <div className="container p-3">
             <div className='row gy-5'>
                 <div className="col-4 pe-5">
-                    <img src={doctor?.practitionerTarget?.photo[0].url} alt="img doctor" className='image-doctor' />
+                    <img src={doctor?.practitionerTarget?.photo[0]?.url} alt="img doctor" className='image-doctor' />
                     <button className='button button--primary w-100 mt-4 text-uppercase' onClick={() => handleBookAppointment()}>Make an Appointment Now!</button>
                 </div>
                 <div className="col-8">
@@ -83,9 +83,9 @@ const DoctorDetail = () => {
                                     {listEducation.length > 0 && listEducation.map((item: any, idx: number) => {
                                         return (
                                             <li className='lh-base mb-2'>
-                                                <span>{item.period.start ? moment(item.period.start).format(FORMAT_DATE_MONTH_YEAR) :  ""}</span>
+                                                <span>{item.period.start ? moment(item.period.start).format(FORMAT_DATE_MONTH_YEAR) : ""}</span>
                                                 <span> - </span>
-                                                <span>{item.period.start ? moment(item.period.start).format(FORMAT_DATE_MONTH_YEAR) :  ""}</span>
+                                                <span>{item.period.start ? moment(item.period.start).format(FORMAT_DATE_MONTH_YEAR) : ""}</span>
                                                 <span>: {item.code.display}</span>
                                             </li>
                                         )
@@ -95,12 +95,12 @@ const DoctorDetail = () => {
                             <div className='row'>
                                 <p className='col-2 fw-bold'>Specialized activities</p>
                                 <ul className='col-10'>
-                                {listSpecialized.length > 0 && listSpecialized.map((item: any, idx: number) => {
+                                    {listSpecialized.length > 0 && listSpecialized.map((item: any, idx: number) => {
                                         return (
                                             <li className='lh-base mb-2'>
-                                                <span>{item.period.start ? moment(item.period.start).format(FORMAT_DATE_MONTH_YEAR) :  ""}</span>
+                                                <span>{item.period.start ? moment(item.period.start).format(FORMAT_DATE_MONTH_YEAR) : ""}</span>
                                                 <span> - </span>
-                                                <span>{item.period.start ? moment(item.period.start).format(FORMAT_DATE_MONTH_YEAR) :  ""}</span>
+                                                <span>{item.period.start ? moment(item.period.start).format(FORMAT_DATE_MONTH_YEAR) : ""}</span>
                                                 <span>: {item.code.display}</span>
                                             </li>
                                         )
@@ -114,16 +114,16 @@ const DoctorDetail = () => {
                         <h3 className='pb-3 mb-3 fw-bold text-uppercase border-bottom'>Achievement</h3>
                         <div>
                             <ul>
-                            {listAchievement.length > 0 && listAchievement.map((item: any, idx: number) => {
-                                        return (
-                                            <li className='lh-base mb-2'>
-                                                <span>{item.period.start ? moment(item.period.start).format(FORMAT_DATE_MONTH_YEAR) :  ""}</span>
-                                                <span> - </span>
-                                                <span>{item.period.start ? moment(item.period.start).format(FORMAT_DATE_MONTH_YEAR) :  ""}</span>
-                                                <span>: {item.code.display}</span>
-                                            </li>
-                                        )
-                                    })}
+                                {listAchievement.length > 0 && listAchievement.map((item: any, idx: number) => {
+                                    return (
+                                        <li className='lh-base mb-2'>
+                                            <span>{item.period.start ? moment(item.period.start).format(FORMAT_DATE_MONTH_YEAR) : ""}</span>
+                                            <span> - </span>
+                                            <span>{item.period.start ? moment(item.period.start).format(FORMAT_DATE_MONTH_YEAR) : ""}</span>
+                                            <span>: {item.code.display}</span>
+                                        </li>
+                                    )
+                                })}
                             </ul>
                         </div>
                     </div>
