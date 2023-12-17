@@ -131,12 +131,12 @@ const Information = () => {
                                 </table>
                             </div>
                             <div className="col-4">
-                                <div className="h-100 d-flex flex-column" >
-                                    <div className="h-100">
+                                <div className="d-flex flex-column" >
+                                    <div className="p-1 border">
                                         <img
                                             src={patient.photo ? patient.photo : USER}
                                             alt="img patient"
-                                            className={`d-block m-auto ${patient?.photo ? "" : "bg-image"} w-100 h-100 object-fit-cover`}
+                                            className={`d-block m-auto ${patient?.photo ? "" : "bg-image"} w-100 h-200 object-fit-cover`}
                                         />
                                     </div>
 

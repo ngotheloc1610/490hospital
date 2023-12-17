@@ -41,6 +41,8 @@ const EditPatient = () => {
     const [patientInfo, setPatientInfo] = useState<any>(defaultValue);
     const [isPickImage, setIsPickImage] = useState<boolean>(false);
     const { trigger } = useAppSelector(state => state.profileSlice);
+
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -64,6 +66,8 @@ const EditPatient = () => {
         const formData: FormData = new FormData();
         formData.append('file', selectedFile);
 
+        setIsLoading(true);
+
         try {
             const config = {
                 headers: {
@@ -73,11 +77,13 @@ const EditPatient = () => {
             }
 
             const { data } = await axios.post(url, formData, config)
-            if(data){
-                
+            if (data === "Successful!") {
+                setIsLoading(false)
+                success("Upload image Successful!")
             }
         } catch (err: any) {
             console.log(err);
+            setIsLoading(false)
             error(err.response.data.error)
         }
     }
@@ -266,15 +272,19 @@ const EditPatient = () => {
         return (
             <div className="h-100 d-flex flex-column" onClick={handlePickImage}>
                 <div className="h-100">
-                {!isPickImage ?  <img
-            src={patientInfo?.photo ? patientInfo?.photo : USER}
-            alt="img patient"
-            className={`${patientInfo?.photo ? "" : "bg-image"} w-100 h-100 object-fit-cover`}
-          /> :  <img
-          src={selectedFile ? URL.createObjectURL(selectedFile) : USER}
-          alt="img patient"
-          className={`${selectedFile ? "" : "bg-image"} w-100 h-100 object-fit-cover`}
-        />}
+                    {!isLoading ? !isPickImage ? <img
+                        src={patientInfo?.photo ? patientInfo?.photo : USER}
+                        alt="img patient"
+                        className={`${patientInfo?.photo ? "" : "bg-image"} w-100 h-350 object-fit-cover p-2 border`}
+                    /> : <img
+                        src={selectedFile ? URL.createObjectURL(selectedFile) : USER}
+                        alt="img patient"
+                        className={`${selectedFile ? "" : "bg-image"} w-100 h-350 object-fit-cover p-2 border`}
+                    /> : <div className="d-flex justify-content-center bg-light h-100">
+                        <div className="spinner-border my-auto" style={{ width: "5rem", height: "5rem" }} role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </div>
+                    </div>}
                     <input
                         type="file"
                         className="d-none"
@@ -282,9 +292,9 @@ const EditPatient = () => {
                         onChange={handleChangeImage}
                     />
                 </div>
-                {/* <button className="button button--small button--primary w-90 mx-auto mt-3">
-          {patientInfo?.photo ? "Edit" : "Add"} profile picture
-        </button> */}
+                <p className="button button--small button--primary w-100 mx-auto mt-3 p-3">
+                    {patientInfo?.photo ? "Edit" : "Add"} profile picture
+                </p>
             </div>
         );
     };

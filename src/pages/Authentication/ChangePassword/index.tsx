@@ -3,7 +3,7 @@ import { useState } from "react";
 import { defineConfigPost } from "../../../components/Common/utils";
 import { API_CHANGE_PASSWORD } from "../../../Contants/api.constant";
 import { useAppSelector } from "../../../redux/hooks";
-import { success, warn } from "../../../components/Common/notify";
+import { error, success, warn } from "../../../components/Common/notify";
 import { useNavigate } from "react-router-dom";
 
 
@@ -40,8 +40,13 @@ const ChangePassword = () => {
             .then((resp: any) => {
                 setIsLoading(false)
                 if (resp) {
-                    success(resp.data)
-                    setIsSuccess(true);
+                    const data = resp.data;
+                    if (data === "change pass successful") {
+                        success(data)
+                        setIsSuccess(true);
+                    } else {
+                        error(data)
+                    }
                 }
             })
             .catch((err: any) => {

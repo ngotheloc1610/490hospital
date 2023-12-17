@@ -116,10 +116,10 @@ const Doctors = () => {
         return (
             <div className='container'>
                 {doctorList && doctorList.map((doctor: any, idx: number) => {
-                    const name = doctor.practitioner.display;
-                    const src = doctor.practitionerTarget.photo[0].url;
-                    const listEducation = doctor.practitionerTarget?.qualification.filter((item:any) => item.code.coding[0].code === "Edu");
-            
+                    const name = doctor?.practitioner?.display;
+                    const src = doctor?.practitionerTarget?.photo[0].url;
+                    const listEducation = doctor.practitionerTarget?.qualification.filter((item: any) => item.code.coding[0].code === "Edu");
+
 
                     return (
                         <div className='row gy-3 py-3 mb-3' onClick={() => navigate(doctor.id)}>
