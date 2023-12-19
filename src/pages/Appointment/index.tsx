@@ -326,8 +326,8 @@ const Appointment = () => {
               onClick={() => handleBook()}
             >
               {isLoading && <span className="spinner-border" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </span>} <span className="ms-2">Book</span>
+                <span className="visually-hidden">Loading...</span>
+              </span>} <span className="ms-2">Book</span>
             </button>
             <button
               className="button button--gray"
@@ -389,12 +389,12 @@ const Appointment = () => {
               {listDoctor && listDoctor.map((item: any, idx: number) => {
                 const name = item?.practitioner.display;
                 const photo = item?.practitionerTarget?.photo[0];
-                const src = `data:${photo?.contentType};base64,${photo?.data}`;
+                const src = item?.photo[0]?.url;
 
                 return (
                   <div className={`col-6 row mb-3 ${item.id === doctor?.id ? "doctor-selected" : ""}`} onClick={() => setDoctor(item)}>
                     <div className='col-4'>
-                      <img src={src} alt="img doctor" />
+                      <img src={src} alt="img doctor" style={{ widows: "100px", height: "100px", objectFit: "cover" }} />
                     </div>
                     <div className='col-8'>
                       <h3 className='mb-3'>{name}</h3>
