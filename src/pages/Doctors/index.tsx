@@ -99,7 +99,7 @@ const Doctors = () => {
         return (
             <>
                 <option hidden>Specialty</option>
-                {specialtyList.length > 0 ? (
+                {specialtyList?.length > 0 ? (
                     specialtyList.map((item: any) => (
                         <option value={item.name} key={item.name}>
                             {item.name}
@@ -115,7 +115,7 @@ const Doctors = () => {
     const _renderListDoctor = () => {
         return (
             <div className='container'>
-                {doctorList && doctorList.map((doctor: any, idx: number) => {
+                {doctorList && doctorList.length > 0 && doctorList.map((doctor: any, idx: number) => {
                     const name = doctor?.practitioner?.display;
                     const src = doctor?.practitionerTarget?.photo[0].url;
                     const listEducation = doctor.practitionerTarget?.qualification.filter((item: any) => item.code.coding[0].code === "Edu");
