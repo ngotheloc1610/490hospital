@@ -3,6 +3,7 @@ export const KEY_LOCAL_STORAGE = {
     EXP: "exp",
     IAT: "iat",
     SUB: "sub",
+    IMAGE: "image",
 };
 
 export const GENERATED_MESSAGING_KEY = "BPtCV3KlXtPFOPeeOUJM_mH4TTBdHHiTg7AQkd0sbJlHBJDunqP4FUDNPG76zEg1ZJ6f34tc-r7_lrzyMEb8FUo"

@@ -4,6 +4,7 @@ import axios from "axios";
 import { API_FORGOT_PASSWORD, API_SEND_MAIL, API_VERIFY_CODE } from "../../../Contants/api.constant";
 import { error, success, warn } from "../../../components/Common/notify";
 import OTPInput from "otp-input-react";
+import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
   const url_api = process.env.REACT_APP_API_URL;
@@ -21,6 +22,8 @@ const ForgotPassword = () => {
   const [isVerifyCode, setIsVerifyCode] = useState<boolean>(false)
 
   const [isLoading, setIsLoading] = useState(false)
+
+  const navigate = useNavigate();
 
   const handleSendMail = () => {
     if (!email) {
@@ -238,7 +241,7 @@ const ForgotPassword = () => {
             You have successfully reset your
             <span className="text-center d-block mt-2">password.</span>
           </p>
-          <p className="text-center">Re-directing to your homepage...</p>
+          <p className="text-center fw-bold" onClick={() => navigate("/")}>Re-directing to your homepage...</p>
         </div>
       </div>
     );

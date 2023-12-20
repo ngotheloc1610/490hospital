@@ -4,7 +4,7 @@ import axios from "axios";
 
 import { LIST_TIME, TYPE_OF_APPOINTMENT } from "../../Contants";
 import { FORMAT_DATE, FORMAT_DATE_MONTH_YEAR, FORMAT_DATE_TIME, TOTAL_STEP } from "../../Contants/general.constant";
-import { DOCTOR, ICON_GRADUATION, ICON_PEOPLE_TEAM } from "../../assets";
+import { DOCTOR, ICON_GRADUATION, ICON_PEOPLE_TEAM, ICON_USER } from "../../assets";
 import { API_CREATE_APPOINTMENT, API_GET_DOCTOR_APPOINTMENT, API_GET_SLOT, API_GET_SPECIALTY_APPOINTMENT, API_PROFILE_PATIENT } from "../../Contants/api.constant";
 import { defineConfigGet, defineConfigPost } from "../../components/Common/utils";
 import { ISpecialty } from "../../interface/general.interface";
@@ -230,16 +230,19 @@ const Appointment = () => {
   };
 
   const disabled = (item: any) => {
-    if (timeBusy.length > 0) {
-      const existedBusy = timeBusy.find((time: any) => {
-        return moment(time.start).format("HH:mm:ss") === item.startTime && moment(time.end).format("HH:mm:ss") === item.endTime;
-      })
+    const currentDate = moment().format(FORMAT_DATE);
 
-      if (existedBusy) {
-        return true;
-      }
-      return false;
+    if (currentDate === date && moment(new Date(), "HH:mm:ss").isAfter(moment(item.endTime, "HH:mm:ss"))) {
+      return true;
     }
+
+    if (timeBusy.some((time: any) =>
+      moment(time.start).format("HH:mm:ss") === item.startTime &&
+      moment(time.end).format("HH:mm:ss") === item.endTime
+    )) {
+      return true;
+    }
+
     return false;
   }
 
@@ -266,7 +269,7 @@ const Appointment = () => {
         </div>
       )
     },
-    [triggerTime, timeBusy],
+    [triggerTime, timeBusy, date],
   )
 
   const _renderListSpecialty = () => {
@@ -386,15 +389,14 @@ const Appointment = () => {
           <div className="mt-3">
             <h5 className="fw-bold mb-3">Select Doctor</h5>
             <div className="row">
-              {listDoctor && listDoctor.map((item: any, idx: number) => {
+              {listDoctor && listDoctor.length > 0 ? listDoctor.map((item: any, idx: number) => {
                 const name = item?.practitioner.display;
-                const photo = item?.practitionerTarget?.photo[0];
-                const src = item?.photo[0]?.url;
+                const src = item?.practitionerTarget?.photo[0]?.url;
 
                 return (
                   <div className={`col-6 row mb-3 ${item.id === doctor?.id ? "doctor-selected" : ""}`} onClick={() => setDoctor(item)}>
                     <div className='col-4'>
-                      <img src={src} alt="img doctor" style={{ widows: "100px", height: "100px", objectFit: "cover" }} />
+                      <img src={src && src !== "null" ? src : ICON_USER} alt="img doctor" style={{ widows: "100px", height: "100px", objectFit: "cover" }} />
                     </div>
                     <div className='col-8'>
                       <h3 className='mb-3'>{name}</h3>
@@ -413,7 +415,7 @@ const Appointment = () => {
                     </div>
                   </div>
                 )
-              })}
+              }) : <p>No have doctor in {specialty}</p>}
             </div>
           </div>
 
@@ -456,6 +458,7 @@ const Appointment = () => {
   const _renderStep2 = () => {
     const specialtyCode = listSpecialty.find(item => item.name === specialty)?.code;
     const specialtyDisplay = listSpecialty.find(item => item.name === specialty)?.name;
+    const url = patient?.practitionerTarget?.photo[0]?.url;
 
     return (
       <div className="border border-3 rounded p-3">
@@ -463,7 +466,7 @@ const Appointment = () => {
           <p className="fw-bold text-uppercase">patient details</p>
           <div className="row">
             <div className="col-3">
-              <img src={DOCTOR} alt="img patient" />
+              <img src={url && url !== "null" ? url : ICON_USER} alt="img patient" />
             </div>
             <div className="col-9">
               <table className="table table-borderless">

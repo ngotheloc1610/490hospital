@@ -1,5 +1,5 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { DOCTOR, LOGO } from "../../assets";
+import { DOCTOR, ICON_USER, LOGO } from "../../assets";
 import { KEY_LOCAL_STORAGE } from "../../Contants/general.constant";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setId, setLogin } from "../../redux/features/auth/authSlice";
@@ -47,6 +47,7 @@ const Header = () => {
     localStorage.removeItem(KEY_LOCAL_STORAGE.IAT)
     localStorage.removeItem(KEY_LOCAL_STORAGE.EXP)
     localStorage.removeItem(KEY_LOCAL_STORAGE.SUB)
+    localStorage.removeItem(KEY_LOCAL_STORAGE.IMAGE)
 
     dispatch(setLogin(false));
     dispatch(setId(""));
@@ -54,6 +55,7 @@ const Header = () => {
     navigate("/login")
   }
 
+  const imageURL: any = localStorage.getItem(KEY_LOCAL_STORAGE.IMAGE)
 
   return (
     <header className="header">
@@ -108,7 +110,7 @@ const Header = () => {
           {isLogin ? <div className="dropdown">
             <a className="btn btn-secondary dropdown-toggle m-auto" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style={{ background: "transparent", border: "none" }}>
               <div className="d-flex mt-3">
-                <img src={DOCTOR} alt="" style={{ width: "40px", height: "40px", borderRadius: "100rem" }} />
+                <img src={imageURL ? imageURL : ICON_USER} alt="img" style={{ width: "40px", height: "40px", borderRadius: "100rem" }} />
                 <span className="m-auto ms-2 text-dark">{account} <i className="bi bi-caret-down-fill"></i></span>
               </div>
             </a>
