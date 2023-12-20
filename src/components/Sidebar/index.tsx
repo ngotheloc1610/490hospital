@@ -29,7 +29,7 @@ const Sidebar = () => {
       <h5 className="heading-title pt-5">You may be interested</h5>
 
       <div className="sidebar-contain">
-        {listSpecialty.map((item: ISpecialty) => {
+        {listSpecialty && listSpecialty.map((item: ISpecialty) => {
           return (
             <div className="row gy-3 py-3 mb-3" onClick={() => navigate(`/specialty/${item.id}`)}>
               <div className="col-6">

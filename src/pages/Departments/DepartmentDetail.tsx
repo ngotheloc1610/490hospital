@@ -87,13 +87,13 @@ const DepartmentDetail = () => {
                         <p className="lh-base">
                           {item.specialistTeamDescription}
                         </p>
-                        <button className="button button--large button--white text-uppercase fw-bold px-5 py-3 mt-3" onClick={() => navigate("/doctors")}>
-                          Go to doctor list
-                        </button>
                       </div>
                     </>
                   );
                 })}
+              <button className="button button--large button--white text-uppercase fw-bold px-5 py-3 mt-3" onClick={() => navigate("/doctors")}>
+                Go to doctor list
+              </button>
             </div>
           </div>
         </div>
