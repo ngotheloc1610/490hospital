@@ -29,6 +29,7 @@ export const API_GET_LIST_APPOINTMENT_PATIENT = "/patient/listAppointment/";
 export const API_UPDATE_PATIENT = "/patient/update_profile";
 export const API_PROFILE_PATIENT = "/patient/profile";
 export const API_CREATE_PATIENT = "/patient/create";
+export const API_VERIFY_CODE_CREATE = "/patient/verify";
 
 export const API_INBOX_ROOM_LIST = "/inbox-room";
 export const API_CREATE_ROOM = "/inbox-room/create/";
