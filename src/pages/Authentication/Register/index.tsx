@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { LOGO_HOSPITAL } from "../../../assets";
 import { GENDER_ALL } from "../../../Contants";
-import { defineConfigGet, defineConfigPost } from "../../../components/Common/utils";
+import { defineConfigGet } from "../../../components/Common/utils";
 import axios from "axios";
-import { API_CREATE_PATIENT } from "../../../Contants/api.constant";
+import { API_CREATE_PATIENT, API_VERIFY_CODE, API_VERIFY_CODE_CREATE } from "../../../Contants/api.constant";
 import { error, warn } from "../../../components/Common/notify";
 import { useNavigate } from "react-router-dom";
 import queryString from "query-string";
@@ -36,7 +36,7 @@ const Register = () => {
   }, [queryParam.code])
 
   const verifyCode = () => {
-    const url = `${url_api}${API_CREATE_PATIENT}`;
+    const url = `${url_api}${API_VERIFY_CODE_CREATE}`;
 
     axios
       .get(url, defineConfigGet({ code: queryParam.code }))
@@ -119,7 +119,7 @@ const Register = () => {
   }
 
   return (
-    <div className="register" onKeyDown={handleKeyEnter}>
+    <div className="register" >
       {isVerify ? <div className="forgot">
         <div className="forgot-container">
           <p className="icon-success mb-4">
@@ -131,7 +131,7 @@ const Register = () => {
           </p>
           <p className="text-center cursor-pointer text-reset" onClick={() => navigate("/login")}>Re-directing to login...</p>
         </div>
-      </div> : <div className="register-container">
+      </div> : <div className="register-container" onKeyDown={handleKeyEnter}>
         <div className="register-container-header">
           <img src={LOGO_HOSPITAL} alt="" />
           <h3>Register</h3>

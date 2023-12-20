@@ -132,7 +132,7 @@ const Login = () => {
         </div>
         <div className="login-container-footer mt-5">
           <p className="text-center fw-700">------------------------or-------------------------</p>
-          <button className="button w-100 button--large button--large--outline fw-bold" onClick={() => navigate("/register")}>
+          <button className="button w-100 button--large button--large--outline fw-bold" onClick={() => navigate("/patient/create")}>
             Create new account
           </button>
         </div>

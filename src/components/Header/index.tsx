@@ -122,7 +122,7 @@ const Header = () => {
               <li className="p-1 cursor-pointer"><span onClick={() => handleLogout()}>Log out</span></li>
             </ul>
           </div> : <div className="header-auth">
-            <Link to="/register" className="header-signin">
+            <Link to="/patient/create" className="header-signin">
               Sign up
             </Link>
             <Link to="/login" className="button button--primary">
