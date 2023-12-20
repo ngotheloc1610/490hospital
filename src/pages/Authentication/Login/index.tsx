@@ -3,7 +3,7 @@ import { LOGO_HOSPITAL } from "../../../assets";
 import { useState } from "react";
 import axios from "axios";
 import { defineConfigPost } from "../../../components/Common/utils";
-import { API_LOGIN } from "../../../Contants/api.constant";
+import { API_LOGIN, API_PROFILE_PATIENT } from "../../../Contants/api.constant";
 import { KEY_LOCAL_STORAGE } from "../../../Contants/general.constant";
 import { JwtPayload, jwtDecode } from "jwt-decode";
 import { useAppDispatch } from "../../../redux/hooks";
@@ -39,7 +39,7 @@ const Login = () => {
           const accessToken = resp.data.accessToken;
 
           localStorage.setItem(KEY_LOCAL_STORAGE.AUTHEN, accessToken);
-
+          getPatientDetail()
           const decoded: any = jwtDecode<JwtPayload>(accessToken);
           localStorage.setItem(KEY_LOCAL_STORAGE.EXP, decoded.exp);
           localStorage.setItem(KEY_LOCAL_STORAGE.IAT, decoded.iat);
@@ -54,6 +54,22 @@ const Login = () => {
         console.log("error Login:", err);
       });
   }
+
+  const getPatientDetail = () => {
+    const url = `${url_api}${API_PROFILE_PATIENT}`;
+
+    axios
+      .get(url, defineConfigPost())
+      .then((resp: any) => {
+        if (resp) {
+          localStorage.setItem(KEY_LOCAL_STORAGE.IMAGE, resp.data?.photo)
+        }
+      })
+      .catch((err) => {
+        console.log("error get info patient:", err);
+      });
+  }
+
 
   const handleKeyEnter = (event: any) => {
     if (gmail !== '' && password !== '') {

@@ -67,7 +67,7 @@ const Register = () => {
     setIsLoading(true);
 
     axios
-      .post(url, params, defineConfigPost())
+      .post(url, params, defineConfigGet({ code: "" }))
       .then((resp: any) => {
         setIsLoading(false)
         if (resp) {

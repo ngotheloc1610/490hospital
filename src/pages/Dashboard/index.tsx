@@ -43,7 +43,12 @@ const Dashboard = () => {
           const data = resp.data.content;
           if (data.length > 9) {
             const dataChuck = chunkArraySplice(data, 9);
-            setListDoctor(dataChuck);
+            if (dataChuck.length > 3) {
+              const newData = dataChuck.slice(0, 3);
+              setListDoctor(newData);
+            } else {
+              setListDoctor(dataChuck);
+            }
             setIsChuckDoctor(true);
             return;
           }

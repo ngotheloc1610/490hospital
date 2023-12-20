@@ -168,7 +168,7 @@ const ChangePassword = () => {
                         You have successfully change your
                         <span className="text-center d-block mt-2">password.</span>
                     </p>
-                    <p className="text-center cursor-pointer text-reset" onClick={() => navigate("/")}>Re-directing to your homepage...</p>
+                    <p className="text-center cursor-pointer text-reset fw-bold" onClick={() => navigate("/")}>Re-directing to your homepage...</p>
                 </div>
             </div>
         );
