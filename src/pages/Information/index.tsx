@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import moment from "moment";
 import { FORMAT_DATE_MONTH_YEAR } from "../../Contants/general.constant";
 import PopUpCancel from "./PopUpCancel";
+import { setIdAppointment } from "../../redux/features/appointment/appointmentSlice";
 
 const Information = () => {
     const [currentPage, setCurrentPage] = useState<number>(0);
@@ -165,18 +166,18 @@ const Information = () => {
                                 {listAppointment && listAppointment.length > 0 && listAppointment.map((item: any, idx: number) => {
                                     return (
                                         <tr className={`${idx % 2 === 1 ? "table-light" : ""}`} >
-                                            <td onClick={() => navigate(`/information/diagnostic/${item.idEncounter}`)}>
+                                            <td onClick={() => { navigate(`/information/diagnostic/${item.idEncounter}`); dispatch(setIdAppointment(item?.idAppointment)) }}>
                                                 {item.patientName}
                                             </td>
 
-                                            <td onClick={() => navigate(`/information/diagnostic/${item.idEncounter}`)}>{convertToDate(item.appointDate)}</td>
-                                            <td onClick={() => navigate(`/information/diagnostic/${item.idEncounter}`)}>
+                                            <td onClick={() => { navigate(`/information/diagnostic/${item.idEncounter}`); dispatch(setIdAppointment(item?.idAppointment)) }}>{convertToDate(item.appointDate)}</td>
+                                            <td onClick={() => { navigate(`/information/diagnostic/${item.idEncounter}`); dispatch(setIdAppointment(item?.idAppointment)) }}>
                                                 <span>{convertToTime(item.appointmentTimeStart)} </span>
                                                 <span> - </span>
                                                 <span>{convertToTime(item.appointmentTimeEnd)}</span>
                                             </td>
-                                            <td onClick={() => navigate(`/information/diagnostic/${item.idEncounter}`)}>{item.doctorName}</td>
-                                            <td onClick={() => navigate(`/information/diagnostic/${item.idEncounter}`)}>
+                                            <td onClick={() => { navigate(`/information/diagnostic/${item.idEncounter}`); dispatch(setIdAppointment(item?.idAppointment)) }}>{item.doctorName}</td>
+                                            <td onClick={() => { navigate(`/information/diagnostic/${item.idEncounter}`); dispatch(setIdAppointment(item?.idAppointment)) }}>
                                                 <p className={`${styleStatus(item.status)} text-center d-inline-block mb-0`}>{item.status}</p>
                                             </td>
                                             <td>

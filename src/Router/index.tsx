@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter as BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 
 import Login from "../pages/Authentication/Login";
@@ -60,7 +60,7 @@ const RouterDom = () => {
           </Route>
 
           <Route path="/login" element={<Login />} />
-          <Route path="/patient/create" element={<Register />} />
+          <Route path="/patient/verify" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/chat" element={<Chat />} />

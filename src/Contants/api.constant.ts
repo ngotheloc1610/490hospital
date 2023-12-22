@@ -22,13 +22,13 @@ export const API_GET_DETAIL_APPOINTMENT = "/appointment/detail/";
 export const API_GET_SPECIALTY_APPOINTMENT = "/appointment/specialty";
 export const API_GET_DOCTOR_APPOINTMENT = "/appointment/doctor";
 export const API_GET_SLOT = "/appointment/schedule";
-export const API_CREATE_APPOINTMENT = "/appointment/patient/create";
+export const API_CREATE_APPOINTMENT = "/appointment/patient/verify";
 export const API_CANCEL_APPOINTMENT = "/appointment/patientCancelAppointment/";
 
 export const API_GET_LIST_APPOINTMENT_PATIENT = "/patient/listAppointment/";
 export const API_UPDATE_PATIENT = "/patient/update_profile";
 export const API_PROFILE_PATIENT = "/patient/profile";
-export const API_CREATE_PATIENT = "/patient/create";
+export const API_CREATE_PATIENT = "/patient/verify";
 export const API_VERIFY_CODE_CREATE = "/patient/verify";
 
 export const API_INBOX_ROOM_LIST = "/inbox-room";

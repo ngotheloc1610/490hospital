@@ -50,8 +50,7 @@ const Specialty = () => {
       .get(url, defineConfigGet({ page: currentPage, size: itemPerPage }))
       .then((resp: any) => {
         if (resp) {
-          setListSpecialty(resp.data.content);
-          setTotalItem(resp.data.totalElements);
+          setListSpecialty(resp.data);
         }
       })
       .catch((err: any) => {
@@ -70,7 +69,7 @@ const Specialty = () => {
             Experience high quality medical services that meet international standards at SEP490 Hospital
           </p>
           <div className="service-container">
-            {listSpecialty.map((item: ISpecialty, idx: number) => {
+            {listSpecialty && listSpecialty.length > 0 ? listSpecialty.map((item: ISpecialty, idx: number) => {
               return (
                 <div
                   className="row gy-3 mb-5 py-3 cursor-pointer"
@@ -87,7 +86,7 @@ const Specialty = () => {
                   </div>
                 </div>
               );
-            })}
+            }) : <p>Không có dữ liệu!</p>}
             <PaginationComponent
               totalItem={totalItem}
               itemPerPage={itemPerPage}
