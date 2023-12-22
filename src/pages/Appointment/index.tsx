@@ -196,8 +196,13 @@ const Appointment = () => {
     axios.post(url, params, defineConfigPost()).then((resp: any) => {
       setIsLoading(false)
       if (resp) {
-        success(resp.data);
-        setIsBooking(true);
+        if (resp.data === "Book successful") {
+          success(resp.data)
+          setIsBooking(true);
+        } else {
+          error(resp.data)
+          setIsBooking(false);
+        }
       }
     }).catch((err: any) => {
       setIsBooking(false);

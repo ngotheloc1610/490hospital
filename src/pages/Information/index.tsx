@@ -90,7 +90,7 @@ const Information = () => {
                 <>
                     <div>
                         <div className="pb-3 mb-3 d-flex justify-content-between">
-                            <h3 className="fw-bold text-uppercase">{patient?.nameFirstRep?.text}</h3>
+                            <h3 className="fw-bold text-uppercase">{patient?.name}</h3>
                             <div>
                                 <button className="button button--info me-3" onClick={() => {
                                     navigate("/change-password");

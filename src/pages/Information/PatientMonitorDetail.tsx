@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { USER } from "../../assets";
-import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,7 +13,7 @@ import { API_DIAGNOSTIC_BOOK_DETAIL, API_DIAGNOSTIC_CONDITION_BY_PATIENT, API_DI
 import { convertToDate, convertToTime, defineConfigPost, styleStatus } from "../../components/Common/utils";
 import axios from "axios";
 import moment from "moment";
-import { FORMAT_DATE, FORMAT_DATE_MONTH_YEAR } from "../../Contants/general.constant";
+import { FORMAT_DATE_MONTH_YEAR } from "../../Contants/general.constant";
 import { useParams } from "react-router-dom";
 import { useAppSelector } from "../../redux/hooks";
 
@@ -44,7 +43,11 @@ const PatientMonitorDetail = () => {
   const [listPreviousEncounter, setListPreviousEncounter] = useState<any>([]);
   const [listUpcomingAppointment, setListUpcomingAppointment] = useState<any>([]);
   const [listEncounterHistory, setListEncounterHistory] = useState<any>([]);
-  const [observations, setObservations] = useState<any>([]);
+  const [indexHeartRate, setIndexHeartRate] = useState<any>(null);
+  const [indexBloodPressure, setIndexBloodPressure] = useState<any>(null);
+  const [indexBloodGlucose, setIndexBloodGlucose] = useState<any>(null);
+  const [indexTemperature, setIndexTemperature] = useState<any>(null);
+  const [indexBMI, setIndexBMI] = useState<any>(null);
 
   const { idAppointment } = useAppSelector(state => state.appointmentSlice);
 
@@ -52,16 +55,16 @@ const PatientMonitorDetail = () => {
     if (idAppointment) {
       getProfilePatient(idAppointment)
       getBookingDetail(idAppointment)
+      getUpcomingAppointment(idAppointment)
+      getEncounterHistory(idAppointment)
     }
   }, [idAppointment])
 
 
   useEffect(() => {
     if (params.encounterId && params.encounterId !== "null") {
-      getPreviousEncounter(params.encounterId)
-      getUpcomingAppointment(params.encounterId)
-      getEncounterHistory(params.encounterId)
       getObservations(params.encounterId)
+      getPreviousEncounter(params.encounterId)
     }
   }, [params.encounterId])
 
@@ -110,8 +113,8 @@ const PatientMonitorDetail = () => {
       });
   }
 
-  const getUpcomingAppointment = (encounterId: string) => {
-    const url = `${url_api}${API_DIAGNOSTIC_UPCOMING}${encounterId}`;
+  const getUpcomingAppointment = (idAppointment: string) => {
+    const url = `${url_api}${API_DIAGNOSTIC_UPCOMING}${idAppointment}`;
 
     axios
       .get(url, defineConfigPost())
@@ -125,8 +128,8 @@ const PatientMonitorDetail = () => {
       });
   }
 
-  const getEncounterHistory = (encounterId: string) => {
-    const url = `${url_api}${API_DIAGNOSTIC_ENCOUNTER_HISTORY}${encounterId}`;
+  const getEncounterHistory = (idAppointment: string) => {
+    const url = `${url_api}${API_DIAGNOSTIC_ENCOUNTER_HISTORY}${idAppointment}`;
 
     axios
       .get(url, defineConfigPost())
@@ -147,7 +150,12 @@ const PatientMonitorDetail = () => {
       .get(url, defineConfigPost())
       .then((resp: any) => {
         if (resp) {
-          setObservations(resp.data);
+          const data = resp.data;
+          setIndexHeartRate(data?.filter((item: any) => item?.name === "Heart rate")?.[0])
+          setIndexBMI(data?.filter((item: any) => item?.name === "BMI")?.[0])
+          setIndexBloodGlucose(data?.filter((item: any) => item?.name === "Blood Glucose")?.[0])
+          setIndexBloodPressure(data?.filter((item: any) => item?.name === "Blood Pressure")?.[0])
+          setIndexTemperature(data?.filter((item: any) => item?.name === "Temperature")?.[0])
         }
       })
       .catch((err: any) => {
@@ -169,8 +177,6 @@ const PatientMonitorDetail = () => {
               <th scope="col">Condition Name</th>
               <th scope="col">Body site</th>
               <th scope="col">Severity</th>
-              <th scope="col">Clinical Status</th>
-              <th scope="col">Onset</th>
               <th scope="col">Recorded date</th>
               <th scope="col">Note</th>
               <th scope="col">Encounter</th>
@@ -184,8 +190,6 @@ const PatientMonitorDetail = () => {
                   <td>{item?.conditionName}</td>
                   <td>{item?.bodySite}</td>
                   <td>{item?.severity}</td>
-                  <td>{item?.clinicalStatus}</td>
-                  <td>{item?.onset}</td>
                   <td>{item.recordedDate ? moment(item.recordedDate).format(FORMAT_DATE_MONTH_YEAR) : ""}</td>
                   <td>{item?.note}</td>
                   <td>{item.encounterDate ? moment(item.encounterDate).format(FORMAT_DATE_MONTH_YEAR) : ""}</td>
@@ -311,9 +315,9 @@ const PatientMonitorDetail = () => {
                       style={{ color: "#FF0000" }}
                     ></i>
                   </p>
-                  <p className="fw-bold mb-1">N/A</p>
+                  <p className="fw-bold mb-1">{indexHeartRate?.value ? indexHeartRate?.value : "N/A"}</p>
                   <p className="mb-1">BPM</p>
-                  <p className="mb-0">N/A</p>
+                  <p className="mb-0">{indexHeartRate?.interpretations ? indexHeartRate?.interpretations : "N/A"}</p>
                 </div>
                 <div
                   className="box box-item p-3 text-center"
@@ -325,9 +329,9 @@ const PatientMonitorDetail = () => {
                       style={{ color: "#FF0000" }}
                     ></i>
                   </p>
-                  <p className="fw-bold mb-1">N/A</p>
+                  <p className="fw-bold mb-1">{indexBloodPressure?.value ? indexBloodPressure?.value : "N/A"}</p>
                   <p className="mb-1">mmHg</p>
-                  <p className="mb-0">N/A</p>
+                  <p className="mb-0">{indexBloodPressure?.interpretations ? indexBloodPressure?.interpretations : "N/A"}</p>
                 </div>
                 <div
                   className="box box-item p-3 text-center"
@@ -339,9 +343,9 @@ const PatientMonitorDetail = () => {
                       style={{ color: "#FF0000" }}
                     ></i>
                   </p>
-                  <p className="fw-bold mb-1">N/A</p>
+                  <p className="fw-bold mb-1">{indexBloodGlucose?.value ? indexBloodGlucose?.value : "N/A"}</p>
                   <p className="mb-1">mmol/L</p>
-                  <p className="mb-0">N/A</p>
+                  <p className="mb-0">{indexBloodGlucose?.interpretations ? indexBloodGlucose?.interpretations : "N/A"}</p>
                 </div>
                 <div
                   className="box box-item p-3 text-center"
@@ -350,9 +354,9 @@ const PatientMonitorDetail = () => {
                   <p>
                     <i className="bi bi-thermometer-high fs-1"></i>
                   </p>
-                  <p className="fw-bold mb-1">N/A</p>
+                  <p className="fw-bold mb-1">{indexTemperature?.value ? indexTemperature?.value : "N/A"}</p>
                   <p className="mb-1">&deg;C</p>
-                  <p className="mb-0">N/A</p>
+                  <p className="mb-0">{indexTemperature?.interpretations ? indexTemperature?.interpretations : "N/A"}</p>
                 </div>
                 <div
                   className="box box-item p-3 text-center"
@@ -361,9 +365,9 @@ const PatientMonitorDetail = () => {
                   <p>
                     <i className="bi bi-person-fill fs-1"></i>
                   </p>
-                  <p className="fw-bold mb-1">N/A</p>
+                  <p className="fw-bold mb-1">{indexBMI?.value ? indexBMI?.value : "N/A"}</p>
                   <p className="mb-1">N/A</p>
-                  <p className="mb-0">N/A</p>
+                  <p className="mb-0">{indexBMI?.interpretations ? indexBMI?.interpretations : "N/A"}</p>
                 </div>
               </div>
             </div>

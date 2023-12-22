@@ -59,7 +59,7 @@ const Doctors = () => {
 
         axios.get(url, defineConfigGet({})).then((resp: any) => {
             if (resp) {
-                setSpecialtyList(resp.data.content);
+                setSpecialtyList(resp.data);
             }
         }).catch((err: any) => {
             console.log("err:", err)
