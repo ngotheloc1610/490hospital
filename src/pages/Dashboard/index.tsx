@@ -68,7 +68,7 @@ const Dashboard = () => {
       .get(url, defineConfigGet({ page: START_PAGE, size: 9 }))
       .then((resp: any) => {
         if (resp) {
-          const data = resp.data.content;
+          const data = resp.data;
           if (data.length > 3) {
             const dataChuck = chunkArraySplice(data, 3);
             setListSpecialty(dataChuck);

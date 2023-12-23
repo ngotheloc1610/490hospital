@@ -227,8 +227,6 @@ button {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-
-
   }
 }
 
@@ -237,6 +235,7 @@ button {
   background: #b3e5fc;
   color: #1a8fe3;
   padding: 5px;
+  text-transform: capitalize;
 }
 
 .canceled {
@@ -244,6 +243,7 @@ button {
   background: rgba(255, 59, 59, 0.14);
   color: #ff3b3b;
   padding: 5px;
+  text-transform: capitalize;
 }
 
 .fulfilled {
@@ -251,6 +251,7 @@ button {
   background: #c8e6c9;
   color: #0ea961;
   padding: 5px;
+  text-transform: capitalize;
 }
 
 .booked {
@@ -258,6 +259,7 @@ button {
   background: #daccd0;
   color: #a90e47;
   padding: 5px;
+  text-transform: capitalize;
 }
 
 .box {

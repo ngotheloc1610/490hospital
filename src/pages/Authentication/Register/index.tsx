@@ -3,7 +3,7 @@ import { LOGO_HOSPITAL } from "../../../assets";
 import { GENDER_ALL } from "../../../Contants";
 import { defineConfigGet } from "../../../components/Common/utils";
 import axios from "axios";
-import { API_CREATE_PATIENT, API_VERIFY_CODE, API_VERIFY_CODE_CREATE } from "../../../Contants/api.constant";
+import { API_CREATE_PATIENT, API_VERIFY_CODE_CREATE } from "../../../Contants/api.constant";
 import { error, warn } from "../../../components/Common/notify";
 import { useNavigate } from "react-router-dom";
 import queryString from "query-string";
@@ -25,15 +25,16 @@ const Register = () => {
   const [isVerify, setIsVerify] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-
   const url_api = process.env.REACT_APP_API_URL;
 
   const paramStr = window.location.search;
   const queryParam = queryString.parse(paramStr);
 
   useEffect(() => {
-    verifyCode();
-  }, [queryParam.code])
+    if (!queryParam) {
+      verifyCode();
+    }
+  }, [queryParam])
 
   const verifyCode = () => {
     const url = `${url_api}${API_VERIFY_CODE_CREATE}`;
@@ -42,7 +43,7 @@ const Register = () => {
       .get(url, defineConfigGet({ code: queryParam.code }))
       .then((resp: any) => {
         if (resp) {
-          resp.include("verify_success") ? setIsVerify(true) : setIsVerify(false);
+          resp.include("success") ? setIsVerify(true) : setIsVerify(false);
         }
       })
       .catch((err: any) => {
@@ -79,11 +80,16 @@ const Register = () => {
       .catch((err: any) => {
         console.log("error create patient:", err);
         setIsLoading(false)
-        error(err.response?.data?.error || err.response?.data?.error?.message || err.response?.data?.error?.code);
+        error(err.response?.data?.error?.code);
       });
   };
 
   const handleRegister = () => {
+    const currentDate = new Date().toISOString()
+    const birthDate = new Date(birthday).toISOString()
+    if (birthDate > currentDate) {
+      warn("Invalid birthday!");
+    }
     if (
       gmail &&
       password &&
@@ -97,10 +103,10 @@ const Register = () => {
       if (password === cfPassword) {
         registerPatient();
       } else {
-        warn("Mật khẩu không trùng khớp!");
+        warn("Passwords do not match!");
       }
     } else {
-      warn("Bạn chưa điền hết thông tin!");
+      warn("You have not filled in all the information!");
     }
   };
 

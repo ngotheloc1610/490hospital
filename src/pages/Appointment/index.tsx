@@ -213,20 +213,20 @@ const Appointment = () => {
   }
 
   const handleNext = () => {
+    if (!isLogin) {
+      warn("You are not logged in! Please log in before booking");
+      return;
+    }
     if (typeOfAppointment && specialty && doctor && date && startTime && endTime) {
       setIsPassStep1(true);
       setStep(step + 1);
     } else {
-      warn("Chưa điền hết thông tin!");
+      warn("You have not filled in all the information!");
     }
   };
 
   const handleBook = () => {
-    if (isLogin) {
-      createAppointment();
-    } else {
-      warn("Bạn chưa đăng nhập! Vui lòng đăng nhập trước khi book lịch");
-    }
+    createAppointment();
   };
 
   const handleCancel = () => {
@@ -400,8 +400,8 @@ const Appointment = () => {
 
                 return (
                   <div className={`col-6 row mb-3 ${item.id === doctor?.id ? "doctor-selected" : ""}`} onClick={() => setDoctor(item)}>
-                    <div className='col-4'>
-                      <img src={src && src !== "null" ? src : ICON_USER} alt="img doctor" style={{ widows: "100px", height: "100px", objectFit: "cover" }} />
+                    <div className='col-4 border'>
+                      <img src={src && src !== "null" ? src : ICON_USER} alt="img doctor" className="w-100 mt-2" style={{ height: "100px", objectFit: "cover" }} />
                     </div>
                     <div className='col-8'>
                       <h3 className='mb-3'>{name}</h3>
@@ -546,7 +546,7 @@ const Appointment = () => {
               </tr>
               <tr>
                 <td>Status</td>
-                <td><span className="text-warning">No Show</span></td>
+                <td><span className="text-warning">Pending</span></td>
               </tr>
             </tbody>
           </table>

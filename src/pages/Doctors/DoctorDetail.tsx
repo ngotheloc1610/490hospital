@@ -50,7 +50,7 @@ const DoctorDetail = () => {
         if (isLogin) {
             navigate("/appointment");
         } else {
-            warn("Bạn cần đăng nhập trước khi book lịch");
+            warn("You need to log in before booking!");
         }
     }
 

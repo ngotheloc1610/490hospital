@@ -15,7 +15,7 @@ import DEPARTMENT_BG from "./images/department_bg.png";
 import DOCTOR_BG from "./images/bg_doctor.jpg";
 import SIDEBAR from "./images/sidebar.png";
 import USER from "./images/user.png";
-import BG_ABOUT_US from "./images/bg-about.png";
+import BG_ABOUT_US from "./images/bg-about.jpg";
 
 import { ReactComponent as ICON_CARDIOLOGIST } from "./icons/cardiologist.svg";
 import { ReactComponent as ICON_COVID } from "./icons/covid.svg";

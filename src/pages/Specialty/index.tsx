@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Outlet, useNavigate, useOutlet } from "react-router-dom";
 
-import { API_ALL_GET_SPECIALTY } from "../../Contants/api.constant";
+import { API_ALL_GET_SPECIALTIES, API_ALL_GET_SPECIALTY } from "../../Contants/api.constant";
 import { PAGE_SIZE_SERVICE, START_PAGE } from "../../Contants/general.constant";
 import { ISpecialty } from "../../interface/general.interface";
 
@@ -44,13 +44,14 @@ const Specialty = () => {
   const url_api = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
-    const url = `${url_api}${API_ALL_GET_SPECIALTY}`;
+    const url = `${url_api}${API_ALL_GET_SPECIALTIES}`;
 
     axios
       .get(url, defineConfigGet({ page: currentPage, size: itemPerPage }))
       .then((resp: any) => {
         if (resp) {
-          setListSpecialty(resp.data);
+          setListSpecialty(resp.data.content);
+          setTotalItem(resp.data.totalElements)
         }
       })
       .catch((err: any) => {

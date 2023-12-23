@@ -31,14 +31,6 @@ const AboutUs = () => {
             <div className="container mt-5">
                 <h3 className="text-uppercase border-bottom pb-3">About us</h3>
                 {_renderExperienceOfBusiness()}
-                <div className="mb-3">
-                    <div className="p-3 bg-light text-dark">
-                        <p>SEP490 is a Capstone Project Hospital.</p>
-                        <p>SEP490 Hospital is a Capstone Project under the FPT University (Registered Charity No. 20000490) and is administered and managed in accordance with a Hospital Constitution approved by the FPT University. The current Hospital Constitution was approved in 2013. The property is vested in Vietnam.</p>
-                        <p>
-                            The Hospital has a total of 50 experts and has served 15 thousand happy patients. The In-Patient specialties are General Medicine, General Surgery and Gynaecology. We also have an Urgent Care Centre incorporating a Local Injuries Unit and Medical Assessment Unit.</p>
-                    </div>
-                </div>
                 <img src={BG_ABOUT_US} alt="object-fit-cover" />
                 <div className="mt-3 mb-5">
                     <div className="p-3 bg-light text-dark">

@@ -6,6 +6,7 @@ export const API_CHANGE_PASSWORD = "/password/changePass/";
 export const API_VERIFY_CODE = "/password/verify";
 
 export const API_ALL_GET_SPECIALTY = "/homepage/listSpecialty";
+export const API_ALL_GET_SPECIALTIES = "/homepage/specialties";
 export const API_GET_SPECIALTY = "/homepage/Specialty/detail/";
 export const API_GET_DOCTOR_FOR_SPECIALTY = "/homepage/specialty/listDoctor"
 
@@ -28,7 +29,7 @@ export const API_CANCEL_APPOINTMENT = "/appointment/patientCancelAppointment/";
 export const API_GET_LIST_APPOINTMENT_PATIENT = "/patient/listAppointment/";
 export const API_UPDATE_PATIENT = "/patient/update_profile";
 export const API_PROFILE_PATIENT = "/patient/profile";
-export const API_CREATE_PATIENT = "/patient/verify";
+export const API_CREATE_PATIENT = "/patient/create";
 export const API_VERIFY_CODE_CREATE = "/patient/verify";
 
 export const API_INBOX_ROOM_LIST = "/inbox-room";

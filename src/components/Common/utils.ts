@@ -43,13 +43,13 @@ export const convertToTime = (time: string) => {
 
 export const styleStatus = (status: string) => {
     switch (status) {
-        case "No Show":
+        case "no show":
             return "no-show";
-        case "Cancel":
+        case "cancel":
             return "canceled";
-        case "Fulfilled":
+        case "fulfilled":
             return "fulfilled";
-        case "Booked":
+        case "booked":
             return "booked";
         default:
             return;

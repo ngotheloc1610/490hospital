@@ -69,7 +69,10 @@ const DepartmentDetail = () => {
             <h3 className="mb-3">SPECIALTY SERVICES</h3>
             {listSpecialty &&
               listSpecialty.map((item: any) => {
-                return <p>{item.detail}</p>;
+                return <div className="mb-3">
+                  <p className="fw-bold">{item?.name}</p>
+                  <p>{item?.description}</p>
+                </div>;
               })}
           </div>
 
