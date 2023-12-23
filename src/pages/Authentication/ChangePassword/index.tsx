@@ -57,16 +57,16 @@ const ChangePassword = () => {
 
     const handleChangePassword = () => {
         if (!oldPassword) {
-            warn("Vui lòng nhập mật khẩu cũ!");
+            warn("Please enter old password!");
             return;
         }
         if (oldPassword === password) {
-            warn("Trùng với mật khẩu cũ ! Vui lòng nhập lại.");
+            warn("Same as old password! Please re-enter.");
             return;
         }
 
         if (password !== cfPassword) {
-            warn("Mật khẩu không trùng khớp!");
+            warn("Passwords do not match!");
             return;
         }
         changePassword()
