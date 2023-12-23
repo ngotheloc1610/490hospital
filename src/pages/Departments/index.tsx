@@ -47,7 +47,7 @@ const Departments = () => {
         <div className="our-department-container">
           <h3 className="mb-3 fs-1 fw-bold">Our Departments</h3>
           <p className="color-primary mb-3">
-            Experience high quality medical services that meet international standards at SEP490 Hospital
+            Experience Exceptional Medical Services Adhering to International Standards at SEP490 Hospital
           </p>
           <div className="mt- 5">
             <div className="row gy-3">
@@ -55,7 +55,7 @@ const Departments = () => {
                 return (
                   <div className="col-4" onClick={() => navigate(item.id)}>
                     <div className="d-flex">
-                      <img src={item.photo} alt="img department" style={{width:"150px", height:"150px", objectFit:"cover", borderRadius:"100rem"}}/>
+                      <img src={item.photo} alt="img department" style={{ width: "150px", height: "150px", objectFit: "cover", borderRadius: "100rem" }} />
                       <span className="my-auto ms-3 color-gray-light">
                         {item.title}
                       </span>

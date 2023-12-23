@@ -49,8 +49,14 @@ export const styleStatus = (status: string) => {
             return "canceled";
         case "fulfilled":
             return "fulfilled";
+        case "pending":
+            return "pending";
+        case "proposed":
+            return "proposed";
         case "booked":
             return "booked";
+        case "arrived":
+            return "arrived";
         default:
             return;
     }

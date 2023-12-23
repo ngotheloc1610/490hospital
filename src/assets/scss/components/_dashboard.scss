@@ -1,5 +1,6 @@
 .dashboard {
   .banner {
+
     .carousel-inner {
       width: 80%;
       margin: auto;
@@ -9,6 +10,7 @@
       background-image: url("../../images/arrow_left.png");
       height: 3rem;
     }
+
     .carousel-control-next-icon {
       background-image: url("../../images/arrow_right.png");
       height: 3rem;
@@ -16,6 +18,7 @@
 
     h3 {
       font-weight: bold;
+
       &::before {
         border-top: 3px solid #333;
       }
@@ -31,6 +34,7 @@
     padding: 150px 0px 160px 0px;
     background-color: #f2fcfb;
     line-height: 3rem;
+
     .heading-title {
       width: 75%;
       margin-bottom: 100px;
@@ -39,15 +43,11 @@
     .box-item {
       width: 100%;
       border-radius: 40px;
-      background: var(
-        --thin-light-blue,
-        linear-gradient(
-          180deg,
-          #c5dcff 0%,
-          rgba(197, 220, 255, 0.5) 96.87%,
-          rgba(196, 196, 196, 0) 100%
-        )
-      );
+      background: var(--thin-light-blue,
+          linear-gradient(180deg,
+            #c5dcff 0%,
+            rgba(197, 220, 255, 0.5) 96.87%,
+            rgba(196, 196, 196, 0) 100%));
       box-shadow: -1px 5px 5px 5px rgba(144, 131, 213, 0.35);
 
       img {
@@ -74,6 +74,7 @@
       height: 4rem;
       width: 4rem;
     }
+
     .carousel-control-next-icon {
       background-image: url("../../images/Right.png");
       height: 4rem;
@@ -88,10 +89,11 @@
       }
 
       button {
+        margin-top: 50px;
         background-color: $gray-color;
-        width: 15px;
-        height: 15px;
-        border-radius: 100rem !important;
+        width: 25px;
+        height: 25px;
+        border-radius: 1000rem;
       }
     }
   }
@@ -138,6 +140,7 @@
       height: 3rem;
       width: 3rem;
     }
+
     .carousel-control-next-icon {
       background-image: url("../../images/Right.png");
       height: 3rem;
@@ -152,9 +155,10 @@
       }
 
       button {
+        margin-top: 50px;
         background-color: $gray-color;
-        width: 15px;
-        height: 15px;
+        width: 25px;
+        height: 25px;
         border-radius: 100rem !important;
       }
     }
@@ -174,7 +178,8 @@
       font-size: 14px;
       font-style: normal;
       font-weight: 700;
-      line-height: 24px; /* 171.429% */
+      line-height: 24px;
+      /* 171.429% */
       letter-spacing: 0.2px;
     }
   }

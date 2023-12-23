@@ -32,8 +32,13 @@ const Dashboard = () => {
 
   const { isLogin } = useAppSelector((state) => state.authSlice);
 
-  //Get all doctor
   useEffect(() => {
+    getDoctor()
+    getDepartment()
+    getSpecialty()
+  }, []);
+
+  const getDoctor = () => {
     const url = `${url_api}${API_ALL_GET_DOCTOR}`;
 
     axios
@@ -58,33 +63,9 @@ const Dashboard = () => {
       .catch((err: any) => {
         console.log("err:", err);
       });
-  }, []);
+  }
 
-  //Get all specialty
-  useEffect(() => {
-    const url = `${url_api}${API_ALL_GET_SPECIALTY}`;
-
-    axios
-      .get(url, defineConfigGet({ page: START_PAGE, size: 9 }))
-      .then((resp: any) => {
-        if (resp) {
-          const data = resp.data;
-          if (data.length > 3) {
-            const dataChuck = chunkArraySplice(data, 3);
-            setListSpecialty(dataChuck);
-            setIsChuckSpecialty(true);
-            return;
-          }
-          setListSpecialty(data);
-        }
-      })
-      .catch((err: any) => {
-        console.log("err:", err);
-      });
-  }, []);
-
-  //Get all department
-  useEffect(() => {
+  const getDepartment = () => {
     const url = `${url_api}${API_ALL_GET_DEPARTMENT}`;
 
     axios
@@ -97,7 +78,34 @@ const Dashboard = () => {
       .catch((err: any) => {
         console.log("err:", err);
       });
-  }, []);
+  }
+
+  const getSpecialty = () => {
+    const url = `${url_api}${API_ALL_GET_SPECIALTY}`;
+
+    axios
+      .get(url, defineConfigGet({ page: START_PAGE, size: 9 }))
+      .then((resp: any) => {
+        if (resp) {
+          const data = resp.data;
+          if (data.length > 3) {
+            const dataChuck = chunkArraySplice(data, 3);
+            if (dataChuck.length > 3) {
+              const newData = dataChuck.slice(0, 3);
+              setListSpecialty(newData);
+            } else {
+              setListSpecialty(dataChuck);
+            }
+            setIsChuckSpecialty(true);
+            return;
+          }
+          setListSpecialty(data);
+        }
+      })
+      .catch((err: any) => {
+        console.log("err:", err);
+      });
+  }
 
   const _renderBanner = () => {
     return (
@@ -536,18 +544,12 @@ const Dashboard = () => {
             <p className="heading-title">About us</p>
             <h3 className="mb-3 fs-1 fw-bold">Who We Are</h3>
             <p>
-              Lorem Media is a full-service social media agency. We offer
-              businesses innovative solutions that deliver the right type of
-              audience to you in the most effective strategies possible. We
-              strive to develop a community around your business, polishing your
-              branding, and improving your public relations.
+              Welcome to 490Hospital, where convenience meets healthcare excellence. We understand that managing your health should be seamless, and that's why we've crafted a platform dedicated to simplifying the process of booking hospital appointments.
             </p>
             <p>
-              Social Media is now one of the most powerful marketing tools with
-              the ability to communicate with a target audience in real time.
+              At 490Hospital, we are a team of passionate individuals committed to revolutionizing the way you access healthcare services. Our journey began with a vision to bridge the gap between patients and medical professionals, ensuring that every step of the healthcare journey is efficient, transparent, and patient-centered.
             </p>
-            <p className="mt-3">It's 2019: time to sink o r swim.</p>
-            <p className="mt-3">We are your Social Media Marketing Agency.</p>
+            <p className="mt-3">Our mission is simple yet profound: to empower individuals to take control of their health by providing them with a user-friendly, reliable, and efficient platform for booking hospital appointments. We strive to make healthcare accessible to everyone, ensuring that your well-being is never compromised due to cumbersome processes or unnecessary delays.</p>
 
             <button
               className="button button--primary button--large mt-3"

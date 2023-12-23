@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import axios from "axios";
 
 import { ICON_GRADUATION, ICON_PEOPLE_TEAM } from "../../assets";
@@ -16,6 +16,9 @@ const SpecialtyDetail = () => {
   const params = useParams();
   const navigate = useNavigate();
   const url_api = process.env.REACT_APP_API_URL;
+
+  const [listSpecialty]: any = useOutletContext();
+  console.log("listSpecialty:", listSpecialty)
 
   const [specialty, setSpecialty] = useState<ISpecialty>({
     id: "",
@@ -82,8 +85,8 @@ const SpecialtyDetail = () => {
               <p>{specialty.description}</p>
             </div>
 
-            <div className="doctor-specialty">
-              <div className="mb-5 doctor-specialty-header">
+            <div className="doctor-specialty mt-5">
+              <div className="mb-2 doctor-specialty-header">
                 <h3 className="text-uppercase text-white">specialist team</h3>
               </div>
               <div>
@@ -92,11 +95,11 @@ const SpecialtyDetail = () => {
                   international standards at SEP490 Hospital
                 </p>
 
-                {listDoctor && listDoctor.length > 0 &&
+                {listDoctor && listDoctor.length > 0 ?
                   listDoctor.map((doctor: any, idx: number) => {
                     const name = doctor.practitioner.display;
                     const src = doctor?.photo?.url;
-                    const educations = doctor.practitionerTarget?.qualification.filter((item:any) => item.code.coding[0].code === "Edu")
+                    const educations = doctor.practitionerTarget?.qualification.filter((item: any) => item.code.coding[0].code === "Edu")
 
                     return (
                       <div
@@ -129,7 +132,7 @@ const SpecialtyDetail = () => {
                         </div>
                       </div>
                     );
-                  })}
+                  }) : <p>No have data...</p>}
               </div>
             </div>
           </div>

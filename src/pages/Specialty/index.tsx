@@ -62,7 +62,7 @@ const Specialty = () => {
   return (
     <section className="service">
       {outlet ? (
-        <Outlet />
+        <Outlet context={[listSpecialty]} />
       ) : (
         <div className="container p-5">
           <h3 className="mb-3 fs-1 fw-bold">Our Specialty</h3>
@@ -80,8 +80,8 @@ const Specialty = () => {
                     <img src={item.photo} alt={item.photo} />
                   </div>
                   <div className={`${idx === 0 ? "col-6" : "col-8"}`}>
-                    <h5 className="title-service">{item.name}</h5>
-                    <p className="subtitle-service">
+                    <h5 className="title-service fs-2">{item.name}</h5>
+                    <p className="subtitle-service fs-6">
                       {item.description}
                     </p>
                   </div>
