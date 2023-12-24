@@ -366,7 +366,7 @@ const PatientMonitorDetail = () => {
                     <i className="bi bi-person-fill fs-1"></i>
                   </p>
                   <p className="fw-bold mb-1">{indexBMI?.value ? indexBMI?.value : "N/A"}</p>
-                  <p className="mb-1">N/A</p>
+                  <p className="mb-1">kg/m2</p>
                   <p className="mb-0">{indexBMI?.interpretations ? indexBMI?.interpretations : "N/A"}</p>
                 </div>
               </div>
