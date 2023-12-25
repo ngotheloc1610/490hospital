@@ -62,7 +62,7 @@ const Login = () => {
       .get(url, defineConfigPost())
       .then((resp: any) => {
         if (resp) {
-          localStorage.setItem(KEY_LOCAL_STORAGE.IMAGE, resp.data?.photo)
+          localStorage.setItem(KEY_LOCAL_STORAGE.IMAGE, resp?.data?.photo)
         }
       })
       .catch((err) => {

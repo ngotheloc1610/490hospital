@@ -444,23 +444,23 @@ const Dashboard = () => {
                   >
                     <div className="row g-5">
                       {doctors?.map((item: any, idx: number) => {
-                        const src = item.practitionerTarget?.photo[0]?.url;
+                        const src = item?.practitionerTarget?.photo?.[0]?.url;
 
                         return (
                           <div
                             className="col-4 d-flex"
-                            onClick={() => navigate(`/doctors/${item.id}`)}
+                            onClick={() => navigate(`/doctors/${item?.id}`)}
                           >
                             <img src={src} alt="img doctor" />
                             <div className="ms-3">
                               <p className="color-dark fw-bold">
-                                {item.practitioner.display}
+                                {item?.practitioner.display}
                               </p>
                               <span className="text-small">
-                                {item.specialty &&
-                                  item.specialty.map((spec: any) => {
+                                {item?.specialty &&
+                                  item?.specialty.map((spec: any) => {
                                     return (
-                                      <span>{spec.coding[0].display} {item.specialty.length > 1 && <span>, </span>}</span>
+                                      <span>{spec?.coding?.[0]?.display} {item?.specialty?.length > 1 && <span>, </span>}</span>
                                     );
                                   })}
                               </span>
@@ -477,22 +477,22 @@ const Dashboard = () => {
                 <div className="row g-5">
                   {listDoctor &&
                     listDoctor.map((doctor: any) => {
-                      const src = doctor.practitionerTarget?.photo[0].url;
+                      const src = doctor?.practitionerTarget?.photo?.[0].url;
                       return (
                         <div
                           className="col-4 d-flex"
-                          onClick={() => navigate(`/doctors/${doctor.id}`)}
+                          onClick={() => navigate(`/doctors/${doctor?.id}`)}
                         >
                           <img src={src} alt="img doctor" />
                           <div className="ms-3">
                             <p className="color-dark fw-bold">
-                              {doctor.practitioner.display}
+                              {doctor?.practitioner?.display}
                             </p>
                             <span className="text-small">
-                              {doctor.specialty &&
-                                doctor.specialty.map((spec: any) => {
+                              {doctor?.specialty &&
+                                doctor?.specialty?.map((spec: any) => {
                                   return (
-                                    <span>{spec.coding[0].display} {doctor.specialty.length > 1 && <span>, </span>}</span>
+                                    <span>{spec?.coding?.[0]?.display} {doctor?.specialty?.length > 1 && <span>, </span>}</span>
                                   );
                                 })}
                             </span>

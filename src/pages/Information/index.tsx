@@ -110,7 +110,7 @@ const Information = () => {
                                         </tr>
                                         <tr>
                                             <th scope="row">Date of birth</th>
-                                            <td>{patient.dateOfBirth ? moment(patient.dateOfBirth).format(FORMAT_DATE_MONTH_YEAR) : ""}</td>
+                                            <td>{patient?.dateOfBirth ? moment(patient.dateOfBirth).format(FORMAT_DATE_MONTH_YEAR) : ""}</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">Address</th>
@@ -135,7 +135,7 @@ const Information = () => {
                                 <div className="d-flex flex-column" >
                                     <div className="p-1 border">
                                         <img
-                                            src={patient.photo ? patient.photo : USER}
+                                            src={patient?.photo ? patient?.photo : USER}
                                             alt="img patient"
                                             className={`d-block m-auto ${patient?.photo ? "" : "bg-image"} w-100 h-200 object-fit-cover`}
                                         />
